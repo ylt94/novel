@@ -2,7 +2,7 @@
   <el-container style="height: 100%; border: 1px solid #eee">
     <el-aside width="201px">
       <el-menu style="height:100%;margin-top:60px;" :default-openeds="['1', '3']">
-        <el-submenu index="1" style="height:100%;">
+        <el-submenu index="1">
           <template slot="title"><i class="el-icon-document"></i>小说管理</template>
           <el-menu-item index="1-1">玄幻</el-menu-item>
           <el-menu-item index="1-2">仙侠</el-menu-item>
