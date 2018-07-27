@@ -71,7 +71,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    .el-header {
+  .el-header {
     background-color:#409EFF;
     color: #333;
     line-height: 60px;

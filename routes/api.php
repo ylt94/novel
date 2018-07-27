@@ -16,6 +16,9 @@ use Illuminate\Http\Request;
 Route::group(['namespace'=>'Admin','prefix'=>'admin','middleware'=>'auth:api'],function(){
     Route::group(['namespace'=>'Novel','prefix'=>'novel'],function(){
         Route::get('/categories','NovelCategoryController@getCategory');
+        Route::post('/categories-addorupdate','NovelCategoryController@categoryAddOrUpdate');
+        Route::post('/categories-del','NovelCategoryController@categoryDel');
+        Route::post('/categories-sort','NovelCategoryController@categorySort');
     });
 });
 

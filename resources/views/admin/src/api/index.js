@@ -15,7 +15,7 @@ axios.defaults.headers.common['Authorization'] ='Bearer ' + localStorage.getItem
 
 function get(url,params){
     return new Promise(function(resolve,reject){
-        axios.get(url,params)
+        axios.get(url,{params})
         .then(function (response) {
             resolve(response.data)
         }).catch(function(error){
@@ -49,6 +49,9 @@ function errorCheck(error){
         case 404:
             msg = '服务未找到!'
             break
+        case 405:
+            msg = '方法不被允许!'
+            break
         case 500:
             msg = '服务器错误，请稍后再试!'
             break
@@ -60,7 +63,22 @@ function errorCheck(error){
 
 }
 
+function retrunMsg(ret){
+    if(ret.status) {
+        ElementUI.Message({
+            type: 'success',
+            message: '操作成功!'
+        })
+    }else{
+        ElementUI.Message({
+            type: 'error',
+            message: '操作失败:'+ret.msg
+        })
+    }
+}
+
 export default{
     get,
     post,
+    retrunMsg
 }
