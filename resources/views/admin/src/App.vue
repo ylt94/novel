@@ -1,4 +1,4 @@
-<template>
+  <template>
   <div id="app">
     <el-container style="height: 100%; border: 1px solid #eee">
       <el-aside style="width:15%">
