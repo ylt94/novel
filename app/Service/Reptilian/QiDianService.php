@@ -7,6 +7,9 @@
         //匹配小说名字,id
         public static function getTitleId(array $novel,$data,$page){
             preg_match_all('/data-bid=\"[1-9][0-9]+\">(.*?)<\/a><\/h4>/u',$data, $title_res);
+            if(!$title_res) {
+                return false;
+            }
             foreach ($title_res[1] as $key => $title) {
                 // $num = count($title_res[1]);
                 // echo $num.'条数据<br/>';
@@ -47,16 +50,20 @@
 
 
         //匹配简介
-        public static function getNovelDesc(array $novel,$data,$page){
-            $base_key = ($page-1)*20;
-            preg_match_all('/<p class=\"intro\">(.*?)<\/p>/',$data, $desc_res);
+        public static function getNovelDesc($novel_id,$content){
+            preg_match_all('/<div class=\"book-intro\">(.*?)<\/div>/',$content, $desc_res);
+            $description = $desc_res[1][0];
+            $description = str_replace("\r",'',$description);
+            $description = str_replace(' ','',$description);
+          
+            return $description;
+        }
 
-            foreach ($desc_res[1] as $key => $item) {
-                $k = $base_key + $key;
-                $item = str_replace("\r",' ',$item);
-                $item = str_replace(' ','',$item);
-                $novel[$k]['desc'] = $item;
-            }
-            return $novel;
+        public static function getNovelChapters($novel_id,$content){
+            
+            preg_match_all('/<div class=\"catalog-content-wrap\" id=\"j-catalogWrap\" data-l1=\"14\" style=\"display: block;\">(.*?)<\/div>/',$content, $res);
+            //preg_match_all('/<li data-rid=\"[1-9][0-9]*\">(.*?)<\/li>/',$content, $res);
+            dd($res);
+            return $chapters;
         }
     }
