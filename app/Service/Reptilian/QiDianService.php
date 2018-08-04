@@ -51,21 +51,13 @@
 
 
         //匹配简介
-        public static function getNovelDesc($novel_id,$content){
+        public static function getNovelDesc($content){
             preg_match_all('/<div class=\"book-intro\">(.*?)<\/div>/',$content, $desc_res);
             $description = $desc_res[1][0];
             $description = str_replace("\r",'',$description);
             $description = str_replace(' ','',$description);
           
             return $description;
-        }
-
-        public static function getNovelChapters($novel_id,$content){
-            
-            preg_match_all('/<div class=\"catalog-content-wrap\" id=\"j-catalogWrap\" data-l1=\"14\" style=\"display: block;\">(.*?)<\/div>/',$content, $res);
-            //preg_match_all('/<li data-rid=\"[1-9][0-9]*\">(.*?)<\/li>/',$content, $res);
-            dd($res);
-            return $chapters;
         }
 
         public static function getCsrfToken(){
@@ -111,5 +103,19 @@
             $csrf_token = $res[1][0];
             Cache::put($csrf_token_key,$csrf_token,90);
             return $csrf_token;
+        }
+
+
+        public static function getChapterContent($contents){
+            //<span class="j_chapterWordCut">3912</span>
+            //<span class="j_updateTime">2017.11.01 09:30</span>
+            //<div class="read-content j_readContent">
+            preg_match_all('/<span class="j_chapterWordCut">(.*?)<\/span>/',$contents, $words);
+            $words_num = $words[1][0];
+            preg_match_all('/<span class="j_updateTime">(.*?)<\/span>/',$contents, $time);
+            $update_time = $time[1][0]; 
+            preg_match_all('/j_readContent">\n\s+(.*?)\n\s+<\/div>/',$contents, $main);
+            $content = $main[1][0];
+            return ['words_num'=>$words_num,'update_time'=>$update_time,'content'=>$content];
         }
     }

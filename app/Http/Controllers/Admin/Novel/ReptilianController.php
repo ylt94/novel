@@ -10,7 +10,8 @@ class ReptilianController extends Controller{
 
 
     public function getQiDianNovels(){
-        $base_url = 'https://www.qidian.com/finish?action=hidden&orderId=&vip=0&style=1&pageSize=20&siteid=1&pubflag=0&hiddenField=2&page=';
+        //$base_url = 'https://www.qidian.com/finish?action=hidden&orderId=&vip=0&style=1&pageSize=20&siteid=1&pubflag=0&hiddenField=2&page=';
+        $base_url = 'https://www.qidian.com/all?orderId=&vip=0&style=1&pageSize=20&siteid=1&pubflag=0&hiddenField=0&page=';
         $page = 1;
         $novel = array();
         do{
@@ -24,29 +25,33 @@ class ReptilianController extends Controller{
             $novel = QiDianService::getNovelType($novel,$result,$page);
             //$novel = QiDianService::getNovelDesc($novel,$result,$page);
             $page++;
-        }while($result);
-        
+        }while($page<2);
+        dd($novel);
     }
 
     public function getQiDianNovelDetail(){
-        $csrf_token = QiDianService::getCsrfToken();
-        $novel_id = 1005064061;
-        //https://book.qidian.com/ajax/book/category?_csrfToken=YcqOui8MNn3esPNxbh4wjlXTEGmz7rpNWKpkjQ1i&bookId=1005064061
-        $url = 'https://book.qidian.com/ajax/book/category?'.http_build_query(['_csrfToken'=>$csrf_token,'bookId'=>$novel_id]);
-        $contents = file_get_contents($url);
-        dd(json_decode($contents,true));
-        // // if(!$contents){
-        // //     return ['status'=>-1,'msg'=>'查无此书'];
-        // // }
+        $base_url = 'https://book.qidian.com/info/';
+        $csrf_token = QiDianService::getCsrfToken().'e';
+        $novel_id = 1010734492;
+        $url = $base_url.$novel_id;
+        $content = file_get_contents($url);
+        $description = QiDianService::getNovelDesc($content);
+        $chapter_url = 'https://book.qidian.com/ajax/book/category?bookId=1005064061';
 
-        // //$description = QiDianService::getNovelDesc($novel_id,$contents);
-        // $url = $url.'#Catalog';
-        // $url = 'https://book.qidian.com/ajax/book/category?_csrfToken=yGXbCbOp8JSztmdRaqXhqy3xoEq94Lpu7IJxbSvE&bookId=1005064061';
-        // $url = 'https://www.qidian.com/ajax/Free/getSysTime?_csrfToken=';
-        // $contents = file_get_contents($url);dd($contents);
-        // $chapters = QiDianService::getNovelChapters($novel_id,$contents);
-       
+        //$chapter_url = 'https://book.qidian.com/ajax/book/category?'.http_build_query(['_csrfToken'=>'','bookId'=>$novel_id]);
+        $contents = file_get_contents($chapter_url);
+        $chapters = json_decode($contents,true);
+        dd($chapters);
+    }
 
+    public function getQiDianNovelChapterContent(){
+        $base_url = 'https://read.qidian.com/chapter/';
+        $chapter_id = 'ORlSeSgZ6E_MQzCecGvf7A2/tSuREBNwaBdOBDFlr9quQA2';
+        $url = $base_url.$chapter_id;
+        $content = file_get_contents($url);
+        $result = QiDianService::getChapterContent($content);
+        echo $result['content'];
+        //dd($result);
     }
     
 }
