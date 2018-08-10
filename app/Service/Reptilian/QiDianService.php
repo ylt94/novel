@@ -49,6 +49,18 @@
             return $novel;
         }
 
+        //获取小说总字数
+        public static function getNovelWords(array $novel,$data,$page) {
+            $base_key = ($page-1)*20;//dd($data);
+            preg_match_all('/<span class="[a-zA-Z]+">(.*?)<\/span>万字/',$data, $words_res);
+            foreach ($words_res[1] as $key => $item) {
+                dd(html_entity_decode('&#100521;&#100521;&#100528;&#100529;&#100521;'));
+                $k = $base_key + $key;
+                $novel[$k]['words'] = $item;
+            }
+            return $novel;
+        }
+
 
         //匹配简介
         public static function getNovelDesc($content){
@@ -106,6 +118,8 @@
         }
 
 
+
+        //获取小说内容
         public static function getChapterContent($contents){
             //<span class="j_chapterWordCut">3912</span>
             //<span class="j_updateTime">2017.11.01 09:30</span>

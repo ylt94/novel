@@ -23,10 +23,12 @@ class ReptilianController extends Controller{
             }
             $novel = QiDianService::getAuthor($novel,$result,$page);
             $novel = QiDianService::getNovelType($novel,$result,$page);
+            $novel = QiDianService::getNovelWords($novel,$result,$page);
             //$novel = QiDianService::getNovelDesc($novel,$result,$page);
             $page++;
         }while($page<2);
         dd($novel);
+        echo '爬取完成';
     }
 
     public function getQiDianNovelDetail(){
