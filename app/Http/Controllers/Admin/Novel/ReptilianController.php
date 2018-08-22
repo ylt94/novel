@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Novel;
 
 use App\Http\Controllers\Controller;
 use App\Service\Reptilian\QiDianService;
+use QL\QueryList;
 
 class ReptilianController extends Controller{
 
@@ -54,6 +55,26 @@ class ReptilianController extends Controller{
         $result = QiDianService::getChapterContent($content);
         echo $result['content'];
         //dd($result);
+    }
+
+    public function test() {
+        $base_url = 'https://www.qidian.com/all?orderId=&vip=0&style=1&pageSize=20&siteid=1&pubflag=0&hiddenField=0&page=1';
+        $html = file_get_contents($base_url);
+        $rules = array(
+            //采集id为one这个元素里面的纯文本内容
+            'title' => array('.book-mid-info>h4>a','text'),
+            // //采集class为two下面的超链接的链接
+            // 'link' => array('.two>a','href'),
+            // //采集class为two下面的第二张图片的链接
+            // 'img' => array('.two>img:eq(1)','src'),
+            // //采集span标签中的HTML内容
+            'other' => array('.book-mid-info>.author>.name','text')
+        );
+        $data = QueryList::html($html)
+                ->rules($rules)
+                ->query()
+                ->getData();
+        print_r($data->all());
     }
     
 }

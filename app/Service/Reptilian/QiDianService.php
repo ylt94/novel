@@ -51,13 +51,14 @@
 
         //获取小说总字数
         public static function getNovelWords(array $novel,$data,$page) {
-            $base_key = ($page-1)*20;//dd($data);
+            dd(file_get_contents('https://qidian.gtimg.com/qd_anti_spider/zqKIaGZL.woff'));
+            $base_key = ($page-1)*20;
             preg_match_all('/<span class="[a-zA-Z]+">(.*?)<\/span>万字/',$data, $words_res);
-            foreach ($words_res[1] as $key => $item) {
-                dd(html_entity_decode('&#100521;&#100521;&#100528;&#100529;&#100521;'));
+            foreach ($words_res[0] as $key => $item) {
                 $k = $base_key + $key;
-                $novel[$k]['words'] = $item;
+                $novel[$k]['words'] = htmlspecialchars_decode($item);
             }
+
             return $novel;
         }
 
