@@ -1,15 +1,20 @@
 <?php
 
 
-namespace App\Http\Controllers\Admin\Novel;
+namespace App\Http\Controllers\Admin\Reptilian;
 
 use App\Http\Controllers\Controller;
 use App\Service\Reptilian\QiDianService;
 use QL\QueryList;
+use App\Service\Novel\NovelCategoryService;
+use App\Service\Site\SiteService;
+use App\Service\Reptilian\PublicService;
 
 class ReptilianController extends Controller{
 
-
+    public static $categories = null;
+    public static $site = null;
+    
     public function getQiDianNovels(){
         //$base_url = 'https://www.qidian.com/finish?action=hidden&orderId=&vip=0&style=1&pageSize=20&siteid=1&pubflag=0&hiddenField=2&page=';
         $base_url = 'https://www.qidian.com/all?orderId=&vip=0&style=1&pageSize=20&siteid=1&pubflag=0&hiddenField=0&page=';
@@ -58,32 +63,34 @@ class ReptilianController extends Controller{
     }
 
     public function test() {
-
+        static::$categories = NovelCategoryService::getCategories();
+        static::$site =  SiteService::getSiteByName('起点中文网');
         $rules = array(
-            //采集id为one这个元素里面的纯文本内容
+            'novel_id' => array('.book-mid-info>h4>a','data-bid'),
             'title' => array('.book-mid-info>h4>a','text'),
-            // //采集class为two下面的超链接的链接
-            // 'link' => array('.two>a','href'),
-            // //采集class为two下面的第二张图片的链接
-            // 'img' => array('.two>img:eq(1)','src'),
-            // //采集span标签中的HTML内容
-            'type' => array('.author>a:eq(1)','text'),
+            'type' => array('.author>a[data-eid=qd_B60]','text'),
             'desc' => array('.intro','text'),
             'status' => array('.author>span','text'),
             'author' => array('.book-mid-info>.author>.name','text')
         );
-        $base_url = 'https://www.qidian.com/all?orderId=&vip=0&style=1&pageSize=20&siteid=1&pubflag=0&hiddenField=0&page=';
+        $base_url = 'https://www.qidian.com/all?orderId=&style=1&pageSize=20&siteid=1&pubflag=0&hiddenField=0&page=';
         $page = 1;
+        $ql = QueryList::rules($rules);
         do{
             $url = $base_url.$page;
-            $html = file_get_contents($url);
-            $data = QueryList::html($html)
-                    ->rules($rules)
+            $data = $ql->get($url)
                     ->query()
                     ->getData();
+            $data =  $data->all();
+            $data = array_slice($data,0,20);
+            $data = PublicService::careteNovelBase($data,static::$site,static::$categories);
+            $result = PublicService::insertNovelBase($data,$page);
+            $ql->destruct();
+            
             $page++;
-        }while($page<2);
-        print_r($data->all()); 
+        }while($page<10);
+
+        echo '成功';
         
     }
     
