@@ -12,8 +12,8 @@ use App\Service\Reptilian\PublicService;
 
 class ReptilianController extends Controller{
 
-    public static $categories = null;
-    public static $site = null;
+    //public static $categories = null;
+    //public static $site = null;
     
     public function getQiDianNovels(){
         //$base_url = 'https://www.qidian.com/finish?action=hidden&orderId=&vip=0&style=1&pageSize=20&siteid=1&pubflag=0&hiddenField=2&page=';
@@ -63,8 +63,8 @@ class ReptilianController extends Controller{
     }
 
     public function test() {
-        static::$categories = NovelCategoryService::getCategories();
-        static::$site =  SiteService::getSiteByName('起点中文网');
+        $categories = NovelCategoryService::getCategories();
+        $site =  SiteService::getSiteByName('起点中文网');
         $rules = array(
             'novel_id' => array('.book-mid-info>h4>a','data-bid'),
             'title' => array('.book-mid-info>h4>a','text'),
@@ -83,7 +83,7 @@ class ReptilianController extends Controller{
                     ->getData();
             $data =  $data->all();
             $data = array_slice($data,0,20);
-            $data = PublicService::careteNovelBase($data,static::$site,static::$categories);
+            $data = PublicService::careteNovelBase($data,$site,$categories);
             $result = PublicService::insertNovelBase($data,$page);
             $ql->destruct();
             

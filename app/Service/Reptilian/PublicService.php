@@ -21,6 +21,7 @@
                 $item['is_hide'] = 0;
                 $item['site_source'] = $site->id;
                 $item['type'] = array_search($item['type'],$types);
+                $item['updated_at'] = $item['created_at'] = date('Y-m-d H:i:s',time());
             }
             unset($item);
             return $data;
