@@ -58,8 +58,7 @@ class ReptilianController extends Controller{
     }
 
     public function test() {
-        $base_url = 'https://www.qidian.com/all?orderId=&vip=0&style=1&pageSize=20&siteid=1&pubflag=0&hiddenField=0&page=1';
-        $html = file_get_contents($base_url);
+
         $rules = array(
             //采集id为one这个元素里面的纯文本内容
             'title' => array('.book-mid-info>h4>a','text'),
@@ -68,13 +67,24 @@ class ReptilianController extends Controller{
             // //采集class为two下面的第二张图片的链接
             // 'img' => array('.two>img:eq(1)','src'),
             // //采集span标签中的HTML内容
-            'other' => array('.book-mid-info>.author>.name','text')
+            'type' => array('.author>a:eq(1)','text'),
+            'desc' => array('.intro','text'),
+            'status' => array('.author>span','text'),
+            'author' => array('.book-mid-info>.author>.name','text')
         );
-        $data = QueryList::html($html)
-                ->rules($rules)
-                ->query()
-                ->getData();
-        print_r($data->all());
+        $base_url = 'https://www.qidian.com/all?orderId=&vip=0&style=1&pageSize=20&siteid=1&pubflag=0&hiddenField=0&page=';
+        $page = 1;
+        do{
+            $url = $base_url.$page;
+            $html = file_get_contents($url);
+            $data = QueryList::html($html)
+                    ->rules($rules)
+                    ->query()
+                    ->getData();
+            $page++;
+        }while($page<2);
+        print_r($data->all()); 
+        
     }
     
 }
