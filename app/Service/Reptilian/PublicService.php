@@ -33,7 +33,7 @@
                 NovelBase::insert($data);
                 DB::commit();
             }catch(\Exception $e){
-                $error = $site->name.'，小说基础信息搬运：'.$e->getMessage();
+                $error = $site->name.'，小说基础信息搬运第'.$page.'页：'.$e->getMessage();
                 Log::error($error,storagepath('logs/reptilian/'.$site->name));
             }
         }
