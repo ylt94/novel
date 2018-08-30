@@ -3,6 +3,11 @@
     use Illuminate\Support\Facades\Cache;
 
 
+    use App\Models\Sites;
+    use App\Models\NovelBase;
+    use App\Models\NovelDetail;
+    use Illuminate\Support\Facades\DB;
+
     class QiDianService {
 
         //匹配小说名字,id
@@ -132,5 +137,73 @@
             preg_match_all('/j_readContent">\n\s+(.*?)\n\s+<\/div>/',$contents, $main);
             $content = $main[1][0];
             return ['words_num'=>$words_num,'update_time'=>$update_time,'content'=>$content];
+        }
+
+        //获取起点网站信息
+        public static function getQiDianData(){
+            $qidian = Sites::where('name','like','%起点%')->first();
+            if (!$qidian) {
+                return false;
+            }
+            return $qidian;
+        }
+
+        //获取起点网站所有小说
+        public static function getQiDianNovels($qidian){
+            $novels = NovelBase::where('site_source',$qidian->id)->get();
+
+            if (!$novels) {
+                return false;
+            }
+
+            return $novels;
+        }
+
+
+        //检查小说是否是最新
+        public static function checkNovelChapter($id,$total_chapters) {
+            $novel = NovelBase::find($id);
+
+            if($novel->total_chapters == $total_chapters){//已最新无需更新
+                return false;
+            }
+
+            $chapters = $total_chapters - $novel->total_chapters;
+            $novel->total_chapters = $total_chapters;
+            $novel->save();
+
+            return $chapters;
+
+        }
+
+        //合并所有章节
+        public static function mergeNovelChapters($data){
+            $chapters = [];
+            foreach($data as $item) {
+                $chapters = array_merge($chapters,$item['cs']);
+            }
+
+            return $chapters;
+        }
+
+        //更新detail表
+        public static function createNovelDetail($id,$data) {
+            $create_arr = array();
+            foreach ($data as $item) {
+                $create_item = [
+                    'novel_id' => $id,
+                    'is_free' => $item['sS'],
+                    'title' => $item['cN'],
+                    'site_id' => $item['cU'],
+                    'words' => $item['cnt'],
+                    'create_at' => $item['uT'],
+                    'created_at' => date('Y-m-d H:i:s',time()),
+                    'updated_at' => date('Y-m-d H:i:s',time())
+                ];
+                array_push($create_arr,$create_item);
+            }
+           
+            return NovelDetail::insert($create_arr);
+            
         }
     }

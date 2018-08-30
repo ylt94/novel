@@ -10,6 +10,8 @@ use App\Service\Novel\NovelCategoryService;
 use App\Service\Site\SiteService;
 use App\Service\Reptilian\PublicService;
 
+use Illuminate\Support\Facades\DB;
+
 class ReptilianController extends Controller{
 
     //public static $categories = null;
@@ -39,7 +41,7 @@ class ReptilianController extends Controller{
 
     public function getQiDianNovelDetail(){
         $base_url = 'https://book.qidian.com/info/';
-        $csrf_token = QiDianService::getCsrfToken().'e';
+        $csrf_token = QiDianService::getCsrfToken();
         $novel_id = 1010734492;
         $url = $base_url.$novel_id;
         $content = file_get_contents($url);
@@ -62,7 +64,7 @@ class ReptilianController extends Controller{
         //dd($result);
     }
 
-    public function test() {
+    public function getNovelBase() {
         $categories = NovelCategoryService::getCategories();
         $site =  SiteService::getSiteByName('起点中文网');
         $rules = array(
@@ -71,7 +73,7 @@ class ReptilianController extends Controller{
             'type' => array('.author>a[data-eid=qd_B60]','text'),
             'desc' => array('.intro','text'),
             'status' => array('.author>span','text'),
-            'author' => array('.book-mid-info>.author>.name','text')
+            'author' => array('.book-mid-info>.author>.name[data-eid=qd_B59]','text')
         );
         $base_url = 'https://www.qidian.com/all?orderId=&style=1&pageSize=20&siteid=1&pubflag=0&hiddenField=0&page=';
         $page = 1;
@@ -89,9 +91,57 @@ class ReptilianController extends Controller{
             
             $page++;
         }while($page<10);
-
         echo '成功';
         
+    }
+    
+    public function getNovelDetail(){
+        $site = QiDianService::getQiDianData();
+        if(!$site) {
+            exit;
+        }
+
+        $novels = QiDianService::getQiDianNovels($site);
+        if (!$novels) {
+            exit;
+        }
+
+        $base_url = 'https://book.qidian.com/ajax/book/category?';
+        $csrf_token = QiDianService::getCsrfToken();//获取ajax请求token
+        foreach ($novels as $item) {
+            $url = $base_url.http_build_query(['_csrfToken'=>$csrf_token,'bookId'=>$item->novel_id]);
+
+            $contents = file_get_contents($url);
+            $result = json_decode($contents,true);
+            if($result['code'] != 0 || $result['msg'] != 'suc') {
+                continue;
+            }
+            
+            $data = $result['data'];
+            //try{
+                //DB::beginTransAction();
+
+                $check_res = QiDianService::checkNovelChapter($item->id,$data['chapterTotalCnt']);
+                if(is_bool($check_res) && !$check_res) {
+                    continue;
+                }
+                
+                //组合所有章节
+                $chapter_array = [];
+                $chapter_array = QiDianService::mergeNovelChapters($data['vs']);
+                //获取需要更新章节
+                $new_chapters = array_slice($chapter_array,-$check_res);
+                $create_res = QiDianService::createNovelDetail($item->id,$new_chapters);
+                //DB::commit();
+            //}catch(\Exception $e){
+               // DB::rollBack();
+                //dd($e->getMessage());
+            //}
+            
+        }
+
+        echo 'success';
+
     }
     
 }
