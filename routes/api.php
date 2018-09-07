@@ -27,7 +27,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     
 });
 
-Route::get('/test','Admin\Reptilian\ReptilianController@getNovelDetail');
+Route::get('/test','Admin\Reptilian\ReptilianController@getNovelContent');
 
 // Route::get('/test',function(){
 //     return ['status'=>1,'password'=>bcrypt(123456)];

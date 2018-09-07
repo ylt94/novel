@@ -6,7 +6,11 @@
     use App\Models\Sites;
     use App\Models\NovelBase;
     use App\Models\NovelDetail;
+    use App\Models\NovelContent;
+
     use Illuminate\Support\Facades\DB;
+    use QL\QueryList;
+    use Log;
 
     class QiDianService {
 
@@ -187,15 +191,17 @@
         }
 
         //更新detail表
-        public static function createNovelDetail($id,$data) {
+        public static function createNovelDetail($id,$data,$site_id) {
             $create_arr = array();
             foreach ($data as $item) {
                 $create_item = [
                     'novel_id' => $id,
+                    'site_resource' => $site_id, 
                     'is_free' => $item['sS'],
                     'title' => $item['cN'],
                     'site_id' => $item['cU'],
                     'words' => $item['cnt'],
+                    'is_content' => 0,
                     'create_at' => $item['uT'],
                     'created_at' => date('Y-m-d H:i:s',time()),
                     'updated_at' => date('Y-m-d H:i:s',time())
@@ -206,4 +212,34 @@
             return NovelDetail::insert($create_arr);
             
         }
+
+        public static function getQiDianNovelContent($url,$capter_id){
+            $rules = array(
+                'content' => array('.read-content','html')
+            );
+
+            $result = QueryList::rules($rules)
+                            ->get($url)
+                            ->query()
+                            ->getData();
+            $data = $result->all();
+            $content = $data[0]['content'];
+            Log::useDailyFiles(storage_path('logs/capter/qidian'));
+            if(!$content){
+                Log::error($error);
+            }
+            try{
+                DB::beginTransaction();
+                NovelContent::create(['content'=>$content]);
+                NovelDetail::where('id',$capter_id)->update(['is_content'=>1]);
+                DB::commit();
+            }catch(\Exception $e){
+                DB::rollback();
+                $error = '小说章节:'.$capter_id.'更新失败:'.$e->getMessage();
+                Log::error($error);
+                return false;
+            }
+            
+            return true;
+        } 
     }

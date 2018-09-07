@@ -131,7 +131,7 @@ class ReptilianController extends Controller{
                 $chapter_array = QiDianService::mergeNovelChapters($data['vs']);
                 //获取需要更新章节
                 $new_chapters = array_slice($chapter_array,-$check_res);
-                $create_res = QiDianService::createNovelDetail($item->id,$new_chapters);
+                $create_res = QiDianService::createNovelDetail($item->id,$new_chapters,$site->id);
                 //DB::commit();
             //}catch(\Exception $e){
                // DB::rollBack();
@@ -142,6 +142,16 @@ class ReptilianController extends Controller{
 
         echo 'success';
 
+    }
+
+    public function getNovelContent(){
+        $base_url = 'https://read.qidian.com/chapter/';
+        $capters = PublicService::getUnContentCapter();
+        foreach ($capters as $capter) {
+            $url = $base_url.$capters->site_id;
+            QiDianService::getQiDianNovelContent($url,$capters->id);
+        }
+        echo 'success';
     }
     
 }
