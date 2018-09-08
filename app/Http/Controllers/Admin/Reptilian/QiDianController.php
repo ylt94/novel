@@ -12,7 +12,7 @@ use App\Service\Reptilian\PublicService;
 
 use Illuminate\Support\Facades\DB;
 
-class ReptilianController extends Controller{
+class QiDianController extends Controller{
 
     //public static $categories = null;
     //public static $site = null;
