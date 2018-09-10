@@ -241,5 +241,56 @@
             }
             
             return true;
-        } 
+        }
+
+
+        public static function updateDetailByQuery(NovelBase $novel_base){
+            if(!$novel_base) {
+                return false;
+            }
+
+            $base_url = 'https://book.qidian.com/ajax/book/category?';
+            $csrf_token = static::getCsrfToken();//获取ajax请求token
+
+            $url = $base_url.http_build_query(['_csrfToken'=>$csrf_token,'bookId'=>$novel_base->novel_id]);
+
+            $contents = file_get_contents($url);
+            $result = json_decode($contents,true);
+            if($result['code'] != 0 || $result['msg'] != 'suc') {
+                return false;
+            }
+            
+            $data = $result['data'];
+            try{
+                DB::beginTransAction();
+
+                $check_res = static::checkNovelChapter($novel_base->id,$data['chapterTotalCnt']);
+                if(is_bool($check_res) && !$check_res) {
+                    return false;
+                }
+                
+                //组合所有章节
+                $chapter_array = [];
+                $chapter_array = static::mergeNovelChapters($data['vs']);
+                //获取需要更新章节
+                $new_chapters = array_slice($chapter_array,-$check_res);
+                $create_res = static::createNovelDetail($novel_base->id,$new_chapters,Sites::QIDIAN);
+                DB::commit();
+                return true;
+            }catch(\Exception $e){
+               DB::rollBack();
+                //dd($e->getMessage());
+                return false;
+            }
+        }
+
+
+        public static function updateContentByQuery(NovelDetail $novel_detail){
+            $base_url = 'https://read.qidian.com/chapter/';
+
+            $url = $base_url.$novel_detail->site_id;
+            static::getQiDianNovelContent($url,$novel_detail->id);
+            
+            return true;
+        }
     }

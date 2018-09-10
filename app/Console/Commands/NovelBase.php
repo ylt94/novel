@@ -4,6 +4,10 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
+use App\Services\RedisService;
+
+use App\Models\NovelBase as NovelBaseModel;
+
 class NovelBase extends Command
 {
     /**
@@ -38,6 +42,6 @@ class NovelBase extends Command
     public function handle()
     {
         //
-        $this->info('--------------->>>>');
+        
     }
 }

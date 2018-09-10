@@ -4,6 +4,12 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
+use App\Services\RedisService;
+use App\Services\Reptilian\QiDianService;
+
+use App\Models\NovelBase;
+use App\Models\Sites;
+
 class NovelDetail extends Command
 {
     /**
@@ -38,5 +44,17 @@ class NovelDetail extends Command
     public function handle()
     {
         //
+        $novel_id = RedisService::getNovelId();
+        if($novel_id && $novel_base = NovelBase::find($novel_id)) {
+            self::checkChannel($novel_base);
+        }
+    }
+
+    public static function checkChannel(NovelBase $novel_base){
+        switch($novel_base->site_resource){
+            case Sites::QIDIAN:
+                $result = QiDianService::updateDetailByQuery($novel_base);
+                break;
+        }
     }
 }

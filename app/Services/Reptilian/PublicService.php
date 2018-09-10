@@ -41,7 +41,7 @@
             }
         }
 
-        public static function getUnContentCapter($site_id = 1){
+        public static function getUnContentCapters($site_id = 1){
             $search = array(
                 'is_content' => 0,
                 'site_resource' => $site_id
