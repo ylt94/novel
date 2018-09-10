@@ -1,5 +1,5 @@
 <?php
-    namespace App\Service\Site;
+    namespace App\Services\Site;
     use Illuminate\Support\Facades\Cache;
     use App\Models\Sites;
 

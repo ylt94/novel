@@ -9,7 +9,8 @@
         "jaeger/querylist": "^4.0",
         "laravel/framework": "5.4.*",
         "laravel/passport": "^4.0",
-        "laravel/tinker": "~1.0"
+        "laravel/tinker": "~1.0",
+        "predis/predis": "^1.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

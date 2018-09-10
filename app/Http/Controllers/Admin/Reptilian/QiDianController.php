@@ -4,11 +4,12 @@
 namespace App\Http\Controllers\Admin\Reptilian;
 
 use App\Http\Controllers\Controller;
-use App\Service\Reptilian\QiDianService;
+
+use App\Services\Reptilian\QiDianService;
 use QL\QueryList;
-use App\Service\Novel\NovelCategoryService;
-use App\Service\Site\SiteService;
-use App\Service\Reptilian\PublicService;
+use App\Services\Novel\NovelCategoryService;
+use App\Services\Site\SiteService;
+use App\Services\Reptilian\PublicService;
 
 use Illuminate\Support\Facades\DB;
 

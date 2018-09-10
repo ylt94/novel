@@ -1,5 +1,5 @@
 <?php
-    namespace App\Service\Reptilian;
+    namespace App\Services\Reptilian;
     use Illuminate\Support\Facades\Cache;
 
 
