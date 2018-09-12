@@ -51,7 +51,7 @@ class LoginController extends Controller{
 
         $token_res = RedisService::setMemberToken($result);
         if(!$token_res) {
-            return ['status'=>0,'msg'=>'登陆失败，请骚后再试'];
+            return ['status'=>0,'msg'=>'登陆失败，请稍后再试'];
         }
 
         return ['status'=>1,'msg'=>'登陆成功','data'=>['token'=>$token_res]];
@@ -62,7 +62,7 @@ class LoginController extends Controller{
 
         $result = RedisService::delMemberToken($key);
         if(!$result){
-            return ['status'=>0,'msg'=>'服务器异常，请骚后再试'];
+            return ['status'=>0,'msg'=>'服务器异常，请稍后再试'];
         }
 
         return ['status'=>1,'msg'=>'退出成功'];
