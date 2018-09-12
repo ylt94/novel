@@ -41,4 +41,26 @@
 
             return self::$redis->lrange($key);
         }
+
+
+        public static function setMemberToken($user){
+            $key = 'member_login_'.$user->id;
+            $key_header = '&mermber&%';
+            $key_body = mt_rand(0,9999).time().'&';
+            $token = md5($key_header.$key_body);
+            if(!$token){
+                return false;
+            }
+            $data = [
+                'user_id' => $user->id,
+                'user_name' => $user->user_name,
+                'token' => $token
+            ];
+            $redis_res = self::$redis->set($key,$data);
+            if(!$redis_res) {
+                return false;
+            }
+
+            return $value;
+        }
     }
