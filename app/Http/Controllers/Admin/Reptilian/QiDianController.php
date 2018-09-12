@@ -92,7 +92,7 @@ class QiDianController extends Controller{
             //$data = PublicService::careteNovelBase($data,$site,$categories);
             //$result = PublicService::insertNovelBase($data,$page);
             $ql->destruct();
-            $arr = aray_merge($arr,$data);
+            $arr = array_merge($arr,$data);
             $page++;
         }while($page<10);
         dd($arr);
