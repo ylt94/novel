@@ -80,6 +80,7 @@ class QiDianController extends Controller{
         );
         $base_url = 'https://www.qidian.com/all?orderId=&style=1&pageSize=20&siteid=1&pubflag=0&hiddenField=0&page=';
         $page = 1;
+        $arr = [];
         $ql = QueryList::rules($rules);
         do{
             $url = $base_url.$page;
@@ -88,13 +89,13 @@ class QiDianController extends Controller{
                     ->getData();
             $data =  $data->all();
             $data = array_slice($data,0,20);
-            $data = PublicService::careteNovelBase($data,$site,$categories);
-            $result = PublicService::insertNovelBase($data,$page);
+            //$data = PublicService::careteNovelBase($data,$site,$categories);
+            //$result = PublicService::insertNovelBase($data,$page);
             $ql->destruct();
-            
+            $arr = aray_merge($arr,$data);
             $page++;
         }while($page<10);
-        echo '成功';
+        dd($arr);
         
     }
     
