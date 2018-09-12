@@ -67,4 +67,5 @@ class LoginController extends Controller{
 
         return ['status'=>1,'msg'=>'退出成功'];
     }
+
 }
