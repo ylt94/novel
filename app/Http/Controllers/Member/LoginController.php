@@ -56,4 +56,15 @@ class LoginController extends Controller{
 
         return ['status'=>1,'msg'=>'登陆成功','data'=>['token'=>$token_res]];
     }
+
+    public function loginOut(Request $request){
+        $key = $request->header('Access-Token');
+
+        $result = RedisService::delMemberToken($key);
+        if(!$result){
+            return ['status'=>0,'msg'=>'服务器异常，请骚后再试'];
+        }
+
+        return ['status'=>1,'msg'=>'退出成功'];
+    }
 }

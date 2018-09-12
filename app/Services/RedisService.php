@@ -44,23 +44,31 @@
 
 
         public static function setMemberToken($user){
-            $key = 'member_login_'.$user->id;
-            $key_header = '&mermber&%';
-            $key_body = mt_rand(0,9999).time().'&';
-            $token = md5($key_header.$key_body);
-            if(!$token){
+            $key = 'member_login_'.$user->id.mt_rand(0,9999).time();
+            $key = md5($key);
+            if(!$key){
                 return false;
             }
             $data = [
                 'user_id' => $user->id,
                 'user_name' => $user->user_name,
-                'token' => $token
             ];
             $redis_res = self::$redis->set($key,$data);
             if(!$redis_res) {
                 return false;
             }
 
-            return $value;
+            return $key;
+        }
+
+        public static function delMemberToken($key){
+            $keys = self::$redis->keys($key);
+
+            $del_res = self::$redis->del($keys);
+            if(!$del_res){
+                return false;
+            }
+
+            return true;
         }
     }
