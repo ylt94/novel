@@ -12,5 +12,6 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    //return view('welcome');
+    echo "盗用IP者，死全家，请三思!!!";
 });
