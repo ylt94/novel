@@ -205,7 +205,7 @@
                     'title' => $item['cN'],
                     'site_id' => $item['cU'],
                     'words' => $item['cnt'],
-                    'is_content' => 0,
+                    'is_update' => 0,
                     'create_at' => $item['uT'],
                     'created_at' => date('Y-m-d H:i:s',time()),
                     'updated_at' => date('Y-m-d H:i:s',time())
@@ -234,8 +234,8 @@
             }
             try{
                 DB::beginTransaction();
-                NovelContent::create(['content'=>$content]);
-                NovelDetail::where('id',$capter_id)->update(['is_content'=>1]);
+                NovelContent::create(['content'=>$content,'capter_id'=>$capter_id]);
+                NovelDetail::where('id',$capter_id)->update(['is_update'=>1]);
                 DB::commit();
             }catch(\Exception $e){
                 DB::rollback();
