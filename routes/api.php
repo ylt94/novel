@@ -13,6 +13,9 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::post('/member/register','Member/LoginController@register');
+Route::post('/member/login','Member/LoginController@login');
+
 Route::group(['namespace'=>'Admin','prefix'=>'admin','middleware'=>'auth:api'],function(){
     Route::group(['namespace'=>'Novel','prefix'=>'novel'],function(){
         Route::get('/categories','NovelCategoryController@getCategory');
@@ -27,6 +30,14 @@ Route::group(['namespace'=>'Admin','prefix'=>'admin','middleware'=>'auth:api'],f
         Route::post('/sites-add','NovelCategoryController@siteAdd');
     });
 });
+
+Route::group(['namespace'=>'Member','prefix'=>'member','middleware'=>'auth:member'],function(){
+    Route::get('/books','BooksController@memberBooks');
+    Route::post('/add-book','NovelCategoryController@addBook');
+    Route::post('/del-book','NovelCategoryController@delBook');
+    Route::post('/loginout','LoginController@loginOut');
+});
+
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
