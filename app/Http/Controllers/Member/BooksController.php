@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Member;
 
 use App\Http\Controllers\Controller;
 use Request;
+use App\Services\Member\MemberService;
 
 use App\Models\MemberBooks;
 
@@ -13,9 +14,12 @@ class BooksController extends Controller{
     public function memberBooks(Request $request){
         
         $member_id = app()->member['id'];
-        $books = MemberBooks::where('member_id',$member_id)->get();
+        $result = MemberService::memberBooks($member_id);
+        if(!$result) {
+            return ['status'=>MemberService::getLastCode(),'msg'=>MemberService::getLastError()];
+        }
 
-        return ['status'=>1,'msg'=>'','data'=>$books];
+        return ['status'=>1,'msg'=>'','data'=>$result];
     }
 
     public function addBook(Request $request){
@@ -59,6 +63,20 @@ class BooksController extends Controller{
         $book->delete();
         
         return ['status'=>1,'msg'=>'删除成功'];
+    }
+
+    public function readBook(Request $request){
+        $novel_id = $request->novel_id;
+        if(!$novel_id) {
+            return ['status'=>0,'msg'=>'参数不完整'];
+        }
+
+        $result = MemberService::memberReadBookCapter($novel_id);
+        if(!$result) {
+            return ['status'=>0,'msg'=>'获取失败'];
+        }
+
+        return ['status'=>1,'msg'=>'获取成功','data'=>$result];
     }
 
 }

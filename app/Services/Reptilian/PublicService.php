@@ -6,10 +6,11 @@
     use Log;
 
     use App\Models\NovelDetail;
-
     use App\Models\NovelBase;
 
-    class PublicService {
+    use App\Services\BaseService;
+
+    class PublicService extends BaseService{
 
 
 
@@ -43,7 +44,7 @@
 
         public static function getUnContentCapters($site_id = 1){
             $search = array(
-                'is_content' => 0,
+                'is_update' => 0,
                 'site_resource' => $site_id
             );
             return NovelDetail::where($search)->get();

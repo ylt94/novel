@@ -1,18 +1,18 @@
 <?php
     namespace App\Services\Reptilian;
     use Illuminate\Support\Facades\Cache;
-
+    use Illuminate\Support\Facades\DB;
+    use QL\QueryList;
+    use Log;
 
     use App\Models\Sites;
     use App\Models\NovelBase;
     use App\Models\NovelDetail;
     use App\Models\NovelContent;
 
-    use Illuminate\Support\Facades\DB;
-    use QL\QueryList;
-    use Log;
+    use App\Services\BaseService;
 
-    class QiDianService {
+    class QiDianService extends BaseService{
 
         //匹配小说名字,id
         public static function getTitleId(array $novel,$data,$page){
@@ -120,6 +120,7 @@
             //_csrfToken=zNBHov91ewRBUkSf2DsjdezDOsSdNWNC3lkBbdKO; expires
             preg_match_all('/_csrfToken=(.*?);/',$header, $res);
             if(!$res[1]){
+                static::addError('获取token失败',0);
                 return false;
             }
             $csrf_token = $res[1][0];
@@ -147,6 +148,7 @@
         public static function getQiDianData(){
             $qidian = Sites::where('name','like','%起点%')->first();
             if (!$qidian) {
+                static::addError('获取网站信息失败',0);
                 return false;
             }
             return $qidian;
@@ -157,6 +159,7 @@
             $novels = NovelBase::where('site_source',$qidian->id)->get();
 
             if (!$novels) {
+                static::addError('获取失败',0);
                 return false;
             }
 
@@ -169,6 +172,7 @@
             $novel = NovelBase::find($id);
 
             if($novel->total_chapters == $total_chapters){//已最新无需更新
+                static::addError('已最新无需更新',0);
                 return false;
             }
 
@@ -246,6 +250,7 @@
 
         public static function updateDetailByQuery(NovelBase $novel_base){
             if(!$novel_base) {
+                static::addError('参数错误',0);
                 return false;
             }
 
@@ -257,6 +262,7 @@
             $contents = file_get_contents($url);
             $result = json_decode($contents,true);
             if($result['code'] != 0 || $result['msg'] != 'suc') {
+                static::addError('获取小说章节失败',0);
                 return false;
             }
             
@@ -266,6 +272,7 @@
 
                 $check_res = static::checkNovelChapter($novel_base->id,$data['chapterTotalCnt']);
                 if(is_bool($check_res) && !$check_res) {
+                    static::addError('已最新无需更新',0);
                     return false;
                 }
                 

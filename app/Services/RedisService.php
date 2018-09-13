@@ -3,7 +3,9 @@
 
     use Illuminate\Support\Facades\Redis;
 
-    class RedisService {
+    use App\Services\BaseService;
+
+    class RedisService extends BaseService{
         private static $redis = null;
 
 
@@ -47,6 +49,7 @@
             $key = 'member_login_'.$user->id.mt_rand(0,9999).time();
             $key = md5($key);
             if(!$key){
+                static::addError('登陆失败',0);
                 return false;
             }
             $data = [
@@ -55,6 +58,7 @@
             ];
             $redis_res = self::$redis->set($key,$data);
             if(!$redis_res) {
+                static::addError('登陆失败',0);
                 return false;
             }
 
@@ -66,6 +70,7 @@
 
             $del_res = self::$redis->del($keys);
             if(!$del_res){
+                static::addError('服务器异常，请稍后再试',0);
                 return false;
             }
 
