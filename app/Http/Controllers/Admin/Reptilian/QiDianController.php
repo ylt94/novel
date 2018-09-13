@@ -68,11 +68,12 @@ class QiDianController extends Controller{
 
     //获取小说基本信息
     public function getNovelBase() {
-        print_r(phpinfo());exit;
+        //print_r(phpinfo());exit;
         $categories = NovelCategoryService::getCategories();
         $site =  SiteService::getSiteByName('起点中文网');
         $rules = array(
             'novel_id' => array('.book-mid-info>h4>a','data-bid'),
+            'img_url' => array('.book-img-box>img','src'),
             'title' => array('.book-mid-info>h4>a','text'),
             'type' => array('.author>a[data-eid=qd_B60]','text'),
             'desc' => array('.intro','text'),
