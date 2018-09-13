@@ -73,7 +73,7 @@ class QiDianController extends Controller{
         $site =  SiteService::getSiteByName('起点中文网');
         $rules = array(
             'novel_id' => array('.book-mid-info>h4>a','data-bid'),
-            'img_url' => array('.book-img-box>img','src'),
+            'img_url' => array('.book-img-box>a>img','src'),
             'title' => array('.book-mid-info>h4>a','text'),
             'type' => array('.author>a[data-eid=qd_B60]','text'),
             'desc' => array('.intro','text'),
