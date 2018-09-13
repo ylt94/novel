@@ -46,12 +46,14 @@
 
 
         public static function setMemberToken($user){
-            $key = 'member_login_'.$user->id.mt_rand(0,9999).time();
+            $key_type = 'member_login_';
+            $key = $user->id.mt_rand(0,9999).time();
             $key = md5($key);
             if(!$key){
                 static::addError('登陆失败',0);
                 return false;
             }
+            $key = $key_type.$key;
             $data = [
                 'user_id' => $user->id,
                 'user_name' => $user->user_name,
