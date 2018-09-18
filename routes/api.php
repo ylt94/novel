@@ -45,7 +45,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/test','Admin\Reptilian\QiDianController@getNovelBase');
-
+Route::get('/phpinfo',function(){
+    print_r(phpinfo());exit;
+});
 // Route::get('/test',function(){
 //     return ['status'=>1,'password'=>bcrypt(123456)];
 // });
