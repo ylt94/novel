@@ -46,17 +46,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/test','Admin\Reptilian\QiDianController@getNovelBase');
 Route::get('/phpinfo',function(){
-    //print_r(phpinfo());exit;
-    try {
-        $con = new PDO('mysql:host=mysql;dbname=novel', 'root', 'root');
-        $con->query('SET NAMES UTF8');
-        $res =  $con->query('select * from novel_category');
-        while ($row = $res->fetch(PDO::FETCH_ASSOC)) {
-            echo "id:{$row['id']} name:{$row['name']}";
-        }
-    } catch (PDOException $e) {
-         echo '错误原因：'  . $e->getMessage();
-    }
+    print_r(phpinfo());exit;
+    // try {
+    //     $con = new PDO('mysql:host=mysql;dbname=novel', 'root', 'root');
+    //     $con->query('SET NAMES UTF8');
+    //     $res =  $con->query('select * from novel_category');
+    //     while ($row = $res->fetch(PDO::FETCH_ASSOC)) {
+    //         echo "id:{$row['id']} name:{$row['name']}";
+    //     }
+    // } catch (PDOException $e) {
+    //      echo '错误原因：'  . $e->getMessage();
+    // }
 });
 // Route::get('/test',function(){
 //     return ['status'=>1,'password'=>bcrypt(123456)];
