@@ -48,9 +48,9 @@ Route::get('/test','Admin\Reptilian\QiDianController@getNovelBase');
 Route::get('/phpinfo',function(){
     //print_r(phpinfo());exit;
     try {
-        $con = new PDO('mysql:host=mysql;dbname=test', 'xuye', 'xy123456');
+        $con = new PDO('mysql:host=mysql;dbname=novel', 'root', 'root');
         $con->query('SET NAMES UTF8');
-        $res =  $con->query('select * from test');
+        $res =  $con->query('select * from novel_category');
         while ($row = $res->fetch(PDO::FETCH_ASSOC)) {
             echo "id:{$row['id']} name:{$row['name']}";
         }
