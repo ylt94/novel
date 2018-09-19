@@ -9,6 +9,7 @@ yarn-error.log*
 selenium-debug.log
 /config/passport.js
 /config/env.js
+/config/index.js
 
 # Editor directories and files
 .idea
