@@ -57,6 +57,8 @@ Route::get('/phpinfo',function(){
     // } catch (PDOException $e) {
     //      echo '错误原因：'  . $e->getMessage();
     // }
+    //extension = pdo_mysql.so
+    //docker-php-ext-pdo_mysql.ini
 });
 // Route::get('/test',function(){
 //     return ['status'=>1,'password'=>bcrypt(123456)];

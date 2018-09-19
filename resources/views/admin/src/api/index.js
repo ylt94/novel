@@ -10,7 +10,7 @@ axios.defaults.timeout = 6000
 if(!localStorage.getItem('access_token')){
     router.push('/login')
 }
-
+console.log('token--------------->',localStorage.getItem('access_token'));
 axios.defaults.headers.common['Authorization'] ='Bearer ' + localStorage.getItem('access_token')
 
 function get(url,params){
