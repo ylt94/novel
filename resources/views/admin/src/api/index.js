@@ -36,6 +36,11 @@ function post(url,params){
     })
 }
 
+function getToken(){
+    console.log('token--------------->',localStorage.getItem('access_token'));
+    axios.defaults.headers.common['Authorization'] ='Bearer ' + localStorage.getItem('access_token')
+}
+
 function errorCheck(error){
     var msg = ''
     switch(error.response.status){
