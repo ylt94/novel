@@ -24,14 +24,15 @@
       
       <el-container style="width:85%">
         <el-header style="text-align: right; font-size: 12px">
-          <el-dropdown>
+          <!-- <el-dropdown>
             <i class="el-icon-setting" style="margin-right: 15px"></i>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item>修改账户</el-dropdown-item>
-              <el-dropdown-item>安全退出</el-dropdown-item>
+              <el-dropdown-item @click="loginout">安全退出</el-dropdown-item>
             </el-dropdown-menu>
-          </el-dropdown>
+          </el-dropdown> -->
           <span>admin</span>
+          <el-button @click="loginout" type="text" size="small">安全退出</el-button>
         </el-header>
         
         <el-main>
@@ -49,6 +50,12 @@ export default {
   methods: {
     novelCategory: function(){
       this.$router.push({path:'/novel/category'});
+    },
+    loginout: function(){
+      console.log(1111111)
+      this.api.get('auth/logout',{}).then((ret)=>{
+          console.log(ret)
+      })
     }
   }
 }

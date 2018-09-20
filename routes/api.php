@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,8 +14,9 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('/member/register','Member/LoginController@register');
-Route::post('/member/login','Member/LoginController@login');
+Route::post('/member/register','Member\LoginController@register');
+Route::post('/member/login','Member\LoginController@login');
+//Route::middleware('auth:api')->get('auth/logout','Auth\LoginController@logout');
 
 Route::group(['namespace'=>'Admin','prefix'=>'admin','middleware'=>'auth:api'],function(){
     Route::group(['namespace'=>'Novel','prefix'=>'novel'],function(){
