@@ -1,6 +1,6 @@
   <template>
   <div id="app">
-    <el-container style="height: 100%; border: 1px solid #eee">
+    <el-container v-if="is_display" style="height: 100%; border: 1px solid #eee">
       <el-aside style="width:15%">
         <el-menu style="height:100%;margin-top:60px;" :default-openeds="['1', '3']">
           <el-submenu index="1">
@@ -24,19 +24,12 @@
       
       <el-container style="width:85%">
         <el-header style="text-align: right; font-size: 12px">
-          <!-- <el-dropdown>
-            <i class="el-icon-setting" style="margin-right: 15px"></i>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>修改账户</el-dropdown-item>
-              <el-dropdown-item @click="loginout">安全退出</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown> -->
           <span>admin</span>
-          <el-button @click="loginout" type="text" size="small">安全退出</el-button>
+          <el-button @click="loginout" type="text" style="color:#333" size="small">安全退出</el-button>
         </el-header>
         
         <el-main>
-          <router-view/>
+          <router-view></router-view>
         </el-main>
         <el-footer>Footer</el-footer>
       </el-container>
@@ -47,7 +40,20 @@
 <script>
 export default {
   name: 'App',
+  data(){
+    return {
+      is_display: false
+    } 
+  },
+  created(){
+    this.loginCheck()
+  },
   methods: {
+    loginCheck: function(){
+      if(localStorage.getItem('access_token')){
+        this.is_display = true
+      }
+    },
     novelCategory: function(){
       this.$router.push({path:'/novel/category'});
     },

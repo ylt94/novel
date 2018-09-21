@@ -10,21 +10,24 @@ axios.defaults.timeout = 6000
 if(!localStorage.getItem('access_token')){
     router.push('/login')
 }
-console.log('token--------------->',localStorage.getItem('access_token'));
-axios.defaults.headers.common['Authorization'] ='Bearer ' + localStorage.getItem('access_token')
+// console.log('token--------------->',localStorage.getItem('access_token'));
+// axios.defaults.headers.common['Authorization'] ='Bearer ' + localStorage.getItem('access_token')
 
 function get(url,params){
+    getToken()
     return new Promise(function(resolve,reject){
         axios.get(url,{params})
         .then(function (response) {
             resolve(response.data)
         }).catch(function(error){
+            console.log('error->>>>>>>>',error.response.status)
             errorCheck(error)
         })
     })
 }
 
 function post(url,params){
+    getToken()
     return new Promise(function(resolve,reject){
         axios.post(url,params)
         .then(function (response) {
@@ -37,8 +40,11 @@ function post(url,params){
 }
 
 function getToken(){
-    console.log('token--------------->',localStorage.getItem('access_token'));
-    axios.defaults.headers.common['Authorization'] ='Bearer ' + localStorage.getItem('access_token')
+    var token = localStorage.getItem('access_token')
+    if(!token){
+        router.push('/login')
+    }
+    axios.defaults.headers.common['Authorization'] ='Bearer ' + token
 }
 
 function errorCheck(error){
