@@ -26,10 +26,10 @@ Route::group(['namespace'=>'Admin','prefix'=>'admin','middleware'=>'auth:api'],f
         Route::post('/categories-sort','NovelCategoryController@categorySort');
     });
     Route::group(['namespace'=>'Site','prefix'=>'site'],function(){
-        Route::get('/sites','NovelCategoryController@siteSelect');
-        Route::post('/sites-del','NovelCategoryController@siteDel');
-        Route::post('/sites-update','NovelCategoryController@siteUpdate');
-        Route::post('/sites-add','NovelCategoryController@siteAdd');
+        Route::get('/sites','NovelSiteCotroller@siteSelect');
+        Route::post('/sites-del','NovelSiteCotroller@siteDel');
+        Route::post('/sites-update','NovelSiteCotroller@siteUpdate');
+        Route::post('/sites-add','NovelSiteCotroller@siteAdd');
     });
 });
 

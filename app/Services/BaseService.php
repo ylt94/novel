@@ -30,6 +30,6 @@ class BaseService
         if (self::$obj_error) {
             return self::$obj_error->code;
         }
-        return false;
+        return '服务器异常，请稍后再试';
     }
 }
