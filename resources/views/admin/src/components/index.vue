@@ -45,7 +45,6 @@ export default {
       this.$router.push({path:'/novel/category'});
     },
     loginout: function(){
-      console.log(1111111)
       this.api.get('auth/logout',{}).then((ret)=>{
           console.log(ret)
       })

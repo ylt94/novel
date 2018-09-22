@@ -28,23 +28,34 @@
         <el-table :data="categories" style="width:100%;height:100%">
             <el-table-column align="center" prop="id" label="编号" style="width:10%"> </el-table-column>
             <el-table-column align="center" prop="name" label="名称" style="width:15%"></el-table-column>
+            <el-table-column align="center" prop="author" label="作者" style="width:15%"></el-table-column>
             <el-table-column align="center" prop="name" label="类型" style="width:10%">
                 <template slot-scope="scope">
                    <span>{{scope.row.type_id==1?'男生':'女生'}}</span>
                 </template>
             </el-table-column>
-            <el-table-column align="center" prop="name" label="父级" style="width:10%">
+            <el-table-column align="center" prop="site_source" label="来源" style="width:15%"></el-table-column>
+            <el-table-column align="center" prop="total_chapters" label="章节" style="width:15%"></el-table-column>
+            <el-table-column align="center" prop="words" label="字数" style="width:15%"></el-table-column>
+            <el-table-column align="center" prop="status" label="状态" style="width:15%"></el-table-column>
+            <el-table-column align="center" prop="click_num" label="点击量" style="width:15%"></el-table-column>
+            <el-table-column align="center" prop="collection_num" label="收藏量" style="width:15%"></el-table-column>
+            <el-table-column align="center" prop="recommend_num" label="推荐量" style="width:15%"></el-table-column>
+            <el-table-column align="center" prop="is_recommend" label="推荐" style="width:15%"></el-table-column>
+            <el-table-column align="center" prop="last_update" label="最后更新" style="width:15%"></el-table-column>
+            <el-table-column align="center" prop="is_hide" label="隐藏" style="width:15%"></el-table-column>
+            <!-- <el-table-column align="center" prop="name" label="父级" style="width:10%">
                 <template slot-scope="scope">
                     <span v-if="scope.row.pid==0">无</span>
                     <span v-else v-for="item in categories" v-if="item.id==scope.row.pid">{{item.name}}</span>
                 </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column align="center" prop="created_at" label="创建时间" style="width:25%"> </el-table-column>
             <el-table-column align="center" label="操作" style="width:30%"> 
                 <template slot-scope="scope">
                     <el-button @click.native.prevent="onDelClicked(scope.row)" type="text" size="small">删除</el-button>
                     <el-button @click.native.prevent="updateRow(scope.row)" type="text" size="small">修改</el-button>
-                    <el-button @click.native.prevent="sortItem(scope.row)" type="text" size="small">排序</el-button>
+                    <el-button  type="text" size="small">章节</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -115,7 +126,7 @@ export default {
         }
     },
     created(){
-        this.getCategories();
+        //this.getCategories();
     },
     methods:{
         onDialogClose(){

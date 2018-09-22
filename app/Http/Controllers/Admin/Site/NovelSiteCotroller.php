@@ -3,7 +3,7 @@
 
 namespace App\Http\Controllers\Admin\Site;
 use App\Http\Controllers\Controller;
-use Request;
+use Illuminate\Http\Request;
 
 use App\Models\Sites;
 
@@ -22,7 +22,7 @@ class NovelSiteCotroller extends Controller{
             return ['status'=>0,'msg'=>'网站名称已存在'];
         }
 
-        Sites::crete(['name'=>$name]);
+        Sites::create(['name'=>$name]);
         return ['status'=>1,'msg'=>'新增成功'];
     }
 
@@ -39,6 +39,9 @@ class NovelSiteCotroller extends Controller{
         }
 
         $check->name = $name;
+        $check->base_url = $request->base_url;
+        $check->detail_url = $request->detail_url;
+        $check->content_url = $request->content_url;
         $check->save();
         return ['status'=>1,'msg'=>'修改成功'];
     }
@@ -54,12 +57,12 @@ class NovelSiteCotroller extends Controller{
     }
 
     public function siteSelect(Request $request){
-        $id = $request->id;
-        if(!$id) {
-            return ['status'=>0,'msg'=>'参数不完整'];
-        }
+        // $id = $request->id;
+        // if(!$id) {
+        //     return ['status'=>0,'msg'=>'参数不完整'];
+        // }
 
-        $sites = Sites::where('id',$id)->delete();
+        $sites = Sites::get();
         return ['status'=>1,'msg'=>'获取成功','data'=>$sites];
     }
 

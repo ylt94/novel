@@ -18,7 +18,7 @@
             </el-col>
             <el-col :span="6">
                 <div class="grid-content bg-purple">
-                    <el-button type="primary">搜索</el-button>
+                    <!-- <el-button type="primary">搜索</el-button> -->
                     <el-button type="primary" @click="dialog=true">新增</el-button>
                 </div>
             </el-col>
@@ -28,55 +28,30 @@
         <el-table :data="sites" style="width:100%;height:100%">
             <el-table-column align="center" prop="id" label="编号" style="width:10%"> </el-table-column>
             <el-table-column align="center" prop="name" label="名称" style="width:15%"></el-table-column>
-            <el-table-column align="center" prop="name" label="类型" style="width:10%">
-                <template slot-scope="scope">
-                   <span>{{scope.row.type_id==1?'男生':'女生'}}</span>
-                </template>
-            </el-table-column>
-            <el-table-column align="center" prop="name" label="父级" style="width:10%">
-                <template slot-scope="scope">
-                    <span v-if="scope.row.pid==0">无</span>
-                    <span v-else v-for="item in sites" v-if="item.id==scope.row.pid">{{item.name}}</span>
-                </template>
-            </el-table-column>
+            <el-table-column align="center" prop="base_url" label="基础地址" style="width:10%"></el-table-column>
+            <el-table-column align="center" prop="detail_url" label="章节地址" style="width:10%"></el-table-column>
+            <el-table-column align="center" prop="content_url" label="内容地址" style="width:10%"></el-table-column>
             <el-table-column align="center" prop="created_at" label="创建时间" style="width:25%"> </el-table-column>
             <el-table-column align="center" label="操作" style="width:30%"> 
                 <template slot-scope="scope">
                     <el-button @click.native.prevent="onDelClicked(scope.row)" type="text" size="small">删除</el-button>
                     <el-button @click.native.prevent="updateRow(scope.row)" type="text" size="small">修改</el-button>
-                    <el-button @click.native.prevent="sortItem(scope.row)" type="text" size="small">排序</el-button>
                 </template>
             </el-table-column>
         </el-table>
-        <el-dialog title="新增小说类型" :visible.sync="dialog" @open="getsites" @close="onDialogClose">
+        <el-dialog title="新增/修改爬虫站点" :visible.sync="dialog" @open="getsites" @close="onDialogClose">
             <el-form :model="form">
-                <el-form-item label="类型" style="width:100%">
-                   <el-select v-model="form.type_id" @change="getsites" placeholder="请选择" style="max-width:200px">
-                        <el-option
-                        v-for="item in novelType"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="父级" style="width:100%">
-                    <el-select v-model="form.pid" placeholder="请选择" style="max-width:200px">
-                        <el-option
-                        :key="0"
-                        :label="'无'"
-                        :value="0">
-                        </el-option>
-                        <el-option
-                        v-for="item in searchCate"
-                        :key="item.id"
-                        :label="item.name"
-                        :value="item.id">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="名称" style="width:100%">
+                <el-form-item label="站点名称" style="width:100%">
                     <el-input v-model="form.name" auto-complete="off" style="max-width:200px"></el-input>
+                </el-form-item>
+                <el-form-item label="基础地址" style="width:100%">
+                    <el-input v-model="form.base_url" auto-complete="off" style="max-width:200px"></el-input>
+                </el-form-item>
+                <el-form-item label="章节地址" style="width:100%">
+                    <el-input v-model="form.detail_url" auto-complete="off" style="max-width:200px"></el-input>
+                </el-form-item>
+                <el-form-item label="内容地址" style="width:100%">
+                    <el-input v-model="form.content_url" auto-complete="off" style="max-width:200px"></el-input>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
@@ -109,8 +84,9 @@ export default {
         form:{
             id:'',
             name:'',
-            type_id:1,
-            pid:0
+            base_url:'',
+            detail_url:'',
+            content_url:''
         },
         }
     },
@@ -146,22 +122,32 @@ export default {
                 })
                 return 
             }
-
-            this.api.post('api/admin/novel/categories-addorupdate',this.form).then((ret)=>{
-                this.api.retrunMsg(ret)
-                if(ret.status) {
-                    this.dialog = false
-                    this.getsites()
-                }
-                
-            })
+            if(this.form.id){
+                this.api.post('api/admin/site/sites-update',this.form).then((ret)=>{
+                    this.api.retrunMsg(ret)
+                    if(ret.status) {
+                        this.dialog = false
+                        this.getsites()
+                    } 
+                })
+            }else{
+                this.api.post('api/admin/site/sites-add',this.form).then((ret)=>{
+                    this.api.retrunMsg(ret)
+                    if(ret.status) {
+                        this.dialog = false
+                        this.getsites()
+                    } 
+                })
+            }
+            
         },
         updateRow(row){
             this.form = {
                 id:row.id,
-                pid:row.pid,
-                type_id:row.type_id,
-                name:row.name
+                name: row.name,
+                base_url:row.base_url,
+                detail_url:row.detail_url,
+                content_url:row.content_url
             }
             this.dialog =true;
         },
@@ -178,31 +164,10 @@ export default {
             })
         },
         delItem(){
-           this.api.post('api/admin/novel/categories-del',this.delData).then((ret)=>{
+           this.api.post('api/admin/site/sites-del',this.delData).then((ret)=>{
                 this.api.retrunMsg(ret)
                 this.getsites()
            })
-        },
-        sortItem(item){
-            this.lastId = item.id
-            this.$prompt('请输入此条数据要插入的位置的编号(XX之后)', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消'
-            }).then(({ value }) => {
-                this.sortPost(value)
-            }).catch(() => {
-              
-            });
-        },
-        sortPost(font_id){
-            var params = {
-                last_id:this.lastId,
-                font_id:font_id
-            }
-            this.api.post('api/admin/novel/categories-sort',params).then(ret=>{
-                this.api.retrunMsg(ret)
-                this.getsites()
-            })
         }
         
     }
