@@ -69,7 +69,7 @@ class QiDianController extends Controller{
     //获取小说基本信息
     public function getNovelBase() {
         
-        $categories = NovelCategoryService::getCategories();dd($categories);
+        $categories = NovelCategoryService::getCategories();
         $site =  SiteService::getSiteByName('起点中文网');
         $rules = array(
             'novel_id' => array('.book-mid-info>h4>a','data-bid'),
@@ -91,13 +91,13 @@ class QiDianController extends Controller{
                     ->getData();
             $data =  $data->all();
             $data = array_slice($data,0,20);
-            //$data = PublicService::careteNovelBase($data,$site,$categories);
-            //$result = PublicService::insertNovelBase($data,$page);
+            $data = PublicService::careteNovelBase($data,$site,$categories);
+            $result = PublicService::insertNovelBase($data,$page);
             $ql->destruct();
             $arr = array_merge($arr,$data);
             $page++;
         }while($page<10);
-        dd($arr);
+        echo 'success';
         
     }
     

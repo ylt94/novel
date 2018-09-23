@@ -197,6 +197,7 @@
         //更新detail表
         public static function createNovelDetail($id,$data,$site_id) {
             $create_arr = array();
+            $total_words = 0;
             foreach ($data as $item) {
                 $create_item = [
                     'novel_id' => $id,
@@ -210,9 +211,10 @@
                     'created_at' => date('Y-m-d H:i:s',time()),
                     'updated_at' => date('Y-m-d H:i:s',time())
                 ];
+                $total_words += $item['cnt'];
                 array_push($create_arr,$create_item);
             }
-           
+            NovelBase::where('id',$id)->increment('words',$total_words);
             return NovelDetail::insert($create_arr);
             
         }

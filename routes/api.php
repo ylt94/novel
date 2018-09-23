@@ -46,15 +46,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     
 });
 
-Route::get('/test','Admin\Reptilian\QiDianController@getNovelBase');
+Route::get('/test','Admin\Reptilian\QiDianController@getNovelDetail');
 Route::get('/phpinfo',function(){
-    return json_encode($silver = [
-        'type' => '现金收款',
-        'total_num'=>0,
-        'total_money'=>'0.00',
-        'refund_money'=>'0.00',
-        'refund_num'=>0
-    ]);
     //print_r(phpinfo());exit;
     // try {
     //     $con = new PDO('mysql:host=mysql;dbname=novel', 'root', 'root');
