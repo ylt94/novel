@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin\Novel;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 
 use App\Services\Novel\NovelService;
 
@@ -22,6 +22,20 @@ class NovelController extends Controller{
         }
 
         return ret_res(1,1000,$result);
+    }
+
+    public function delNovel(Request $request) {
+        $id = $request->id;
+        if($id) {
+            return ret_res(0,0006);
+        }
+
+        $result = NovelService::delNovel($id);
+        if(!$result){
+            return ret_res(0,0005);
+        }
+
+        return ret_res(1,1004);
     }
 
     public function updateNovle(Request $request){

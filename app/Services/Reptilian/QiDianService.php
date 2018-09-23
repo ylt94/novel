@@ -156,7 +156,7 @@
 
         //获取起点网站所有小说
         public static function getQiDianNovels($qidian){
-            $novels = NovelBase::where('site_source',$qidian->id)->get();
+            $novels = NovelBase::where('site_source',$qidian->id)->orderBy('created_at','asc')->get();
 
             if (!$novels) {
                 static::addError('获取失败',0);

@@ -1,7 +1,8 @@
 <?php
     namespace App\Services\Novel;
 
-    use Illuminate\Support\Facades\Request;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\DB;
 
     use App\Services\BaseService;
     use App\Services\PublicService;
@@ -18,8 +19,8 @@
 
         public static function novles(Request $request){
             $query = NovelBase::query();
-            if($request->name){
-                $query->where('title','like','%'.$request->name.'%');
+            if($request->title){
+                $query->where('title','like','%'.$request->title.'%');
             }
 
             if($request->type){
@@ -52,9 +53,26 @@
             
         }
 
+        public static function delNovel($id){
+            try{
+                DB::beginTransaction();
+                NovelBase::where('id',$id)->delete();
+                $chapter_ids = NovelDetail::where('novel_id',$id)->public('id')->get();
+                NovelDetail::where('novel_id',$id)->delete();
+                NovelContete::whereIn('capter_id',$chapter_ids)->delete();
+                DB::commit();
+            }catch(\Exception $e){
+                DB::rollBack();
+                static::addError(-1,$e->getMessage());
+                return false;
+            }
+            return true;
+        }
+
         public static function getNovelChapters($id,$page = 1,$order_by = 'asc'){
             $query = NovelDetail::where('novel_id',$id)->orderBy('create_at',$order_by);
 
+            $page_num = 10;
             $result = PublicService::Paginate($query,$page,$page_num);
 
             return $result;

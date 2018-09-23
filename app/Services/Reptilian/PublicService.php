@@ -47,6 +47,6 @@
                 'is_update' => 0,
                 'site_resource' => $site_id
             );
-            return NovelDetail::where($search)->get();
+            return NovelDetail::where($search)->orderBy('created_at','asc')->get();
         }
     }

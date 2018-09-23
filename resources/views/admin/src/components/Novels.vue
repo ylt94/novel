@@ -1,98 +1,248 @@
 <template>
     <div style="height:100%;width:100%">
         <el-row :gutter="20" style="width:100%">
-            <el-col :span="6">
+            <el-col :span="5">
                 <div class="grid-content bg-purple">
-
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <div class="grid-content bg-purple">
+                                <el-input v-model="search.title" placeholder="小说名称"></el-input>
+                            </div>
+                        </el-col>
+                        <el-col :span="12">
+                            <div class="grid-content bg-purple">
+                                <el-input v-model="search.author" placeholder="作者名称"></el-input>
+                            </div>
+                        </el-col>
+                    </el-row>
                 </div>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="5">
                 <div class="grid-content bg-purple">
-
+                    <el-row :gutter="20">
+                        <el-col :span="12">
+                            <div class="grid-content bg-purple">
+                                <el-select v-model="search.status" placeholder="小说状态">
+                                    <el-option :key="1" :label="'连载'" :value="1"></el-option>
+                                    <el-option :key="2" :label="'完本'" :value="2"></el-option>
+                                </el-select>
+                            </div>
+                        </el-col>
+                        <el-col :span="12">
+                            <div class="grid-content bg-purple">
+                                <el-select v-model="search.type" placeholder="小说类型">
+                                    <el-option v-for="item in categories" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                                </el-select>
+                            </div>
+                        </el-col>
+                    </el-row>
                 </div>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="8">
                 <div class="grid-content bg-purple">
-
+                    <el-row :gutter="20">
+                        <el-col :span="8">
+                            <div class="grid-content bg-purple">
+                                <el-select v-model="search.resource" placeholder="来源网站">
+                                    <el-option v-for="item in sites" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                                </el-select>
+                            </div>
+                        </el-col>
+                        <el-col :span="8">
+                            <div class="grid-content bg-purple">
+                                <el-select v-model="search.order_by_clumn" placeholder="排序字段">
+                                    <el-option :key="1" :label="'编号'" :value="'id'"></el-option>
+                                    <el-option :key="2" :label="'类型'" :value="'type'"></el-option>
+                                    <el-option :key="3" :label="'来源'" :value="'site_source'"></el-option>
+                                    <el-option :key="4" :label="'字数'" :value="'words'"></el-option>
+                                    <el-option :key="5" :label="'章节数'" :value="'total_chapters'"></el-option>
+                                    <el-option :key="6" :label="'状态'" :value="'status'"></el-option>
+                                    <el-option :key="7" :label="'点击量'" :value="'click_num'"></el-option>
+                                    <el-option :key="8" :label="'推荐量'" :value="'recommend_num'"></el-option>
+                                    <el-option :key="9" :label="'收藏量'" :value="'collection_num'"></el-option>
+                                    <el-option :key="10" :label="'推荐首页'" :value="'is_recommend'"></el-option>
+                                    <el-option :key="11" :label="'最后更新'" :value="'last_update'"></el-option>
+                                    <el-option :key="12" :label="'是否隐藏'" :value="'is_hide'"></el-option>
+                                    <el-option :key="13" :label="'创建时间'" :value="'created_at'"></el-option>
+                                </el-select>
+                            </div>
+                        </el-col>
+                        <el-col :span="8">
+                            <div class="grid-content bg-purple">
+                                <el-select v-model="search.order_by_order" placeholder="排序字段">
+                                    <el-option :key="1" :label="'正序'" :value="'asc'"></el-option>
+                                    <el-option :key="2" :label="'逆序'" :value="'desc'"></el-option>
+                                </el-select>
+                            </div>
+                        </el-col>
+                    </el-row>
                 </div>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="3">
                 <div class="grid-content bg-purple">
-                    <el-button type="primary">搜索</el-button>
-                    <el-button type="primary" @click="dialog=true">新增</el-button>
+                    <el-button @click="getNovels" type="primary">搜索</el-button>
                 </div>
             </el-col>
         </el-row>
     
     
-        <el-table :data="categories" style="width:100%;height:100%">
+        <el-table :data="novels" highlight-current-row style="width:100%;height:100%">
             <el-table-column align="center" prop="id" label="编号" style="width:10%"> </el-table-column>
-            <el-table-column align="center" prop="name" label="名称" style="width:15%"></el-table-column>
+            <el-table-column align="center" prop="title" label="名称" style="width:15%"></el-table-column>
             <el-table-column align="center" prop="author" label="作者" style="width:15%"></el-table-column>
-            <el-table-column align="center" prop="name" label="类型" style="width:10%">
+            <el-table-column align="center" prop="type" label="类型" style="width:10%">
                 <template slot-scope="scope">
-                   <span>{{scope.row.type_id==1?'男生':'女生'}}</span>
+                    <span v-for="item in categories" v-if="item.id==scope.row.type">{{item.name}}</span>
                 </template>
             </el-table-column>
-            <el-table-column align="center" prop="site_source" label="来源" style="width:15%"></el-table-column>
-            <el-table-column align="center" prop="total_chapters" label="章节" style="width:15%"></el-table-column>
+            <el-table-column align="center" prop="site_source" label="来源" style="width:15%">
+                <template slot-scope="scope">
+                    <span v-for="item in sites" v-if="item.id==scope.row.site_source">{{item.name}}</span>
+                </template>
+            </el-table-column>
+            <el-table-column align="center" prop="total_chapters" label="章节数" style="width:15%"></el-table-column>
             <el-table-column align="center" prop="words" label="字数" style="width:15%"></el-table-column>
-            <el-table-column align="center" prop="status" label="状态" style="width:15%"></el-table-column>
+            <el-table-column align="center" prop="status" label="状态" style="width:15%">
+                <template slot-scope="scope">
+                    <span v-if="scope.row.status==1">连载</span>
+                    <span v-else>完本</span>
+                </template>
+            </el-table-column>
             <el-table-column align="center" prop="click_num" label="点击量" style="width:15%"></el-table-column>
             <el-table-column align="center" prop="collection_num" label="收藏量" style="width:15%"></el-table-column>
             <el-table-column align="center" prop="recommend_num" label="推荐量" style="width:15%"></el-table-column>
             <el-table-column align="center" prop="is_recommend" label="推荐" style="width:15%"></el-table-column>
             <el-table-column align="center" prop="last_update" label="最后更新" style="width:15%"></el-table-column>
-            <el-table-column align="center" prop="is_hide" label="隐藏" style="width:15%"></el-table-column>
+            <el-table-column align="center" prop="is_hide" label="隐藏" style="width:15%">
+                <template slot-scope="scope">
+                    <span v-if="scope.row.is_hide==1">是</span>
+                    <span v-else>否</span>
+                </template>
+            </el-table-column>
             <!-- <el-table-column align="center" prop="name" label="父级" style="width:10%">
                 <template slot-scope="scope">
                     <span v-if="scope.row.pid==0">无</span>
-                    <span v-else v-for="item in categories" v-if="item.id==scope.row.pid">{{item.name}}</span>
+                    <span v-else v-for="item in novels" v-if="item.id==scope.row.pid">{{item.name}}</span>
                 </template>
             </el-table-column> -->
             <el-table-column align="center" prop="created_at" label="创建时间" style="width:25%"> </el-table-column>
-            <el-table-column align="center" label="操作" style="width:30%"> 
+            <el-table-column align="center" label="操作" style="width:30%" fixed="right"> 
                 <template slot-scope="scope">
                     <el-button @click.native.prevent="onDelClicked(scope.row)" type="text" size="small">删除</el-button>
                     <el-button @click.native.prevent="updateRow(scope.row)" type="text" size="small">修改</el-button>
-                    <el-button  type="text" size="small">章节</el-button>
+                    <el-button @click.native.prevent="getChapters(scope.row)"  type="text" size="small">章节</el-button>
                 </template>
             </el-table-column>
         </el-table>
-        <el-dialog title="新增/修改小说类型" :visible.sync="dialog" @open="getCategories" @close="onDialogClose">
+        <el-pagination @current-change="onPageChange" background layout="prev, pager, next" :total="pages*10"> </el-pagination>
+        <el-dialog title="修改小说数据" :visible.sync="dialog">
             <el-form :model="form">
-                <el-form-item label="类型" style="width:100%">
-                   <el-select v-model="form.type_id" @change="getCategories" placeholder="请选择" style="max-width:200px">
-                        <el-option
-                        v-for="item in novelType"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                        </el-option>
-                    </el-select>
+                <el-form-item label="小说名" style="width:100%">
+                    <el-input v-model="form.title" auto-complete="off" style="max-width:200px"></el-input>
                 </el-form-item>
-                <el-form-item label="父级" style="width:100%">
-                    <el-select v-model="form.pid" placeholder="请选择" style="max-width:200px">
-                        <el-option
+                <el-form-item label="作者" style="width:100%">
+                    <el-input v-model="form.author" auto-complete="off" style="max-width:200px"></el-input>
+                </el-form-item>
+                <el-form-item label="章节数" style="width:100%">
+                    <el-input type="number" v-model="form.total_chapters" auto-complete="off" style="max-width:200px"></el-input>
+                </el-form-item>
+                <el-form-item label="字数" style="width:100%">
+                    <el-input type="number" v-model="form.words" auto-complete="off" style="max-width:200px"></el-input>
+                </el-form-item>
+                <el-form-item label="类型" style="width:100%">
+                   <el-select v-model="form.type" placeholder="请选择" style="max-width:200px">
+                       <el-option
                         :key="0"
                         :label="'无'"
                         :value="0">
                         </el-option>
                         <el-option
-                        v-for="item in searchCate"
+                        v-for="item in categories"
                         :key="item.id"
                         :label="item.name"
                         :value="item.id">
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="名称" style="width:100%">
-                    <el-input v-model="form.name" auto-complete="off" style="max-width:200px"></el-input>
+                <el-form-item label="状态" style="width:100%">
+                    <el-switch
+                    style="display: block"
+                    active-value="2"
+                    inactive-value="1"
+                    v-model="form.status"
+                    active-color="#13ce66"
+                    inactive-color="#ff4949"
+                    active-text="完本"
+                    inactive-text="连载">
+                    </el-switch>
+                </el-form-item>
+                <!-- <el-form-item label="简介" style="width:100%">
+                    <el-input type="textarea" v-model="form.desc" auto-complete="off" style="max-width:200px"></el-input>
+                </el-form-item> -->
+                <el-form-item label="点击量" style="width:100%">
+                    <el-input type="number" v-model="form.click_num" auto-complete="off" style="max-width:200px"></el-input>
+                </el-form-item>
+                <el-form-item label="收藏量" style="width:100%">
+                    <el-input type="number" v-model="form.collection_num" auto-complete="off" style="max-width:200px"></el-input>
+                </el-form-item>
+                <el-form-item label="推荐量" style="width:100%">
+                    <el-input type="number" v-model="form.recommend_num" auto-complete="off" style="max-width:200px"></el-input>
+                </el-form-item>
+                <el-form-item label="首页推荐" style="width:100%">
+                    <el-switch
+                    style="display: block"
+                    active-value="1"
+                    inactive-value="0"
+                    v-model="form.is_recommend"
+                    active-color="#13ce66"
+                    inactive-color="#ff4949"
+                    active-text="是"
+                    inactive-text="否">
+                    </el-switch>
+                </el-form-item>
+                <el-form-item label="是否隐藏" style="width:100%">
+                    <el-switch
+                    style="display: block"
+                    active-value="1"
+                    inactive-value="0"
+                    v-model="form.is_hide"
+                    active-color="#13ce66"
+                    inactive-color="#ff4949"
+                    active-text="是"
+                    inactive-text="否">
+                    </el-switch>
                 </el-form-item>
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialog = false">取 消</el-button>
-                <el-button type="primary" @click="addOrUpdatePost">确 定</el-button>
+                <el-button type="primary" @click="updatePost">确 定</el-button>
+            </div>
+        </el-dialog>
+        <el-dialog title="小说章节" :visible.sync="dialog_chapter" width="80%">
+            <el-table :data="chapters" highlight-current-row style="width:100%;height:100%">
+                <el-table-column align="center" prop="id" label="编号" style="width:10%"> </el-table-column>
+                <el-table-column align="center" prop="title" label="名称" style="width:15%"></el-table-column>
+                <el-table-column align="center" prop="site_id" label="网站标识" style="width:15%"></el-table-column>
+                <el-table-column align="center" prop="words" label="字数" style="width:15%"></el-table-column>
+                <el-table-column align="center" prop="is_update" label="状态" style="width:15%">
+                    <template slot-scope="scope">
+                        <span v-if="scope.row.is_update==1">已更新</span>
+                        <span v-else>未更新</span>
+                    </template>
+                </el-table-column>
+                <el-table-column align="center" prop="create_at" label="发布时间" style="width:15%"></el-table-column>
+                <el-table-column align="center" prop="created_at" label="创建时间" style="width:25%"> </el-table-column>
+                <el-table-column align="center" label="操作" style="width:30%" fixed="right"> 
+                    <template slot-scope="scope">
+                        <el-button @click.native.prevent="onDelClicked(scope.row)" type="text" size="small">删除</el-button>
+                        <el-button @click.native.prevent="updateRow(scope.row)" type="text" size="small">修改</el-button>
+                        <el-button v-if="scope.row.is_update==1" @click.native.prevent="getContent(scope.row)"  type="text" size="small">内容</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="dialog_chapter = false">取 消</el-button>
+                <el-button type="primary" @click="dialog_chapter = false">确 定</el-button>
             </div>
         </el-dialog>
     </div>
@@ -102,83 +252,89 @@
 export default {
     data() {
         return {
-        categories:[],
-        searchCate:[],
-        dialog:false,
-        delData:{},
-        lastId:null,
-        novelType:[
-            {
-                value:1,
-                label:'男生'
+            novels:[],
+            pages:0,
+            search:{
+                title: '',
+                type: '',
+                resource: '',
+                author: '',
+                status: '',
+                order_by: '',
+                order_by_clumn:'',
+                order_by_order:'',
+                page:1
             },
-            {
-                value:2,
-                label:'女生'
-            }
-        ],
-        form:{
-            id:'',
-            name:'',
-            type_id:1,
-            pid:0
-        },
+            categories:[],
+            sites:[],
+            chapters:[],
+            search_chapter:[],
+            dialog:false,
+            dialog_chapter:false,
+            delData:{},
+            novelType:[
+                {
+                    value:1,
+                    label:'男生'
+                },
+                {
+                    value:2,
+                    label:'女生'
+                }
+            ],
+            form:{},
         }
     },
     created(){
-        //this.getCategories();
+        this.getNovels()
+        this.getCategories()
+        this.getSites()
     },
     methods:{
-        onDialogClose(){
-            this.form={
-                id:'',
-                name:'',
-                type_id:1,
-                pid:0
-            }
+        onPageChange(page){
+            this.search.page = page
+            this.getNovels()
         },
-        getCategories(){
-            var params = {}
-            if(this.dialog){
-                params = {
-                    type_id:this.form.type_id
-                }
+        getNovels(){
+            if(this.search.order_by_clumn && this.search.order_by_order){
+                this.search.order_by = this.search.order_by_clumn + ',' + this.search.order_by_order
             }
-            console.log(params)
-            this.api.get('api/admin/novel/categories',params).then((ret)=>{
-                if(this.dialog) {
-                    this.searchCate = ret.data
-                }else{
-                    this.categories = ret.data;
-                }
-                
+            this.api.get('api/admin/novel/novels',this.search).then((ret)=>{
+                this.novels = ret.data.data
+                this.pages = ret.data.pages
             })
         },
-        addOrUpdatePost(){
-            if(!this.form.name) {
-                this.$message({
-                    type: 'warning',
-                    message: '请填写完整!'
-                })
-                return 
+        getCategories(){
+            this.api.get('api/admin/novel/categories',{}).then((ret)=>{
+                this.categories = ret.data
+            })
+        },
+        getSites(){
+            this.api.get('api/admin/site/sites',{}).then((ret)=>{
+                this.sites = ret.data
+            })
+        },
+        updatePost(){
+            for(var i in this.form) {
+                if(this.form[i] === null || this.form[i] === ''){
+                     this.$message({
+                        type: 'warning',
+                        message: '请填写完整!'
+                    })
+                    return 
+                }
             }
-
-            this.api.post('api/admin/novel/categories-addorupdate',this.form).then((ret)=>{
+            this.api.post('api/admin/novel/novels-update',this.form).then((ret)=>{
                 this.api.retrunMsg(ret)
                 if(ret.status) {
                     this.dialog = false
-                    this.getCategories()
+                    this.getNovels()
                 }
                 
             })
         },
         updateRow(row){
-            this.form = {
-                id:row.id,
-                pid:row.pid,
-                type_id:row.type_id,
-                name:row.name
-            }
+            this.form = row
             this.dialog =true;
         },
         onDelClicked(row){
@@ -194,30 +350,22 @@ export default {
             })
         },
         delItem(){
-           this.api.post('api/admin/novel/categories-del',this.delData).then((ret)=>{
+           this.api.post('api/admin/novel/novels-del',this.delData).then((ret)=>{
                 this.api.retrunMsg(ret)
-                this.getCategories()
+                this.getNovels()
            })
         },
-        sortItem(item){
-            this.lastId = item.id
-            this.$prompt('请输入此条数据要插入的位置的编号(XX之后)', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消'
-            }).then(({ value }) => {
-                this.sortPost(value)
-            }).catch(() => {
-              
-            });
-        },
-        sortPost(font_id){
+        getChapters(row){
             var params = {
-                last_id:this.lastId,
-                font_id:font_id
+                id:row.id,
+                page:1,
+                order_by:'asc'
             }
-            this.api.post('api/admin/novel/categories-sort',params).then(ret=>{
+            this.api.post('api/admin/novel/novels-chapters',params).then(ret=>{
                 this.api.retrunMsg(ret)
-                this.getCategories()
+                this.chapters = ret.data.data
+                console.log(this.chapters)
+                this.dialog_chapter = true
             })
         }
         

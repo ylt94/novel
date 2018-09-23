@@ -24,6 +24,12 @@ Route::group(['namespace'=>'Admin','prefix'=>'admin','middleware'=>'auth:api'],f
         Route::post('/categories-addorupdate','NovelCategoryController@categoryAddOrUpdate');
         Route::post('/categories-del','NovelCategoryController@categoryDel');
         Route::post('/categories-sort','NovelCategoryController@categorySort');
+
+        Route::get('/novels','NovelController@getNovles');
+        Route::post('/novels-update','NovelController@updateNovle');
+        Route::post('/novels-del','NovelController@delNovel');
+        Route::post('/novels-chapters','NovelController@novelChapters');
+
     });
     Route::group(['namespace'=>'Site','prefix'=>'site'],function(){
         Route::get('/sites','NovelSiteCotroller@siteSelect');
@@ -46,7 +52,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     
 });
 
-Route::get('/test','Admin\Reptilian\QiDianController@getNovelContent');
+Route::get('/test','Admin\Reptilian\QiDianController@getNovelDetail');
 Route::get('/phpinfo',function(){
     //print_r(phpinfo());exit;
     // try {
