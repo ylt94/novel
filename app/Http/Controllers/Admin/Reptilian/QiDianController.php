@@ -158,8 +158,8 @@ class QiDianController extends Controller{
         $base_url = 'https://read.qidian.com/chapter/';
         $capters = PublicService::getUnContentCapters();
         foreach ($capters as $capter) {
-            $url = $base_url.$capters->site_id;
-            QiDianService::getQiDianNovelContent($url,$capters->id);
+            $url = $base_url.$capter->site_id;
+            QiDianService::getQiDianNovelContent($url,$capter->id);
         }
         echo 'success';
     }
