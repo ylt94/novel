@@ -268,8 +268,8 @@
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button type="primary">确定</el-button>
-                    <el-button @click=" dialog_content=false">取消</el-button>
+                    <el-button @click="updateContent" type="primary">确定</el-button>
+                    <el-button @click="dialog_content=false">取消</el-button>
                 </div>
             </el-dialog>
         </el-dialog>
@@ -429,10 +429,9 @@ export default {
         updateContent(){
             this.api.post('api/admin/novel/novels-content-update',this.content).then(ret=>{ 
                 if(this.api.retrunMsg(ret)) {
-                    this.chapters = ret.data.data
-                    this.dialog_chapter = true
+                    this.getContent(this.content)
+                    this.dialog_chapter = false
                 }
-                
             })
         }
         
