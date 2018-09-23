@@ -96,7 +96,7 @@ class QiDianController extends Controller{
             $ql->destruct();
             $arr = array_merge($arr,$data);
             $page++;
-        }while($page<10);
+        }while($page<2);
         echo 'success';
         
     }
