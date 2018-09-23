@@ -29,6 +29,8 @@ Route::group(['namespace'=>'Admin','prefix'=>'admin','middleware'=>'auth:api'],f
         Route::post('/novels-update','NovelController@updateNovle');
         Route::post('/novels-del','NovelController@delNovel');
         Route::post('/novels-chapters','NovelController@novelChapters');
+        Route::post('/novels-content','NovelController@chapterContent');
+        Route::post('/novels-content-update','NovelController@updateNovelContent');
 
     });
     Route::group(['namespace'=>'Site','prefix'=>'site'],function(){

@@ -80,11 +80,13 @@ function retrunMsg(ret){
             type: 'success',
             message: '操作成功!'
         })
+        return true
     }else{
         ElementUI.Message({
             type: 'error',
             message: '操作失败:'+ret.msg
         })
+        return false
     }
 }
 

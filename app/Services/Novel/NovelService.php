@@ -72,7 +72,7 @@
         public static function getNovelChapters($id,$page = 1,$order_by = 'asc'){
             $query = NovelDetail::where('novel_id',$id)->orderBy('create_at',$order_by);
 
-            $page_num = 10;
+            $page_num = 7;
             $result = PublicService::Paginate($query,$page,$page_num);
 
             return $result;
