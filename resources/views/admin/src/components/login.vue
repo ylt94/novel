@@ -79,12 +79,14 @@ export default {
         display: flex;
         flex-direction: column;
         position: absolute;
+        margin-left:0px;
         margin-top: -150px;
     }
 
     .main-input{
         position: relative;
         top:-120px;
+        left:0px;
         width: 350px;
         height: 250px;
     }
