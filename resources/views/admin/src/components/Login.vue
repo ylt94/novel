@@ -60,7 +60,8 @@ export default {
     .container{
         height: 100%;
         width:100%;
-        background-image:url('../assets/timg.jpg');
+        /* background-color: rgb(3, 84, 160); */
+        background-color: white;
         background-size:cover;
         display: flex;
         align-items: center;
@@ -70,23 +71,22 @@ export default {
     .main{
         background-color: white;
         box-sizing: border-box;
-        border:1px solid grey;
         border-radius: 5px;
-        height: 600px;
-        width:400px;
-        margin-left:300px;
+        box-shadow: 0 0 25px #cac6c6;
+        height: 350px;
+        width:450px;
         opacity: 0.8;
         display: flex;
         flex-direction: column;
         position: absolute;
+        margin-top: -150px;
     }
 
     .main-input{
         position: relative;
-        left:300px;
-        top:50px;
+        top:-120px;
         width: 350px;
-        height: 300px;
+        height: 250px;
     }
 
     .password{
@@ -94,7 +94,7 @@ export default {
     }
 
     .btn{
-        margin-top: 130px;
+        margin-top: 50px;
     }
 
 </style>

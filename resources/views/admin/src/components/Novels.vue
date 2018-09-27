@@ -86,7 +86,7 @@
         </el-row>
     
     
-        <el-table :data="novels.data" highlight-current-row style="width:100%;height:100%">
+        <el-table :data="novels.data" v-loading="loading" highlight-current-row style="width:100%;height:100%">
             <el-table-column align="center" prop="id" label="编号" style="width:10%"> </el-table-column>
             <el-table-column align="center" prop="title" label="名称" style="width:15%"></el-table-column>
             <el-table-column align="center" prop="author" label="作者" style="width:15%"></el-table-column>
@@ -323,6 +323,7 @@ export default {
                 }
             ],
             form:{},
+            loading:false
         }
     },
     created(){
@@ -339,9 +340,11 @@ export default {
             if(this.search.order_by_clumn && this.search.order_by_order){
                 this.search.order_by = this.search.order_by_clumn + ',' + this.search.order_by_order
             }
+            this.loading = true;
             this.api.get('api/admin/novel/novels',this.search).then((ret)=>{
                 this.novels.data = ret.data.data
                 this.novels.pages = ret.data.pages
+                this.loading = false
             })
         },
         getCategories(){
@@ -443,8 +446,6 @@ export default {
     .container{
         height: 100%;
         width:100%;
-        background-image:url('../assets/timg.jpg');
-        background-size:cover;
         display: flex;
         align-items: center;
         justify-content: center;

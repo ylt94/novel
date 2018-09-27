@@ -33,11 +33,17 @@ Route::group(['namespace'=>'Admin','prefix'=>'admin','middleware'=>'auth:api'],f
         Route::post('/novels-content-update','NovelController@updateNovelContent');
 
     });
+
     Route::group(['namespace'=>'Site','prefix'=>'site'],function(){
         Route::get('/sites','NovelSiteCotroller@siteSelect');
         Route::post('/sites-del','NovelSiteCotroller@siteDel');
         Route::post('/sites-update','NovelSiteCotroller@siteUpdate');
         Route::post('/sites-add','NovelSiteCotroller@siteAdd');
+    });
+
+    Route::group(['namespace'=>'Member','prefix'=>'member'],function(){
+        Route::get('/members','MemberController@members');
+        Route::get('/disabled','MemberController@disabled');
     });
 });
 

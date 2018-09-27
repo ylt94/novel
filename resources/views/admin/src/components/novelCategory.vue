@@ -25,7 +25,7 @@
         </el-row>
     
     
-        <el-table :data="categories" style="width:100%;height:100%">
+        <el-table :data="categories" v-loading="loading" style="width:100%;height:100%">
             <el-table-column align="center" prop="id" label="编号" style="width:10%"> </el-table-column>
             <el-table-column align="center" prop="name" label="名称" style="width:15%"></el-table-column>
             <el-table-column align="center" prop="name" label="类型" style="width:10%">
@@ -112,6 +112,7 @@ export default {
             type_id:1,
             pid:0
         },
+        loading:false
         }
     },
     created(){
@@ -133,13 +134,14 @@ export default {
                     type_id:this.form.type_id
                 }
             }
-            console.log(params)
+            this.loading = true
             this.api.get('api/admin/novel/categories',params).then((ret)=>{
                 if(this.dialog) {
                     this.searchCate = ret.data
                 }else{
                     this.categories = ret.data;
                 }
+                this.loading = false
                 
             })
         },
@@ -218,8 +220,6 @@ export default {
     .container{
         height: 100%;
         width:100%;
-        background-image:url('../assets/timg.jpg');
-        background-size:cover;
         display: flex;
         align-items: center;
         justify-content: center;

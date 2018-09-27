@@ -1,7 +1,8 @@
 <template>
   <el-container style="height: 100%; border: 1px solid #eee">
-    <el-aside style="width:15%">
-      <el-menu :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect"
+    <el-aside style="width:15%;">
+      <div style="width:100%;height:60px;background-color:#409eff"></div>
+      <el-menu style="height:93%" :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect"
           unique-opened router>
         <template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
           <el-submenu :index="index+''" v-if="!item.leaf">

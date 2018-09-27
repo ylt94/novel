@@ -5,6 +5,7 @@ import Login from '@/components/Login'
 import novels  from '@/components/Novels'
 import novelCategory from '@/components/novelCategory'
 import sites from '@/components/Sites'
+import members from '@/components/members'
 
 Vue.use(Router)
 
@@ -22,12 +23,12 @@ export default new Router({
       ]
     },
     {
-      path: '/members',
+      path: '/member',
       name: '会员管理',
       component: index,
       icon: 'el-icon-success',
       children: [
-        { path: '/member/members', component: novelCategory,icon: 'el-icon-share', name: '会员管理',},
+        { path: '/member/members', component: members,icon: 'el-icon-share', name: '会员管理',},
       ]
     },
     {

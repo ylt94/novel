@@ -25,7 +25,7 @@
         </el-row>
     
     
-        <el-table :data="sites" style="width:100%;height:100%">
+        <el-table :data="sites" v-loading="loading" style="width:100%;height:100%">
             <el-table-column align="center" prop="id" label="编号" style="width:10%"> </el-table-column>
             <el-table-column align="center" prop="name" label="名称" style="width:15%"></el-table-column>
             <el-table-column align="center" prop="base_url" label="基础地址" style="width:10%"></el-table-column>
@@ -88,6 +88,7 @@ export default {
             detail_url:'',
             content_url:''
         },
+        loading:false
         }
     },
     created(){
@@ -104,14 +105,14 @@ export default {
         },
         getsites(){
             var params = {}
-            console.log(params)
+            this.loading = true
             this.api.get('api/admin/site/sites',params).then((ret)=>{
                 if(this.dialog) {
                     this.searchCate = ret.data
                 }else{
                     this.sites = ret.data;
                 }
-                
+                this.loading = false
             })
         },
         addOrUpdatePost(){
@@ -178,8 +179,6 @@ export default {
     .container{
         height: 100%;
         width:100%;
-        background-image:url('../assets/timg.jpg');
-        background-size:cover;
         display: flex;
         align-items: center;
         justify-content: center;
