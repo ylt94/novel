@@ -14,7 +14,10 @@ if(!localStorage.getItem('access_token')){
 // axios.defaults.headers.common['Authorization'] ='Bearer ' + localStorage.getItem('access_token')
 
 function get(url,params){
-    getToken()
+    var token_res = getToken()
+    if(!token_res) {
+        return false
+    }
     return new Promise(function(resolve,reject){
         axios.get(url,{params})
         .then(function (response) {
@@ -27,7 +30,10 @@ function get(url,params){
 }
 
 function post(url,params){
-    getToken()
+    var token_res = getToken()
+    if(!token_res) {
+        return false
+    }
     return new Promise(function(resolve,reject){
         axios.post(url,params)
         .then(function (response) {
@@ -42,9 +48,15 @@ function post(url,params){
 function getToken(){
     var token = localStorage.getItem('access_token')
     if(!token){
+        ElementUI.Notification.error({
+            title: '提示',
+            message: '登录失效'
+          });
         router.push('/login')
+        return false
     }
     axios.defaults.headers.common['Authorization'] ='Bearer ' + token
+    return true
 }
 
 function errorCheck(error){

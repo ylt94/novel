@@ -7,6 +7,7 @@ use Illuminate\Console\Command;
 use App\Services\RedisService;
 
 use App\Models\NovelBase as NovelBaseModel;
+use App\Models\Sites;
 
 class NovelBase extends Command
 {
@@ -23,7 +24,8 @@ class NovelBase extends Command
      * @var string
      */
     protected $description = 'Command description';
-
+    protected $update_seconds = 8*3600;
+    protected $sleep_seconds = 4*3600;
     /**
      * Create a new command instance.
      *
@@ -42,6 +44,19 @@ class NovelBase extends Command
     public function handle()
     {
         //
-        
+        while(true){
+            $time = time()-$this->update_seconds;
+            $time = date('Y-m-d H:i:s',$time);
+            $novels = NovelBaseModel::where('last_update','<=',$time)->get();
+            if(!$novels){
+                sleep($this->sleep_seconds);
+                continue;
+            }
+            foreach($novels as $item){
+                $this->info($item->id);
+                RedisService::setNovelId($item->id);
+            }
+            sleep($this->sleep_seconds);
+        }
     }
 }

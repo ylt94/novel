@@ -25,7 +25,7 @@ class NovelContent extends Command
      * @var string
      */
     protected $description = 'Command description';
-
+    protected $sleep_time = 10*60;
     /**
      * Create a new command instance.
      *
@@ -44,17 +44,28 @@ class NovelContent extends Command
     public function handle()
     {
         //
-        $detail_id = RedisService::getNovelDetailId();
-        if($detail_id && $novel_detail = NovelDetail::find($detail_id)) {
-            self::checkChannel($novel_detail);
+        while(true){
+            $detail_id = RedisService::getNovelDetailId();
+            if($detail_id && $novel_detail = NovelDetail::find($detail_id)) {
+                self::checkChannel($novel_detail);
+            }
+            sleep($this->sleep_time);
         }
+        
     }
 
     public static function checkChannel(NovelDetail $novel_detail){
+        $result = false;
         switch($novel_detail->site_resource){
             case Sites::QIDIAN:
                 $result = QiDianService::updateContentByQuery($novel_detail);
                 break;
+            case Sites::ZONGHENG:
+                break;
         }
+        if(!$result){
+            //$this->info('result-------:'.QiDianService::getLastError());
+        }
+        return $result; 
     }
 }

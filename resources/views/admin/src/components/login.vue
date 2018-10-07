@@ -30,6 +30,13 @@ export default {
   },
   methods:{
       login: function(){
+        if(!this.username || !this.password) {
+            this.ElementUI.Message({
+                type: 'error',
+                message: '请输入完整!'
+            })
+            return false
+        }
         var params = {
             grant_type: env.grant_type,
             client_id: env.client_id,

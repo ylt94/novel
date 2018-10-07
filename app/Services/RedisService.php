@@ -6,42 +6,34 @@
     use App\Services\BaseService;
 
     class RedisService extends BaseService{
-        private static $redis = null;
-
-
-        public function __construct(){
-            self::$redis = Redis::connection();
-        }
+        private static $novel_base_key = 'novel_ids';
+        private static $novel_detail_key = 'novel_detail_ids';
 
         //设置要更新的小说ID
         public static function setNovelId($id){
-
-            $key = 'novel_ids';
-            self::$redis->lpush($key,$id);
+            Redis::lpush(self::$novel_base_key,$id);
 
             return true;
         }
 
         //获取小说ID
         public static function getNovelId(){
-            $key = 'novel_ids';
-
-            return self::$redis->lrange($key);
+            return Redis::lpop(self::$novel_base_key);
         }
 
 
         //设置detail
         public static function setNovelDetailId($id){
-            $key = 'novel_detail_ids';
+            $key = self::$novel_detail_key;
 
-            self::$redis->lpush($key,$id);
+            Redis::lpush($key,$id);
         }
 
         //获取详情ID
         public static function getNovelDetailId(){
-            $key = 'novel_detail_ids';
+            $key = self::$novel_detail_key;
 
-            return self::$redis->lrange($key);
+            return Redis::lpop($key);
         }
 
 
@@ -58,7 +50,7 @@
                 'user_id' => $user->id,
                 'user_name' => $user->user_name,
             ];
-            $redis_res = self::$redis->set($key,$data);
+            $redis_res = Redis::set($key,$data);
             if(!$redis_res) {
                 static::addError('登陆失败',0);
                 return false;
@@ -68,9 +60,9 @@
         }
 
         public static function delMemberToken($key){
-            $keys = self::$redis->keys($key);
+            $keys = Redis::keys($key);
 
-            $del_res = self::$redis->del($keys);
+            $del_res = Redis::del($keys);
             if(!$del_res){
                 static::addError('服务器异常，请稍后再试',0);
                 return false;

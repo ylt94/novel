@@ -15,6 +15,8 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         //
         \App\Console\Commands\NovelBase::class,
+        \App\Console\Commands\NovelDetail::class,
+        \App\Console\Commands\NovelContent::class,
     ];
 
     /**
@@ -27,7 +29,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
-        $schedule->command('NovelBase')->everyMinute();
+        //$schedule->command('NovelBase')->everyMinute();
     }
 
     /**

@@ -43,12 +43,12 @@ export default {
       }
     },
     novelCategory: function(){
-      this.$router.push({path:'/novel/category'});
+      this.$router.push({path:'/novel/category'})
     },
     loginout: function(){
-      this.api.get('auth/logout',{}).then((ret)=>{
-          console.log(ret)
-      })
+      localStorage.removeItem('access_token')
+      this.$router.push({path:'/login'});
+      
     },
     onSubmit() {
 				console.log('submit!');
@@ -60,20 +60,6 @@ export default {
       console.log('handleclose');
     },
     handleselect: function (a, b) {
-    },
-		//退出登录
-    logout: function () {
-      var _this = this;
-      this.$confirm('确认退出吗?', '提示', {
-        //type: 'warning'
-      }).then(() => {
-        sessionStorage.removeItem('user');
-        _this.$router.push('/login');
-      }).catch(() => {
-
-      });
-
-
     },
     //折叠导航栏
     collapse:function(){

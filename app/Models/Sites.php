@@ -11,4 +11,5 @@ class Sites extends Model{
 
 
     const QIDIAN = 1;
+    const ZONGHENG = 2;
 }
