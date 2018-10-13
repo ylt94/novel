@@ -59,6 +59,7 @@ class NovelBase extends Command
         //     sleep($this->sleep_seconds);
         // }
         $ppid = posix_getpid();
+        dd($ppid);
         $pid = pcntl_fork();
         if ($pid == -1) {
             throw new Exception('fork子进程失败!');
