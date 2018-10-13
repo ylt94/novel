@@ -115,7 +115,7 @@ class NovelBase extends Command
         
         while(TRUE)
         {
-            $this->info('守护进程?');
+            //$this->info('守护进程?');
             sleep(5);
         }
 
