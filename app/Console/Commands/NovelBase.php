@@ -113,10 +113,11 @@ class NovelBase extends Command
         // * 处理业务代码
         // */
         
-        // while(TRUE)
-        // {
-        //     $this->info('守护进程?');
-        //     sleep(5);
-        // }
+        while(TRUE)
+        {
+            //$this->info('守护进程?');
+            sleep(5);
+        }
+
     }
 }
