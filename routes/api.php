@@ -61,7 +61,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/test','Admin\Reptilian\QiDianController@getNovelContent');
-Route::get('/phpinfo',function(){
+Route::get('/phpinfo',function(Request $request){
     //print_r(phpinfo());exit;
     // try {
     //     $con = new PDO('mysql:host=mysql;dbname=novel', 'root', 'root');
@@ -75,6 +75,7 @@ Route::get('/phpinfo',function(){
     // }
     //extension = pdo_mysql.so
     //docker-php-ext-pdo_mysql.ini
+    dd($_SERVER['HTTP_USER_AGENT']);
 });
 // Route::get('/test',function(){
 //     return ['status'=>1,'password'=>bcrypt(123456)];
