@@ -96,7 +96,7 @@ class NovelBase extends Command
         */
         $this->info('守护进程开启成功');
         while(true){
-            $this->info('守护进程运行中.....');
+            $this->info('守护进程运行中.....'.posix_getpid());
             sleep(10);
         }
         // while(true){
