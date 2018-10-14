@@ -104,7 +104,8 @@ class NovelBase extends Command
         $this->info('守护进程开启成功');
         while(true){
             $this->info('守护进程运行中.....'.posix_getpid());
-            sleep(10);
+            $this->info('---->',getmypid());
+            sleep(20);
         }
         // while(true){
         //     $time = time()-$this->update_seconds;
