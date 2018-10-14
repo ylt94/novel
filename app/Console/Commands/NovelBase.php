@@ -95,6 +95,10 @@ class NovelBase extends Command
         * 处理业务代码
         */
         $this->info('守护进程开启成功');
+        while(true){
+            $this->info('守护进程运行中.....');
+            sleep(10);
+        }
         // while(true){
         //     $time = time()-$this->update_seconds;
         //     $time = date('Y-m-d H:i:s',$time);
