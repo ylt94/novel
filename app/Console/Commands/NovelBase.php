@@ -16,7 +16,7 @@ class NovelBase extends Command
      *
      * @var string
      */
-    protected $signature = 'command:novel_base {start=1}';
+    protected $signature = 'command:novel_base {start=1} {pid=0}';
 
     /**
      * The console command description.
@@ -45,14 +45,21 @@ class NovelBase extends Command
     {   
         if (php_sapi_name() != "cli"){
             $this->error('只允许在cli命令下执行');
-            exit;
+            exit(0);
         }
 
         $start = $this->argument('start');
         if(!$start){
-            $this->info('守护进程关闭:');
-            posix_kill(0,SIGKILL);
-            exit;
+            $pid = $this->argument('pid');
+            $this->info('正在关闭守护进程:'.$pid);
+            $res = posix_kill($pid, 9); 
+            if(!$res){
+                $this->info('守护进程关闭失败');
+            }else{
+                $this->info('守护进程关闭成功');
+            }
+            //posix_kill(0,SIGKILL);
+            exit(0);
         }
         
         $pid = pcntl_fork();
