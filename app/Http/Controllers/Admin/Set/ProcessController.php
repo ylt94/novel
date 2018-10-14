@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
+use App\Services\ProcessService;
+
 use App\Models\Process;
 
 
@@ -56,5 +58,39 @@ class ProcessController extends Controller{
         Process::create($data);
 
         return ret_res(1,1003);
+    }
+
+    //启动/重启守护进程
+    public function startProcess(Request $request){
+        $id = $request->id;
+        if(!$id){
+            return ret_res(0,2006);
+        }
+        $process = Process::find($id);
+        if(!$process){
+            return ret_res(0,2008);
+        }
+
+        exec($process->exec_command);
+        return ret_res(1,1001);
+    }
+
+    //停止守护进程
+    public function stopProcess(Request $request){
+        $id = $request->id;
+        if(!$id){
+            return ret_res(0,2006);
+        }
+
+        $process = Process::find($id);
+
+        $res = ProcessService::killProcess($process->pid);
+        if(!$res){
+            return ret_res(0,2001);
+        }
+        $process->pid = 0;
+        $process->save();
+
+        return ret_res(1,1001);
     }
 }
