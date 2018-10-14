@@ -17,7 +17,7 @@ class NovelDetail extends Command
      *
      * @var string
      */
-    protected $signature = 'command:update_novel_detail';
+    protected $signature = 'command:novel_detail';
 
     /**
      * The console command description.

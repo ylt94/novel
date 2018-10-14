@@ -16,7 +16,7 @@ class NovelBase extends Command
      *
      * @var string
      */
-    protected $signature = 'command:update_novel_base';
+    protected $signature = 'command:novel_base {start=1}';
 
     /**
      * The console command description.
@@ -42,7 +42,16 @@ class NovelBase extends Command
      * @return mixed
      */
     public function handle()
-    {
+    {   
+        $start = $this->argument('start');
+        if(!$start){
+            posix_kill(0,SIGKILL);
+            $this->info('守护进程关闭成功');
+            exit;
+        }
+        $pid = getmypid();
+        $this->info($pid);
+        exit;
         //
         // while(true){
         //     $time = time()-$this->update_seconds;
@@ -70,14 +79,13 @@ class NovelBase extends Command
         //     $this->info("我是{$ppid}的子进程,我的进程id是{$cpid}.");
         //     sleep(5);
         // }
-
+        
         $pid = pcntl_fork();
         
         if ($pid == -1)
         {
-            $this->error('fork子进程失败');
-        }
-        elseif ($pid > 0)
+            $this->error('守护进程开启失败');
+        }elseif ($pid > 0)
         {
             //父进程退出,子进程不是进程组长，以便接下来顺利创建新会话
             exit(0);
@@ -96,9 +104,8 @@ class NovelBase extends Command
         $pid = pcntl_fork();
         if ($pid == -1)
         {
-            throw new Exception('fork子进程失败');
-        }
-        elseif ($pid > 0)
+            $this->error('守护进程开启失败');
+        }elseif ($pid > 0)
         {
             //  再一次退出父进程，子进程成为最终的守护进程
             exit(0);

@@ -17,7 +17,7 @@ class NovelContent extends Command
      *
      * @var string
      */
-    protected $signature = 'command:update_novel_content';
+    protected $signature = 'command:novel_content';
 
     /**
      * The console command description.
