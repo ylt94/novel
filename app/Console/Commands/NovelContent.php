@@ -6,9 +6,11 @@ use Illuminate\Console\Command;
 
 use App\Services\RedisService;
 use App\Services\Reptilian\QiDianService;
+use App\Services\ProcessService;
 
 use App\Models\NovelDetail;
 use App\Models\Sites;
+use App\Models\Process;
 
 class NovelContent extends Command
 {
@@ -17,7 +19,7 @@ class NovelContent extends Command
      *
      * @var string
      */
-    protected $signature = 'command:novel_content';
+    protected $signature = 'command:novel_content {start=1} {pid=0}';
 
     /**
      * The console command description.
@@ -25,7 +27,7 @@ class NovelContent extends Command
      * @var string
      */
     protected $description = 'Command description';
-    protected $sleep_time = 10*60;
+    protected $sleep_seconds = 10*60;
     /**
      * Create a new command instance.
      *
@@ -42,14 +44,45 @@ class NovelContent extends Command
      * @return mixed
      */
     public function handle()
-    {
+    {   
+        $start = $this->argument('start');
+
+        //关闭守护进程
+        if(!$start){
+            $res = $this->killProcess();
+            $action_msg = '守护进程关闭成功';
+            if(!$res){
+                $action_msg = '守护进程关闭失败';
+            }
+            $this->info($action_msg);
+            exit(0);
+        }
+
+         //检查有无此类程序的后台进程
+         $process = ProcessService::checkProcess(Process::NOVEL_CONTENT);
+         if(!$process){
+             $this->error(ProcessService::getLastError());
+             exit;
+         }
+ 
+         //守护进程
+         $daemon_res = ProcessService::Daemon();
+         if(!$res){
+             //日志
+             $this->error(ProcessService::getLastError());
+             exit;
+         }
+ 
+         //配置
+         $this->sleep_seconds = $process->sleep_time;
+
         //
         while(true){
             $detail_id = RedisService::getNovelDetailId();
             if($detail_id && $novel_detail = NovelDetail::find($detail_id)) {
                 self::checkChannel($novel_detail);
             }
-            sleep($this->sleep_time);
+            sleep($this->sleep_seconds);
         }
         
     }
@@ -67,5 +100,23 @@ class NovelContent extends Command
             //$this->info('result-------:'.QiDianService::getLastError());
         }
         return $result; 
+    }
+
+    public function killProcess(){
+
+        $action_msg = '正在关闭本次守护进程';
+        $pid = $this->argument('pid');
+        if($pid){
+            $action_msg = '正在关闭守护进程:'.$pid;
+        }
+        $this->info($action_msg);
+
+        $res = ProcessService::killProcess($pid);
+        if($res){
+            Process::where('type',Process::NOVEL_CONTENT)->update(['pid'=>0]);
+        }
+
+        return $res;
+
     }
 }

@@ -28,7 +28,6 @@ class NovelBase extends Command
     protected $description = 'Command description';
     protected $update_seconds = 8*3600;
     protected $sleep_seconds = 4*3600;
-    protected $error_msg = '';
     /**
      * Create a new command instance.
      *
@@ -50,56 +49,52 @@ class NovelBase extends Command
         $start = $this->argument('start');
 
         //关闭守护进程
-        // if(!$start){
-        //     $res = $this->killProcess();
-        //     $action_msg = '守护进程关闭成功';
-        //     if(!$res){
-        //         $action_msg = '守护进程关闭失败';
-        //     }
-        //     $this->info($action_msg);
-        //     exit(0);
-        // }
+        if(!$start){
+            $res = $this->killProcess();
+            $action_msg = '守护进程关闭成功';
+            if(!$res){
+                $action_msg = '守护进程关闭失败';
+            }
+            $this->info($action_msg);
+            exit(0);
+        }
 
         //检查有无此类程序的后台进程
-        //$process = ProcessService::checkProcess(Process::NOVEL_BASE);
-        // if(!$process){
-        //     $this->error(ProcessService::getLastError());
-        //     exit;
-        // }
+        $process = ProcessService::checkProcess(Process::NOVEL_BASE);
+        if(!$process){
+            $this->error(ProcessService::getLastError());
+            exit;
+        }
 
         //守护进程
         $daemon_res = ProcessService::Daemon();
-        if(!$daemon_res){
+        if(!$res){
             //日志
             $this->error(ProcessService::getLastError());
             exit;
         }
 
         //配置
-        //$this->update_seconds = $process->update_time;
-        //$this->sleep_seconds = $process->sleep_time;
+        $this->update_seconds = $process->update_time;
+        $this->sleep_seconds = $process->sleep_time;
         /*
         * 处理业务代码
         */
-       // Process::where('type',Process::NOVEL_BASE)->update(['pid'=>getmypid()]);
+        Process::where('type',Process::NOVEL_BASE)->update(['pid'=>getmypid()]);
         while(true){
-            $this->info('守护进程运行中.....'.posix_getpid());
-            sleep(20);
+            $time = time()-$this->update_seconds;
+            $time = date('Y-m-d H:i:s',$time);
+            $novels = NovelBaseModel::where('last_update','<=',$time)->get();
+            if(!$novels){
+                sleep($this->sleep_seconds);
+                continue;
+            }
+            foreach($novels as $item){
+                $this->info($item->id);
+                RedisService::setNovelId($item->id);
+            }
+            sleep($this->sleep_seconds);
         }
-        // while(true){
-        //     $time = time()-$this->update_seconds;
-        //     $time = date('Y-m-d H:i:s',$time);
-        //     $novels = NovelBaseModel::where('last_update','<=',$time)->get();
-        //     if(!$novels){
-        //         sleep($this->sleep_seconds);
-        //         continue;
-        //     }
-        //     foreach($novels as $item){
-        //         $this->info($item->id);
-        //         RedisService::setNovelId($item->id);
-        //     }
-        //     sleep($this->sleep_seconds);
-        // }
 
     }
 

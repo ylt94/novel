@@ -6,9 +6,11 @@ use Illuminate\Console\Command;
 
 use App\Services\RedisService;
 use App\Services\Reptilian\QiDianService;
+use App\Services\ProcessService;
 
 use App\Models\NovelBase;
 use App\Models\Sites;
+use App\Models\Process;
 
 class NovelDetail extends Command
 {
@@ -17,7 +19,7 @@ class NovelDetail extends Command
      *
      * @var string
      */
-    protected $signature = 'command:novel_detail';
+    protected $signature = 'command:novel_detail {start=1} {pid=0}';
 
     /**
      * The console command description.
@@ -44,8 +46,39 @@ class NovelDetail extends Command
      * @return mixed
      */
     public function handle()
-    {
-        //
+    {   
+        $start = $this->argument('start');
+
+        //关闭守护进程
+        if(!$start){
+            $res = $this->killProcess();
+            $action_msg = '守护进程关闭成功';
+            if(!$res){
+                $action_msg = '守护进程关闭失败';
+            }
+            $this->info($action_msg);
+            exit(0);
+        }
+
+         //检查有无此类程序的后台进程
+         $process = ProcessService::checkProcess(Process::NOVEL_DETAIL);
+         if(!$process){
+             $this->error(ProcessService::getLastError());
+             exit;
+         }
+ 
+         //守护进程
+         $daemon_res = ProcessService::Daemon();
+         if(!$res){
+             //日志
+             $this->error(ProcessService::getLastError());
+             exit;
+         }
+ 
+         //配置
+         $this->sleep_seconds = $process->sleep_time;
+
+        //业务逻辑
         while(true){
             $novel_id = RedisService::getNovelId();
             if(!$novel_id || !$novel_base = NovelBase::find($novel_id)) {
@@ -71,5 +104,23 @@ class NovelDetail extends Command
             //$this->info('result-------:'.QiDianService::getLastError());
         }
         return $result; 
+    }
+
+    public function killProcess(){
+
+        $action_msg = '正在关闭本次守护进程';
+        $pid = $this->argument('pid');
+        if($pid){
+            $action_msg = '正在关闭守护进程:'.$pid;
+        }
+        $this->info($action_msg);
+
+        $res = ProcessService::killProcess($pid);
+        if($res){
+            Process::where('type',Process::NOVEL_DETAIL)->update(['pid'=>0]);
+        }
+
+        return $res;
+
     }
 }
