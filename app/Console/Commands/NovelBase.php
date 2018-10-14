@@ -50,8 +50,8 @@ class NovelBase extends Command
 
         $start = $this->argument('start');
         if(!$start){
+            $this->info('守护进程关闭:');
             posix_kill(0,SIGKILL);
-            $this->info('守护进程关闭成功');
             exit;
         }
         
@@ -61,7 +61,7 @@ class NovelBase extends Command
             $this->error('守护进程开启失败');
         }elseif ($pid > 0){
             //父进程退出,子进程不是进程组长，以便接下来顺利创建新会话
-            $this->info('父进程退出成功');
+            $this->info('父进程退出成功1');
             exit(0);
         }
         
@@ -82,7 +82,7 @@ class NovelBase extends Command
         }elseif ($pid > 0)
         {
             //  再一次退出父进程，子进程成为最终的守护进程
-            $this->info('父进程退出成功');
+            $this->info('父进程退出成功2');
             exit(0);
         }
         
