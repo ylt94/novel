@@ -43,51 +43,25 @@ class NovelBase extends Command
      */
     public function handle()
     {   
+        if (php_sapi_name() != "cli"){
+            $this->error('只允许在cli命令下执行');
+            exit;
+        }
+
         $start = $this->argument('start');
         if(!$start){
             posix_kill(0,SIGKILL);
             $this->info('守护进程关闭成功');
             exit;
         }
-        $pid = getmypid();
-        $this->info($pid);
-        exit;
-        //
-        // while(true){
-        //     $time = time()-$this->update_seconds;
-        //     $time = date('Y-m-d H:i:s',$time);
-        //     $novels = NovelBaseModel::where('last_update','<=',$time)->get();
-        //     if(!$novels){
-        //         sleep($this->sleep_seconds);
-        //         continue;
-        //     }
-        //     foreach($novels as $item){
-        //         $this->info($item->id);
-        //         RedisService::setNovelId($item->id);
-        //     }
-        //     sleep($this->sleep_seconds);
-        // }
-        // $ppid = posix_getpid();
-        // $pid = pcntl_fork();
-        // if ($pid == -1) {
-        //     $this->error('fork子进程失败!');
-        // } elseif ($pid > 0) {
-        //     $this->info("我是父进程,我的进程id是{$ppid}.");
-        //     sleep(5);
-        // } else {
-        //     $cpid = posix_getpid();
-        //     $this->info("我是{$ppid}的子进程,我的进程id是{$cpid}.");
-        //     sleep(5);
-        // }
         
         $pid = pcntl_fork();
-        
         if ($pid == -1)
         {
             $this->error('守护进程开启失败');
-        }elseif ($pid > 0)
-        {
+        }elseif ($pid > 0){
             //父进程退出,子进程不是进程组长，以便接下来顺利创建新会话
+            $this->info('父进程退出成功');
             exit(0);
         }
         
@@ -108,6 +82,7 @@ class NovelBase extends Command
         }elseif ($pid > 0)
         {
             //  再一次退出父进程，子进程成为最终的守护进程
+            $this->info('父进程退出成功');
             exit(0);
         }
         
@@ -119,12 +94,21 @@ class NovelBase extends Command
         /*
         * 处理业务代码
         */
-        
-        while(TRUE)
-        {
-            //$this->info('守护进程?');
-            sleep(5);
-        }
+        $this->info('守护进程开启成功');
+        // while(true){
+        //     $time = time()-$this->update_seconds;
+        //     $time = date('Y-m-d H:i:s',$time);
+        //     $novels = NovelBaseModel::where('last_update','<=',$time)->get();
+        //     if(!$novels){
+        //         sleep($this->sleep_seconds);
+        //         continue;
+        //     }
+        //     foreach($novels as $item){
+        //         $this->info($item->id);
+        //         RedisService::setNovelId($item->id);
+        //     }
+        //     sleep($this->sleep_seconds);
+        // }
 
     }
 }
