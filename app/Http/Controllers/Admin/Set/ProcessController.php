@@ -88,9 +88,9 @@ class ProcessController extends Controller{
         if(!$process){
             return ret_res(0,2008);
         }
-        $cd = 'cd /var/www/novel/ && ';
-        $cd_res = exec($cd.$process->exec_command);
-        return ret_res(1,1001,$cd_res);
+        $cd = 'cd /var/www/novel && ';
+        $cd_res = exec($cd.$process->exec_command);dd($cd_res);
+        return ret_res(1,1001);
     }
 
     //停止守护进程
