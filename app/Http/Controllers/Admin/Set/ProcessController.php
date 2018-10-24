@@ -25,8 +25,8 @@ class ProcessController extends Controller{
      * 修改进程
      */
     public function updateProcess(Request $request){
-        $id = $request->process_id;
-        $data = $request->update_data;
+        $id = $request->id;
+        $data = $request->all();
 
         if(!$id){
             return ret_res(0,2006);
