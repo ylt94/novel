@@ -11,7 +11,7 @@ class ProcessService extends BaseService{
     //终止进程
     public static function killProcess($_pid = null){
 
-        $pid = $pid;
+        $pid = $_pid;
         if(!$pid){
             $pid = getmypid();
         }
