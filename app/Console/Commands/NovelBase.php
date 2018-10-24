@@ -68,7 +68,7 @@ class NovelBase extends Command
 
         //守护进程
         $daemon_res = ProcessService::Daemon();
-        if(!$res){
+        if(!$daemon_res){
             //日志
             $this->error(ProcessService::getLastError());
             exit;
