@@ -84,7 +84,7 @@ export default new Router({
         },
         { 
           path: '/process/index', 
-          component: resolve =>require(['@/components/sites'],resolve),
+          component: resolve =>require(['@/components/process'],resolve),
           icon: 'el-icon-setting', 
           name: '进程设置',
         },

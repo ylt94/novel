@@ -34,17 +34,27 @@ Route::group(['namespace'=>'Admin','prefix'=>'admin','middleware'=>'auth:api'],f
 
     });
 
-    Route::group(['namespace'=>'Site','prefix'=>'site'],function(){
+    Route::group(['namespace'=>'Set','prefix'=>'site'],function(){
         Route::get('/sites','NovelSiteCotroller@siteSelect');
         Route::post('/sites-del','NovelSiteCotroller@siteDel');
         Route::post('/sites-update','NovelSiteCotroller@siteUpdate');
         Route::post('/sites-add','NovelSiteCotroller@siteAdd');
     });
 
+    Route::group(['namespace'=>'Set','prefix'=>'process'],function(){
+        Route::get('/processes','ProcessController@processList');
+        Route::post('/process-add','ProcessController@addProcess');
+        Route::post('/process-update','ProcessController@updateProcess');
+        Route::get('/process-del','ProcessController@delProcess');
+        Route::get('/process-start','ProcessController@startProcess');
+        Route::get('/process-stop','ProcessController@stopProcess');
+    });
+
     Route::group(['namespace'=>'Member','prefix'=>'member'],function(){
         Route::get('/members','MemberController@members');
         Route::get('/disabled','MemberController@disabled');
     });
+
 });
 
 Route::group(['namespace'=>'Member','prefix'=>'member','middleware'=>'auth:member'],function(){

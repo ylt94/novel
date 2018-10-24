@@ -13,11 +13,17 @@ use App\Models\Process;
 
 class ProcessController extends Controller{
     
-
+    /**
+     * 进程列表
+     */
     public function processList(){
-        return Process::get();
+        $process = Process::get();
+        return ret_res(1,1000,$process);
     }
 
+    /**
+     * 修改进程
+     */
     public function updateProcess(Request $request){
         $id = $request->process_id;
         $data = $request->update_data;
@@ -31,19 +37,31 @@ class ProcessController extends Controller{
         return ret_res(1,1002);
     }
 
+    /**
+     * 删除进程
+     */
     public function delProcess(Request $request){
         $id = $request->process_id;
         if(!$id){
             return ret_res(0,2006);
         }
-
-        Process::where('id',$id)->delete();
+        $process = Process::find($id);
+        if ($process->pid) {
+            $res = ProcessService::killProcess($process->pid);
+            if(!$res){
+                return ret_res(0,2001);
+            }
+        }
+        $process->delete();
 
         return ret_res(1,1004);
     }
 
+    /**
+     * 新增进程
+     */
     public function addProcess(Request $request){
-        $data = $request->update_data;
+        $data = $request->all();
 
         $rules = [
             'type' => 'required',
