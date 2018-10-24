@@ -89,9 +89,10 @@ class ProcessController extends Controller{
             return ret_res(0,2008);
         }
         $cd = 'cd /var/www/novel/';
-        $cd_res = exec($cd);
+        exec($cd);
+        
+        $cd_res = exec($process->exec_command);
         dd($cd_res);
-        exec($process->exec_command);
         return ret_res(1,1001);
     }
 
