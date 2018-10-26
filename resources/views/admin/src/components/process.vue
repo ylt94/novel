@@ -98,7 +98,6 @@ export default {
         },
         updateRow(item){
             this.form = item
-            console.log(this.form)
             this.dialog = true
         },
         addOrUpdatePost(){
@@ -106,6 +105,13 @@ export default {
             var url = 'api/admin/process/process-update'
             if(this.form.id == undefined){//add
                 url = 'api/admin/process/process-add'  
+            }
+            if(this.form.pid){
+                this.$message({
+                    type: 'warning',
+                    message: '请先停止进程!'
+                })
+                return 
             }
             this.api.post(url,this.form).then((ret)=>{
                 this.api.retrunMsg(ret)
