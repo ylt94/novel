@@ -88,8 +88,7 @@ class ProcessController extends Controller{
         if(!$process){
             return ret_res(0,2008);
         }
-        $cd = 'cd /var/www/novel && ';
-        exec($cd.$process->exec_command);
+        exec($process->exec_command);
         return ret_res(1,1001);
     }
 
