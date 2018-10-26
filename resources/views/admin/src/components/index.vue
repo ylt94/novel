@@ -43,7 +43,7 @@ export default {
       }
     },
     novelCategory: function(){
-      this.$router.push({path:'/novel/category'})
+      this.$router.push({path:'/admin/novel/category'})
     },
     loginout: function(){
       localStorage.removeItem('access_token')

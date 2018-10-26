@@ -49,7 +49,7 @@ export default {
         axios.post(url,params).then(function(response){console.log(response)
             if(response.data.access_token){
                 localStorage.setItem('access_token',response.data.access_token)
-                that.$router.push({path:'/'});
+                that.$router.push({path:'/admin'});
             }
         }).catch(function(error){
             console.log(error)
