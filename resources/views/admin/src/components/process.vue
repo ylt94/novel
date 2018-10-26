@@ -35,7 +35,7 @@
             <el-table-column align="center" prop="created_at" label="创建时间" style="width:25%"> </el-table-column>  
             <el-table-column align="center" label="操作" style="width:30%"> 
                 <template slot-scope="scope">
-                    <el-button @click.native.prevent="onDelClicked(scope.row)" type="text" size="small">删除</el-button>
+                    <el-button @click.native.prevent="del(scope.row)" type="text" size="small">删除</el-button>
                     <el-button @click.native.prevent="updateRow(scope.row)" type="text" size="small">修改</el-button>
                     <el-button v-if ="scope.row.pid==0" @click.native.prevent="startProcess(scope.row)" type="text" size="small">启动</el-button>
                     <el-button v-else @click.native.prevent="stopProcess(scope.row)" type="text" size="small">停止</el-button>
