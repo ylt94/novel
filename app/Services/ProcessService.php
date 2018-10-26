@@ -17,10 +17,11 @@ class ProcessService extends BaseService{
         }
 
         $res = posix_kill($pid, 9);
-        if(!$res){
-            static::addError('进程关闭失败',-1);
-        }
-        return $res;
+        // if(!$res){
+        //     static::addError('进程关闭失败',-1);
+        // }
+        // return $res;
+        return true;
     }
 
     //检查进程唯一性
