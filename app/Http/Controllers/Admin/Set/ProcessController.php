@@ -100,6 +100,9 @@ class ProcessController extends Controller{
         }
 
         $process = Process::find($id);
+        if($process->pid){
+            return ret_res(1,1001);
+        }
 
         $res = ProcessService::killProcess($process->pid);
         $process->pid = 0;
