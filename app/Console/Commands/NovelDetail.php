@@ -136,13 +136,15 @@ class NovelDetail extends Command
             'novel_id' => $novel_id,
             'is_update' => 0
         ];
-        $novel_detail_ids = NovelDetailTable::where($search)->pluck('id')->all();
+        $novel_detail_ids = NovelDetailTable::where($search)->get();
         if(!$novel_detail_ids){
             return true;
         }
 
         foreach($novel_detail_ids as $val){
-            RedisService::setNovelDetailId($val);
+            if($val->is_free){
+                RedisService::setNovelDetailId($val);
+            }
         }
         return true;
     }
