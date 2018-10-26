@@ -137,7 +137,7 @@ class NovelDetail extends Command
             'is_update' => 0
         ];
         $novel_detail_ids = NovelDetail::where($search)->pluck('id')->all();
-        if($novel_detail_ids){
+        if(!$novel_detail_ids){
             return true;
         }
 
