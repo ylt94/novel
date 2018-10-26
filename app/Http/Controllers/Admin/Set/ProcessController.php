@@ -102,11 +102,11 @@ class ProcessController extends Controller{
         $process = Process::find($id);
 
         $res = ProcessService::killProcess($process->pid);
+        $process->pid = 0;
+        $process->save();
         if(!$res){
             return ret_res(0,2001);
         }
-        $process->pid = 0;
-        $process->save();
 
         return ret_res(1,1001);
     }
