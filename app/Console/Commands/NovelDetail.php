@@ -9,6 +9,7 @@ use App\Services\Reptilian\QiDianService;
 use App\Services\ProcessService;
 
 use App\Models\NovelBase;
+use App\Models\NovelDetail;
 use App\Models\Sites;
 use App\Models\Process;
 
@@ -85,6 +86,9 @@ class NovelDetail extends Command
                 continue;
             }
             $result = self::checkChannel($novel_base);
+            if($result){
+                self::setNovelDetailId($novel_id);
+            }
             sleep($this->sleep_seconds);
         }
         
@@ -121,5 +125,25 @@ class NovelDetail extends Command
 
         return $res;
 
+    }
+
+    /**
+     * 插入要更新章节内容的小说章节ID
+     */
+    public static function setNovelDetailId($novel_id){
+
+        $search = [
+            'novel_id' => $novel_id,
+            'is_update' => 0
+        ];
+        $novel_detail_ids = NovelDetail::where($search)->pluck('id')->all();
+        if($novel_detail_ids){
+            return true;
+        }
+
+        foreach($novel_detail_ids as $val){
+            RedisService::setNovelDetailId($val);
+        }
+        return true;
     }
 }
