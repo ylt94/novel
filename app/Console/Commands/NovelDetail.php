@@ -80,14 +80,12 @@ class NovelDetail extends Command
         //业务逻辑
         Process::where('type',Process::NOVEL_DETAIL)->update(['pid'=>getmypid()]);
         while(true){
-            // $novel_id = RedisService::getNovelId();
-            // if(!$novel_id || !$novel_base = NovelBase::find($novel_id)) {
-            //     //sleep($this->sleep_seconds);
-            //     continue;
-            // }
-            // $result = self::checkChannel($novel_base);
-            // sleep($this->sleep_seconds);
-            $this->info('11111');
+            $novel_id = RedisService::getNovelId();
+            if(!$novel_id || !$novel_base = NovelBase::find($novel_id)) {
+                continue;
+            }
+            $result = self::checkChannel($novel_base);
+            sleep($this->sleep_seconds);
         }
         
     }
