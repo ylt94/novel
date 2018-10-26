@@ -80,13 +80,14 @@ class NovelDetail extends Command
 
         //业务逻辑
         while(true){
-            $novel_id = RedisService::getNovelId();
-            if(!$novel_id || !$novel_base = NovelBase::find($novel_id)) {
-                sleep($this->sleep_seconds);
-                continue;
-            }
-            $result = self::checkChannel($novel_base);
-            sleep($this->sleep_seconds);
+            // $novel_id = RedisService::getNovelId();
+            // if(!$novel_id || !$novel_base = NovelBase::find($novel_id)) {
+            //     //sleep($this->sleep_seconds);
+            //     continue;
+            // }
+            // $result = self::checkChannel($novel_base);
+            // sleep($this->sleep_seconds);
+            $this->info('11111');
         }
         
     }
