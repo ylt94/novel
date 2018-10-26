@@ -31,7 +31,13 @@ class ProcessController extends Controller{
         if(!$id){
             return ret_res(0,2006);
         }
-
+        $process = Process::find($id);
+        if(!$process){
+            return ret_res(0,2007);
+        }
+        if($process->pid){
+            return ret_res(0,2001);
+        }
         Process::where('id',$id)->update($data);
 
         return ret_res(1,1002);
