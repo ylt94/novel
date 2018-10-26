@@ -156,10 +156,8 @@ export default {
             this.loading = true
             this.api.get('api/admin/process/process-stop',params).then(ret=>{
                 this.api.retrunMsg(ret)
-                if(ret.status) {
-                    this.dialog = false
-                    this.getProcess()
-                } 
+                this.dialog = false
+                this.getProcess()
             })
         }
         
