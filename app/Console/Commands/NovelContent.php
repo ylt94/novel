@@ -76,7 +76,8 @@ class NovelContent extends Command
          //配置
          $this->sleep_seconds = $process->sleep_time;
 
-        //
+        //业务逻辑
+        Process::where('type',Process::NOVEL_CONTENT)->update(['pid'=>getmypid()]);
         while(true){
             $detail_id = RedisService::getNovelDetailId();
             if($detail_id && $novel_detail = NovelDetail::find($detail_id)) {

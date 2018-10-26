@@ -60,25 +60,25 @@ class NovelDetail extends Command
             exit(0);
         }
 
-         //检查有无此类程序的后台进程
-         $process = ProcessService::checkProcess(Process::NOVEL_DETAIL);
-         if(!$process){
-             $this->error(ProcessService::getLastError());
-             exit;
-         }
- 
-         //守护进程
-         $daemon_res = ProcessService::Daemon();
-         if(!$daemon_res){
-             //日志
-             $this->error(ProcessService::getLastError());
-             exit;
-         }
- 
-         //配置
-         $this->sleep_seconds = $process->sleep_time;
+        //检查有无此类程序的后台进程
+        $process = ProcessService::checkProcess(Process::NOVEL_DETAIL);
+        if(!$process){
+            $this->error(ProcessService::getLastError());
+            exit;
+        }
 
+        //守护进程
+        $daemon_res = ProcessService::Daemon();
+        if(!$daemon_res){
+            //日志
+            $this->error(ProcessService::getLastError());
+            exit;
+        }
+
+        //配置
+        $this->sleep_seconds = $process->sleep_time;
         //业务逻辑
+        Process::where('type',Process::NOVEL_DETAIL)->update(['pid'=>getmypid()]);
         while(true){
             // $novel_id = RedisService::getNovelId();
             // if(!$novel_id || !$novel_base = NovelBase::find($novel_id)) {
