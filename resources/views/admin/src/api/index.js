@@ -8,7 +8,7 @@ axios.defaults.baseURL = env.baseUrl
 axios.defaults.timeout = 6000
 
 if(!localStorage.getItem('access_token')){
-    router.push('/admin/login')
+    router.push('/login')
 }
 // console.log('token--------------->',localStorage.getItem('access_token'));
 // axios.defaults.headers.common['Authorization'] ='Bearer ' + localStorage.getItem('access_token')
@@ -52,7 +52,7 @@ function getToken(){
             title: '提示',
             message: '登录失效'
           });
-        router.push('/admin/login')
+        router.push('/login')
         return false
     }
     axios.defaults.headers.common['Authorization'] ='Bearer ' + token

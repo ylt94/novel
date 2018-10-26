@@ -57,7 +57,7 @@
                     <el-input v-model="form.sleep_time" auto-complete="off" style="max-width:200px"></el-input>
                 </el-form-item>
                 <el-form-item label="进程编号" style="width:100%">
-                    <el-input v-model="form.pid" auto-complete="off" style="max-width:200px"></el-input>
+                    <el-input :disabled="true" v-model="form.pid" auto-complete="off" style="max-width:200px"></el-input>
                 </el-form-item>
                 <el-form-item label="进程命令" style="width:100%">
                     <el-input v-model="form.exec_command" auto-complete="off" style="max-width:200px"></el-input>
@@ -101,7 +101,6 @@ export default {
             this.dialog = true
         },
         addOrUpdatePost(){
-            this.loading = true
             var url = 'api/admin/process/process-update'
             if(this.form.id == undefined){//add
                 url = 'api/admin/process/process-add'  
@@ -113,6 +112,7 @@ export default {
                 })
                 return 
             }
+            this.loading = true
             this.api.post(url,this.form).then((ret)=>{
                 this.api.retrunMsg(ret)
                 if(ret.status) {
