@@ -9,7 +9,7 @@ use App\Services\Reptilian\QiDianService;
 use App\Services\ProcessService;
 
 use App\Models\NovelBase;
-use App\Models\NovelDetail;
+use App\Models\NovelDetail as NovelDetailTable;
 use App\Models\Sites;
 use App\Models\Process;
 
@@ -136,7 +136,7 @@ class NovelDetail extends Command
             'novel_id' => $novel_id,
             'is_update' => 0
         ];
-        $novel_detail_ids = NovelDetail::where($search)->pluck('id')->all();
+        $novel_detail_ids = NovelDetailTable::where($search)->pluck('id')->all();
         if(!$novel_detail_ids){
             return true;
         }
