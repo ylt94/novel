@@ -12,6 +12,7 @@ use App\Services\Site\SiteService;
 use App\Services\Reptilian\PublicService;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 
 class QiDianController extends Controller{
 
@@ -91,12 +92,13 @@ class QiDianController extends Controller{
                     ->getData();
             $data =  $data->all();
             $data = array_slice($data,0,20);
-            $data = PublicService::careteNovelBase($data,$site,$categories);
-            $result = PublicService::insertNovelBase($data,$page);
+            //$data = PublicService::careteNovelBase($data,$site,$categories);
+            //$result = PublicService::insertNovelBase($data,$page);
             $ql->destruct();
             $arr = array_merge($arr,$data);
             $page++;
         }while($page<2);
+        dd($arr);
         echo 'success';
         
     }
@@ -165,6 +167,10 @@ class QiDianController extends Controller{
             QiDianService::getQiDianNovelContent($url,$capter->id);
         }
         echo 'success';
+    }
+
+    public function test(Request $request){
+        dd($request->getClientIp());
     }
     
 }

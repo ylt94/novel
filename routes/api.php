@@ -70,22 +70,20 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     
 });
 
-Route::get('/test','Admin\Reptilian\QiDianController@getNovelContent');
+Route::get('/test','Admin\Reptilian\QiDianController@test');
 Route::get('/phpinfo',function(Request $request){
-    //print_r(phpinfo());exit;
-    // try {
-    //     $con = new PDO('mysql:host=mysql;dbname=novel', 'root', 'root');
-    //     $con->query('SET NAMES UTF8');
-    //     $res =  $con->query('select * from novel_category');
-    //     while ($row = $res->fetch(PDO::FETCH_ASSOC)) {
-    //         echo "id:{$row['id']} name:{$row['name']}";
-    //     }
-    // } catch (PDOException $e) {
-    //      echo '错误原因：'  . $e->getMessage();
-    // }
-    //extension = pdo_mysql.so
-    //docker-php-ext-pdo_mysql.ini
-    dd($_SERVER['HTTP_USER_AGENT']);
+    $ch = curl_init();
+    $url = 'http:120.78.183.163/api/test';
+    $header = array(
+        'CLIENT-IP:58.68.44.61',
+        'X-FORWARDED-FOR:58.68.44.61',
+    );
+    curl_setopt($ch, CURLOPT_URL, $url); 
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $header); 
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER,true); 
+    $page_content = curl_exec($ch); 
+    curl_close($ch); 
+    echo $page_content; 
 });
 // Route::get('/test',function(){
 //     return ['status'=>1,'password'=>bcrypt(123456)];
