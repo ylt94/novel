@@ -170,7 +170,7 @@ class QiDianController extends Controller{
     }
 
     public function test(Request $request){
-        dd($request->getClientIp());
+        PublicService::getFreeIp();
     }
     
 }
