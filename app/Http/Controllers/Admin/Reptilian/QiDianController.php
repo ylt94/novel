@@ -170,7 +170,8 @@ class QiDianController extends Controller{
     }
 
     public function test(Request $request){
-        PublicService::getFreeIp();
+       $url = 'http://127.0.0.1/111?name=飞剑问道';
+       dd(urlencode($url));
     }
     
 }

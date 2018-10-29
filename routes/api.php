@@ -70,27 +70,28 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     
 });
 
-Route::get('/test','Admin\Reptilian\QiDianController@test');
+Route::get('/test','Admin\Reptilian\BiQuController@novelChapters');
 Route::get('/phpinfo',function(Request $request){
-    $ch = curl_init();
-    //$url = 'http://120.78.183.163/api/test';
-    $url = 'http://117.191.11.80:8080';
-    $header = array(
-        'CLIENT-IP:58.68.44.61',
-        'X-FORWARDED-FOR:58.68.44.61',
-        'CLIENT-IP:58.68.44.61'
-    );
-    // curl_setopt($ch, CURLOPT_PROXY, '117.191.11.80'); //代理服务器地址   
-    // curl_setopt($ch, CURLOPT_PROXYPORT,'8080'); //代理服务器端口
-    curl_setopt($ch, CURLOPT_REFERER, 'http://www.baidu.com/');//模拟来路
-    curl_setopt($ch, CURLOPT_URL, $url); 
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $header); 
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER,true); 
-    $page_content = curl_exec($ch); 
-    $http_code = curl_getinfo($ch,CURLINFO_HTTP_CODE); 
-    $error = curl_error($ch);
-    curl_close($ch); dd($error);
-    echo $page_content; 
+    // $ch = curl_init();
+    // //$url = 'http://120.78.183.163/api/test';
+    // $url = 'http://117.191.11.80:8080';
+    // $header = array(
+    //     'CLIENT-IP:58.68.44.61',
+    //     'X-FORWARDED-FOR:58.68.44.61',
+    //     'CLIENT-IP:58.68.44.61'
+    // );
+    // // curl_setopt($ch, CURLOPT_PROXY, '117.191.11.80'); //代理服务器地址   
+    // // curl_setopt($ch, CURLOPT_PROXYPORT,'8080'); //代理服务器端口
+    // curl_setopt($ch, CURLOPT_REFERER, 'http://www.baidu.com/');//模拟来路
+    // curl_setopt($ch, CURLOPT_URL, $url); 
+    // curl_setopt($ch, CURLOPT_HTTPHEADER, $header); 
+    // curl_setopt($ch, CURLOPT_RETURNTRANSFER,false); 
+    // $page_content = curl_exec($ch); 
+    // $http_code = curl_getinfo($ch,CURLINFO_HTTP_CODE); 
+    // $error = curl_error($ch);
+    // curl_close($ch); dd($error);
+    // echo $page_content;
+    echo  mb_convert_encoding(urldecode('+%B7%C9%BD%A3%CE%CA%B5%C0'),'utf-8','gbk');
 });
 // Route::get('/test',function(){
 //     return ['status'=>1,'password'=>bcrypt(123456)];
