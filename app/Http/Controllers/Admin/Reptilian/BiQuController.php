@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\services\Reptilian\PublicService;
+use App\Services\Reptilian\BiQuService;
 
 class BiQuController extends Controller{
 
@@ -15,8 +16,9 @@ class BiQuController extends Controller{
         $novel_name = '飞剑问道';
         $code_name = urlencode(mb_convert_encoding(' '.$novel_name,'gbk','utf-8'));
         $url = 'http://www.biquge.com.tw/modules/article/soshu.php?searchkey='.$code_name;
+        
         //$agent_ip = PublicService::getAgentIp();
-
+        //$agent_url = $agent_ip->http_type.'://'.$agent_ip->ip.':'.$agent_ip->port;
         // $header = array(
         //     'CLIENT-IP:'.$agent_ip->ip,
         //     'X-FORWARDED-FOR:'.$agent_ip->ip,
@@ -28,11 +30,17 @@ class BiQuController extends Controller{
         curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
         // curl_setopt($ch,CURLOPT_PROXY,$agent_ip->ip);
         // curl_setopt($ch,CURLOPT_PROXYPORT,$agent_ip->port);
+        curl_setopt($ch,CURLOPT_USERAGENT,'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3554.0 Safari/537.36');
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
-        $content = curl_exec($ch);
+        $result = curl_exec($ch);
+        $content = curl_getinfo($ch);
         curl_close($ch);
-        print_r($content);
-        
+        $url = isset($content['redirect_url']) ? $content['redirect_url'] : '';
+        if(!$url){
 
+        }
+        return $url;
     }
+
+
 }
