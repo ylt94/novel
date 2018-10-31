@@ -74,8 +74,13 @@ class BiQuService extends BaseService{
      */
     public static function updateChapters($chapters){
         foreach(dataYieldRange($chapters) as $item){
-
+            $insert_data['capter_id'] = $item['id'];
+            $insert_data['content'] = self::getChapterContent($item['href']);
+            if($insert_data['content']){
+                NovelContent::create($insert_data);
+            }
         }
+        return true;
     }
 
     /**
