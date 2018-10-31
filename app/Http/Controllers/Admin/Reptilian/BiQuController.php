@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin\Reptilian;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Models\NovelBase;
+
 use App\services\Reptilian\PublicService;
 use App\Services\Reptilian\BiQuService;
 
@@ -12,34 +14,38 @@ class BiQuController extends Controller{
     /**
      * 获取小说章节
      */
-    public function novelChapters(Request $request){
-        $novel_name = '飞剑问道';
-        $code_name = urlencode(mb_convert_encoding(' '.$novel_name,'gbk','utf-8'));
-        $url = 'http://www.biquge.com.tw/modules/article/soshu.php?searchkey='.$code_name;
-        
-        //$agent_ip = PublicService::getAgentIp();
-        //$agent_url = $agent_ip->http_type.'://'.$agent_ip->ip.':'.$agent_ip->port;
-        // $header = array(
-        //     'CLIENT-IP:'.$agent_ip->ip,
-        //     'X-FORWARDED-FOR:'.$agent_ip->ip,
-        // );
-        $ch = curl_init();
-
-        curl_setopt($ch,CURLOPT_URL,$url);
-        //curl_setopt($ch,CURLOPT_HTTPHEADER,$header);
-        curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
-        // curl_setopt($ch,CURLOPT_PROXY,$agent_ip->ip);
-        // curl_setopt($ch,CURLOPT_PROXYPORT,$agent_ip->port);
-        curl_setopt($ch,CURLOPT_USERAGENT,'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3554.0 Safari/537.36');
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
-        $result = curl_exec($ch);
-        $content = curl_getinfo($ch);
-        curl_close($ch);
-        $url = isset($content['redirect_url']) ? $content['redirect_url'] : '';
-        if(!$url){
-
+    public function novelChapters(Request $requset){
+        $novel_id = $requset->novel_id;
+        if(!$novel_id){
+            return ret_res(0,2006);
         }
-        return $url;
+        $novel = NovelBase::find($novel_id);
+        if (!$novel) {
+            return ret_res(0,2007);
+        }
+        
+        //获取小说章节url
+        $url = BiQuService::novelChaptersUrl($novel->title);
+        if(!$url){
+            return ret_res(0,2005);
+        }
+
+        //获取所有章节
+        $chapters = BiQuService::novelChapters($url);
+        if(!$chapters){
+            return ret_res(0,2005);
+        }
+
+        //获取我方未更新的章节
+        $unupdate_chapters = BiQuService::unupdateChapters($novel_id);
+
+        //对比章节查找
+        $chapter_result = BiQuService::checkChapters($chapters,$unupdate_chapters);
+
+
+        //跟新章节
+        $result = BiQuService::updateChapters($chapter_result);
+
     }
 
 
