@@ -8,6 +8,7 @@ use App\Models\NovelBase;
 
 use App\services\Reptilian\PublicService;
 use App\Services\Reptilian\BiQuService;
+use App\Services\Novel\NovelService;
 
 class BiQuController extends Controller{
 
@@ -37,16 +38,21 @@ class BiQuController extends Controller{
         }
 
         //获取我方未更新的章节
-        $unupdate_chapters = BiQuService::unupdateChapters($novel_id);
+        $unupdate_chapters = NovelService::unupdateChapters($novel_id,true);
 
         //对比章节查找
-        $chapter_result = BiQuService::checkChapters($chapters,$unupdate_chapters);
+        $chapter_result = PublicService::checkChapters($chapters,$unupdate_chapters);
 
-
+        
         //跟新章节
         $result = BiQuService::updateChapters($chapter_result);
 
     }
 
+    public function test(){
+        $url = 'http://www.biquge.com.tw/18_18820/9492055.html';
+        $chapters = BiQuService::getChapterContent($url);
+        dd($chapters);
+    }
 
 }

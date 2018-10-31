@@ -78,4 +78,19 @@
             return $result;
             
         }
+
+        /**
+         * 获取我方为更新章节
+         */
+        public static function unupdateChapters($novel_id,$return_array = false){
+            $search = [
+                'novel_id' => $novel_id,
+                'is_update' => 0,
+            ];
+            $chapters = NovelDetail::where($search)->orderBy('created_at','asc')->get();
+            if ($return_array) {
+                return $chapters->toArray();
+            }
+            return $chapters;
+        }
     }

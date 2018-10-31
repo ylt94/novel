@@ -100,4 +100,20 @@
 
             dd($data);
         }
+
+        /**
+         * 对比章节获取未更新章节
+         * @param  $site_chapters抓取的章节
+         * @param $my_chapters 本站w未更新章节
+         * */
+        public static function checkChapters($site_chapters,$my_chapters){
+            foreach($my_chapters as &$item){
+                foreach(dataYieldRange($site_chapters) as $value){
+                    if($item['title'] = $value['title']){
+                        $item['href'] = $value['href'];
+                    }
+                }
+            }
+            return $my_chapters;
+        }
     }

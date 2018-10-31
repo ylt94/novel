@@ -4,6 +4,10 @@ namespace App\Services\Reptilian;
 use App\Services\BaseService;
 use QL\QueryList;
 
+use App\Models\NovelDetail;
+use App\Models\NovelBase;
+use App\Models\NovelContent;
+
 class BiQuService extends BaseService{
 
     /**
@@ -37,5 +41,56 @@ class BiQuService extends BaseService{
             return false;
         }
         return $url;
+    }
+
+    /**
+     * 获取笔趣阁所有小说章节
+     */
+    public static function novelChapters($url){
+        $rules = [
+            'title' => array('dd>a','text'),
+            'href' => array('dd>a','href')
+        ];
+        //$html = mb_convert_encoding(file_get_contents($url),'UTF-8','GBK');
+
+        //$ql = QueryList::html($html)->rules($rules)->query()->getData();
+        $ql = QueryList::rules($rules);
+        $result = $ql->get($url)
+                    //->encoding('UTF-8','GBK')
+                    ->query()
+                    ->getData();
+        $data = array();
+        foreach ( dataYieldRange($result) as $item) {
+            $value = array();
+            $value['title'] = mb_convert_encoding($item['title'],'UTF-8','GBK');
+            $value['href'] = 'http://www.biquge.com.tw'.$item['href'];
+            array_push($data,$value);
+        }
+        return $data;
+    }
+
+    /**
+     * 更新小说章节内容
+     */
+    public static function updateChapters($chapters){
+        foreach(dataYieldRange($chapters) as $item){
+
+        }
+    }
+
+    /**
+     * 获取章节内容
+     */
+    public static function getChapterContent($url){
+        $rules = [
+            'content' => array('#content','html'),
+        ];
+
+        $ql = QueryList::rules($rules);
+        $result = $ql->get($url)
+                    ->query()
+                    ->getData();
+        $result = mb_convert_encoding($result[0]['content'],'UTF-8','GBK');
+        dd($result);
     }
 }

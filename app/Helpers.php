@@ -59,3 +59,9 @@ function get_msg_by_code($code){
     }
     return $code_msg[$code];
 }
+
+function dataYieldRange($data){
+    foreach($data as $item){
+        yield $item;
+    }
+}
