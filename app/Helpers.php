@@ -1,5 +1,5 @@
 <?php
-
+use Log;
 
 function check_variable($data){
     if(!is_array($data) && !$data) {
@@ -64,4 +64,15 @@ function dataYieldRange($data){
     foreach($data as $item){
         yield $item;
     }
+}
+
+function my_log($msg,$path,$log_type){
+
+    $log_types = ['info','error'];
+    if (!in_array($log_type,$log_types)) {
+        return false;
+    }
+
+    Log::useDailyFiles(storage_path($path));
+    Log::$log_type($msg);
 }

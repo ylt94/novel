@@ -20,16 +20,12 @@ class BiQuController extends Controller{
         if(!$novel_id){
             return ret_res(0,2006);
         }
-        $novel = NovelBase::find($novel_id);
-        if (!$novel) {
-            return ret_res(0,2007);
-        }
-        
         //获取小说章节url
-        $url = BiQuService::novelChaptersUrl($novel->title);
+        $url = BiQuService::novelChaptersUrl($novel_id);
         if(!$url){
             return ret_res(0,2005);
         }
+        
 
         //获取所有章节
         $chapters = BiQuService::novelChapters($url);

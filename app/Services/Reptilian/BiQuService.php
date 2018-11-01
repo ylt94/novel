@@ -3,6 +3,7 @@
 namespace App\Services\Reptilian;
 use App\Services\BaseService;
 use QL\QueryList;
+use DB;
 
 use App\Models\NovelDetail;
 use App\Models\NovelBase;
@@ -13,8 +14,19 @@ class BiQuService extends BaseService{
     /**
      * 获取小说章节url
      */
-    public static function novelChaptersUrl($novel_name){
-        $novel_name = '飞剑问道';
+    public static function novelChaptersUrl($novel_id){
+
+        $novel = NovelBase::find($novel_id);
+        if(!$novel){
+            static::addError('小说不存在',2007);
+            return false;
+        }
+        $url = $novel->biqu_url;
+        if($url){
+            return $url;
+        }
+
+        $novel_name = $novel->title;
         $code_name = urlencode(mb_convert_encoding(' '.$novel_name,'gbk','utf-8'));
         $url = 'http://www.biquge.com.tw/modules/article/soshu.php?searchkey='.$code_name;
         
@@ -40,6 +52,8 @@ class BiQuService extends BaseService{
         if(!$url){
             return false;
         }
+        $novel->biqu_url = $url;
+        $novel->save(); 
         return $url;
     }
 
@@ -77,7 +91,18 @@ class BiQuService extends BaseService{
             $insert_data['capter_id'] = $item['id'];
             $insert_data['content'] = self::getChapterContent($item['href']);
             if($insert_data['content']){
-                NovelContent::create($insert_data);
+                try{
+                    DB::beginTransaction();
+                    NovelContent::create($insert_data);
+                    NovelDetail::where('id',$item['id'])->update(['is_update'=>1]);
+                    DB::commit();
+                }catch(\Exception $e){
+                    DB::rollback();
+                    $error = '小说章节:'.$capter_id.'更新失败:'.$e->getMessage();
+                    my_log($error,'logs/capter/qidian','error');
+                    return false;
+                }
+                
             }
         }
         return true;
