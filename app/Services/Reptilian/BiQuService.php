@@ -104,7 +104,7 @@ class BiQuService extends BaseService{
                 }catch(\Exception $e){
                     DB::rollback();
                     $error = '小说章节:'.$item['id'].'更新失败:'.$e->getMessage();
-                    my_log($error,'logs/capter/qidian','error');
+                    my_log($error,'logs/capter/biqu','error');
                     return false;
                 }
                 
