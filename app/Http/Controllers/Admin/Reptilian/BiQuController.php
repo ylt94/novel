@@ -46,8 +46,7 @@ class BiQuController extends Controller{
     }
 
     public function test(){
-        $url = 'http://www.biquge.com.tw/18_18820/9492055.html';
-        $chapters = BiQuService::getChapterContent($url);
+        $chapters = PublicService::getFreeIp();
         dd($chapters);
     }
 

@@ -65,40 +65,62 @@
 
         //获取网络空闲代理Ip//http://www.goubanjia.com/
         public static function getFreeIp(){
-           
+            
+            $agent_http_type = Cache::get('agent_http_type');
+            $agent_ip = Cache::get('agent_ip');
+            $agent_port = Cache::get('agent_port');
+            if($agent_http_type && $agent_ip && $agent_port){
+                return ['agent_http_type' => $agent_http_type,'agent_ip' => $agent_ip ,'agent_port' => $agent_port];
+            }
+
+
             $resuorce_url = 'http://www.goubanjia.com';
             
             $html = QueryList::rules([])->get($resuorce_url);
             $tr = $html->query()->find('table')->find('tr:gt(0)');
-            $ip_port = $tr->map(function($row){
+            $ip_ports = $tr->map(function($row){
                             return $row->find('td.ip>[style != display: none;],span:last')->texts()->all();
                         });
-            $order_data = $tr->map(function($row){
+            $other_data = $tr->map(function($row){
                 return $row->find('td')->texts()->all();
             });
             $urls = array();
-            foreach($ip_port as $item){
+            foreach($ip_ports as $item){
+                $ip_port = [];
                 $url = '';
                 foreach($item as $key => $val){
                     if(!$val){
                         continue;
                     }
                     if(count($item) == ($key+1)){
-                        $url .= ':'.$val;
+                        //$url .= ':'.$val;
+                        $ip_port['ip'] = $url;
+                        $ip_port['port'] = $val;
                         continue;
                     }
                     $url .=  $val;
                 }
-                array_push($urls,$url);
+                array_push($urls,$ip_port);
                 
             }
             $data = array();
-            foreach( $order_data as $key => $item){
-                $item[0] = $item[2].'://'.$urls[$key];
+            foreach( $other_data as $key => $item){
+                $item[0] = $urls[$key]['ip'];
+                array_push($item,$urls[$key]['port']);
                 array_push($data,$item);
             };
+            $times = array_column($data, 5);
+            array_multisort($times,SORT_ASC,$data);
+            $ip = $data[0];
+            $agent_http_type = $data[0][2];
+            $agent_ip = $data[0][0];
+            $agent_port = $data[0][8];
+            Cache::put('agent_ip',$agent_ip,30);
+            Cache::put('agent_port',$agent_port,30);
+            Cache::put('agent_http_type',$agent_http_type,30);
 
-            dd($data);
+            return ['agent_http_type' => $agent_http_type,'agent_ip' => $agent_ip ,'agent_port' => $agent_port];
+            
         }
 
         /**
