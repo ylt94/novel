@@ -70,7 +70,7 @@
             $agent_ip = Cache::get('agent_ip');
             $agent_port = Cache::get('agent_port');
             if($agent_http_type && $agent_ip && $agent_port){
-                return ['agent_http_type' => $agent_http_type,'agent_ip' => $agent_ip ,'agent_port' => $agent_port];
+                return ['http_type' => $agent_http_type,'agent_ip' => $agent_ip ,'agent_port' => $agent_port];
             }
 
 
@@ -119,7 +119,7 @@
             Cache::put('agent_port',$agent_port,30);
             Cache::put('agent_http_type',$agent_http_type,30);
 
-            return ['agent_http_type' => $agent_http_type,'agent_ip' => $agent_ip ,'agent_port' => $agent_port];
+            return ['http_type' => $agent_http_type,'agent_ip' => $agent_ip ,'agent_port' => $agent_port];
             
         }
 
