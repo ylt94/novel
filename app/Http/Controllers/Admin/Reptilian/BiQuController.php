@@ -21,7 +21,7 @@ class BiQuController extends Controller{
             return ret_res(0,2006);
         }
         //获取小说章节url
-        $url = BiQuService::novelChaptersUrl($novel_id);
+        $url = BiQuService::novelChaptersUrl($novel_id);dd($url);
         if(!$url){
             return ret_res(0,2005);
         }
@@ -38,7 +38,7 @@ class BiQuController extends Controller{
 
         //对比章节查找
         $chapter_result = PublicService::checkChapters($chapters,$unupdate_chapters);
-
+        dd($chapter_result);
         
         //更新章节内容
         $result = BiQuService::updateChapters($chapter_result);

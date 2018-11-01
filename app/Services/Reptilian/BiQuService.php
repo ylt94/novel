@@ -26,7 +26,7 @@ class BiQuService extends BaseService{
         if($url){
             return $url;
         }
-
+        
         $novel_name = $novel->title;
         $code_name = urlencode(mb_convert_encoding(' '.$novel_name,'gbk','utf-8'));
         $url = 'http://www.biquge.com.tw/modules/article/soshu.php?searchkey='.$code_name;
@@ -36,20 +36,32 @@ class BiQuService extends BaseService{
             'CLIENT-IP:'.$free_ip['agent_ip'],
             'X-FORWARDED-FOR:'.$free_ip['agent_ip'],
         );
+        //$free_ip['agent_ip'] = '39.137.2.222';
+        //$free_ip['agent_port'] = '8302';
+        var_dump($free_ip['agent_ip']);
+        var_dump($free_ip['agent_port']);
+        var_dump($free_ip['http_type']);
         $ch = curl_init();
 
         curl_setopt($ch,CURLOPT_URL,$url);
         curl_setopt($ch,CURLOPT_HTTPHEADER,$header);
         curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 60);
         curl_setopt($ch,CURLOPT_PROXY,$free_ip['agent_ip']);
-        curl_setopt($ch,CURLOPT_PROXYPORT,$free_ip['agent_prot']);
+        curl_setopt($ch,CURLOPT_PROXYPORT,$free_ip['agent_port']);
+        if($free_ip['http_type'] == 'https'){
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE); // https请求 不验证证书和hosts
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+        }
+        // curl_setopt($ch,CURLOPT_PROXY,'39.137.2.238');
+        // curl_setopt($ch,CURLOPT_PROXYPORT,'8926');
         curl_setopt($ch,CURLOPT_USERAGENT,'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3554.0 Safari/537.36');
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
 
         $result = curl_exec($ch);
         $content = curl_getinfo($ch);
         curl_close($ch);
-        $url = isset($content['redirect_url']) ? $content['redirect_url'] : '';
+        $url = isset($content['redirect_url']) ? $content['redirect_url'] : '';dd($content);
         if(!$url){
             return false;
         }
