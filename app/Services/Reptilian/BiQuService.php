@@ -90,6 +90,11 @@ class BiQuService extends BaseService{
         foreach(dataYieldRange($chapters) as $item){
             $insert_data['capter_id'] = $item['id'];
             $insert_data['content'] = self::getChapterContent($item['href']);
+            if(!$insert_data['content']){
+                $error = '小说章节:'.$item['id'].'更新失败:没有抓取到具体内容';
+                my_log($error,'logs/capter/qidian','error');
+                continue;
+            }
             if($insert_data['content']){
                 try{
                     DB::beginTransaction();
@@ -98,7 +103,7 @@ class BiQuService extends BaseService{
                     DB::commit();
                 }catch(\Exception $e){
                     DB::rollback();
-                    $error = '小说章节:'.$capter_id.'更新失败:'.$e->getMessage();
+                    $error = '小说章节:'.$item['id'].'更新失败:'.$e->getMessage();
                     my_log($error,'logs/capter/qidian','error');
                     return false;
                 }
@@ -121,6 +126,10 @@ class BiQuService extends BaseService{
                     ->query()
                     ->getData();
         $result = mb_convert_encoding($result[0]['content'],'UTF-8','GBK');
-        dd($result);
+        if(!$result){
+            return false;
+        }
+
+        return $result;
     }
 }
