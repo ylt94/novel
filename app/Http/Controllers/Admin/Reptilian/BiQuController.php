@@ -40,7 +40,7 @@ class BiQuController extends Controller{
         $chapter_result = PublicService::checkChapters($chapters,$unupdate_chapters);
 
         
-        //跟新章节
+        //更新章节内容
         $result = BiQuService::updateChapters($chapter_result);
 
     }

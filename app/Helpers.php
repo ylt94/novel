@@ -1,5 +1,4 @@
 <?php
-use Log;
 
 function check_variable($data){
     if(!is_array($data) && !$data) {
@@ -73,6 +72,6 @@ function my_log($msg,$path,$log_type){
         return false;
     }
 
-    Log::useDailyFiles(storage_path($path));
-    Log::$log_type($msg);
+    \Log::useDailyFiles(storage_path($path));
+    \Log::$log_type($msg);
 }

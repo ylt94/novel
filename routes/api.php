@@ -70,7 +70,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     
 });
 
-Route::get('/test','Admin\Reptilian\BiQuController@test');
+Route::get('/test','Admin\Reptilian\QiDianController@getNovelDetail');
 Route::get('/phpinfo',function(Request $request){
     // $ch = curl_init();
     // //$url = 'http://120.78.183.163/api/test';

@@ -30,7 +30,7 @@ class BiQuService extends BaseService{
         $novel_name = $novel->title;
         $code_name = urlencode(mb_convert_encoding(' '.$novel_name,'gbk','utf-8'));
         $url = 'http://www.biquge.com.tw/modules/article/soshu.php?searchkey='.$code_name;
-        
+
         $free_ip = PublicService::getFreeIp();
         $header = array(
             'CLIENT-IP:'.$free_ip['agent_ip'],
@@ -53,7 +53,7 @@ class BiQuService extends BaseService{
         if(!$url){
             return false;
         }
-        $novel->biqu_url = $url;
+        $novel->biqu_url = rtrim($url,'/');
         $novel->save(); 
         return $url;
     }
@@ -66,12 +66,9 @@ class BiQuService extends BaseService{
             'title' => array('dd>a','text'),
             'href' => array('dd>a','href')
         ];
-        //$html = mb_convert_encoding(file_get_contents($url),'UTF-8','GBK');
-
-        //$ql = QueryList::html($html)->rules($rules)->query()->getData();
+        
         $ql = QueryList::rules($rules);
         $result = $ql->get($url)
-                    //->encoding('UTF-8','GBK')
                     ->query()
                     ->getData();
         $data = array();

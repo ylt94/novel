@@ -188,8 +188,15 @@
         //合并所有章节
         public static function mergeNovelChapters($data){
             $chapters = [];
-            foreach($data as $item) {
-                $chapters = array_merge($chapters,$item['cs']);
+            $rule = '/([0-9])|(零|一|二|三|四|五|六|七|八|九|十|百|千|万)/';
+            foreach(dataYieldRange($data) as $item) {
+                foreach($item['cs'] as $chapter){
+                    preg_match($rule,$chapter['cN'], $rule_res);
+                    if(!$rule_res){
+                        continue;
+                    }
+                    array_push($chapters,$chapter);
+                }
             }
 
             return $chapters;
@@ -199,7 +206,7 @@
         public static function createNovelDetail($id,$data,$site_id) {
             $create_arr = array();
             $total_words = 0;
-            foreach ($data as $item) {
+            foreach (dataYieldRange($data) as $item) {
                 $create_item = [
                     'novel_id' => $id,
                     'site_resource' => $site_id, 
