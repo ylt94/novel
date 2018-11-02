@@ -36,9 +36,7 @@ class BiQuService extends BaseService{
             'CLIENT-IP:'.$free_ip['agent_ip'],
             'X-FORWARDED-FOR:'.$free_ip['agent_ip'],
         );
-        var_dump($free_ip['agent_ip']);
-        var_dump($free_ip['agent_port']);
-        var_dump($free_ip['agent_type']);
+
         $ch = curl_init();
 
         curl_setopt($ch,CURLOPT_URL,$url);
@@ -57,7 +55,7 @@ class BiQuService extends BaseService{
         $result = curl_exec($ch);
         $content = curl_getinfo($ch);
         curl_close($ch);
-        $url = isset($content['redirect_url']) ? $content['redirect_url'] : '';dd($content);
+        $url = isset($content['redirect_url']) ? $content['redirect_url'] : '';
         if(!$url){
             return false;
         }
@@ -95,7 +93,12 @@ class BiQuService extends BaseService{
     public static function updateChapters($chapters){
         foreach(dataYieldRange($chapters) as $item){
             $insert_data['capter_id'] = $item['id'];
-            $insert_data['content'] = self::getChapterContent($item['href']);
+            if(!$item['biqu_url']){
+                $msg = '章节id：'.$item['id'].'未匹配到url';
+                my_log($msg,'logs/capter/biqu','error');
+                continue;
+            }
+            $insert_data['content'] = self::getChapterContent($item['biqu_url']);
             if(!$insert_data['content']){
                 $error = '小说章节:'.$item['id'].'更新失败:没有抓取到具体内容';
                 my_log($error,'logs/capter/qidian','error');
@@ -105,7 +108,7 @@ class BiQuService extends BaseService{
                 try{
                     DB::beginTransaction();
                     NovelContent::create($insert_data);
-                    NovelDetail::where('id',$item['id'])->update(['is_update'=>1]);
+                    NovelDetail::where('id',$item['id'])->update(['is_update'=>1,'biqu_url' => $item['biqu_url']]);
                     DB::commit();
                 }catch(\Exception $e){
                     DB::rollback();

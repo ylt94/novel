@@ -73,7 +73,7 @@
                 return ['agent_type' => $agent_type,'agent_ip' => $agent_ip ,'agent_port' => $agent_port];
             }
 
-
+            
             $resuorce_url = 'http://www.xicidaili.com/nn/';
             $html = QueryList::rules([])->get($resuorce_url);
             $tr = $html->query()->find('table')->find('tr:gt(0)');
@@ -93,10 +93,18 @@
             $agent_ip = $other_data[$agent_key][1];
             $agent_port = $other_data[$agent_key][2];
             $agent_type = $other_data[$agent_key][5];
+            $time = $other_data[$agent_key][8];
+            $time_last_character = mb_substr($time,-1,1);
+            if($time_last_character == '天'){
+                $time = mb_substr($time,0,-1);
+                $time = $time*60*24;
+            }else{
+                $time = mb_substr($time,0,-2);
+            }
             
-            Cache::put('agent_ip',$agent_ip,60*24);
-            Cache::put('agent_port',$agent_port,60*24);
-            Cache::put('agent_type',$agent_type,60*24);
+            Cache::put('agent_ip',$agent_ip,$time);
+            Cache::put('agent_port',$agent_port,$time);
+            Cache::put('agent_type',$agent_type,$time);
 
             return ['agent_type' => $agent_type,'agent_ip' => $agent_ip ,'agent_port' => $agent_port];
             
