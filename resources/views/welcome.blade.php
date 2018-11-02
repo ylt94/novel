@@ -9,7 +9,7 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
-
+        <script src="{{ asset('js/app.js') }}"></script>
         <!-- Styles -->
         <style>
             html, body {
@@ -65,7 +65,6 @@
         </style>
     </head>
     <body>
-        <div style="width:90%;height:100%;margin-left:5%;"><?php echo $content ?></div>
         <div class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">
