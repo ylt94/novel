@@ -38,7 +38,6 @@ class BiQuController extends Controller{
 
         //对比章节查找
         $chapter_result = PublicService::checkChapters($chapters,$unupdate_chapters);
-        dd($chapter_result);
         
         //更新章节内容
         $result = BiQuService::updateChapters($chapter_result);

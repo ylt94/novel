@@ -63,73 +63,42 @@
 
         }
 
-        //获取网络空闲代理Ip//http://www.goubanjia.com/
+        //获取网络空闲代理Ip//http://www.xicidaili.com/nn/
         public static function getFreeIp(){
             
-            // $agent_http_type = Cache::get('agent_http_type');
-            // $agent_ip = Cache::get('agent_ip');
-            // $agent_port = Cache::get('agent_port');
-            // if($agent_http_type && $agent_ip && $agent_port){
-            //     return ['http_type' => $agent_http_type,'agent_ip' => $agent_ip ,'agent_port' => $agent_port];
-            // }
-
-
-            $resuorce_url = 'http://www.goubanjia.com';
-            
-            //$html = QueryList::rules([])->get($resuorce_url);
-            // $tr = $html->query()->find('table')->find('tr:gt(0)');
-            // $ip_ports = $tr->map(function($row){
-            //                 return $row->find('td.ip>[style != display: none;],span:last')->texts()->all();
-            //             });
-            // $other_data = $tr->map(function($row){
-            //     return $row->find('td')->texts()->all();
-            // });
-            $rules = [
-                'ip' => ''
-            ];
-            $urls = array();
-            foreach($ip_ports as $item){
-                $ip_port = [];
-                $url = '';
-                foreach($item as $key => $val){
-                    if(!$val){
-                        continue;
-                    }
-                    if(count($item) == ($key+1)){
-                        //$url .= ':'.$val;
-                        $ip_port['ip'] = $url;
-                        $ip_port['port'] = $val;
-                        continue;
-                    }
-                    $url .=  $val;
-                }
-                array_push($urls,$ip_port);
-                
+            $agent_type = Cache::get('agent_type');
+            $agent_ip = Cache::get('agent_ip');
+            $agent_port = Cache::get('agent_port');
+            if($agent_type && $agent_ip && $agent_port){
+                return ['agent_type' => $agent_type,'agent_ip' => $agent_ip ,'agent_port' => $agent_port];
             }
-            $data = array();
-            foreach( $other_data as $key => $item){
-                $item[0] = $urls[$key]['ip'];
-                array_push($item,$urls[$key]['port']);
-                array_push($data,$item);
-            };dd($data);
-            $times = array_column($data, 5);
-            array_multisort($times,SORT_ASC,$data);
-            foreach($data as $item){
-                preg_match('/中国/',$item[3],$check_address);
-                if($check_address){
-                    $agent = $item;print_r($item);
+
+
+            $resuorce_url = 'http://www.xicidaili.com/nn/';
+            $html = QueryList::rules([])->get($resuorce_url);
+            $tr = $html->query()->find('table')->find('tr:gt(0)');
+            $speed = $tr->map(function($row){
+                            return $row->find('td>div[class=bar]')->attr('title');
+                        });
+            $other_data = $tr->map(function($row){
+                return $row->find('td')->texts()->all();
+            });
+            $agent_key = -1;
+            foreach($speed as $key => $val){
+                if((float)$val < 0.5){
+                    $agent_key = $key;
                     break;
                 }
             }
+            $agent_ip = $other_data[$agent_key][1];
+            $agent_port = $other_data[$agent_key][2];
+            $agent_type = $other_data[$agent_key][5];
             
-            $agent_http_type = $agent[2];
-            $agent_ip = $agent[0];
-            $agent_port = $agent[8];
-            Cache::put('agent_ip',$agent_ip,30);
-            Cache::put('agent_port',$agent_port,30);
-            Cache::put('agent_http_type',$agent_http_type,30);
+            Cache::put('agent_ip',$agent_ip,60*24);
+            Cache::put('agent_port',$agent_port,60*24);
+            Cache::put('agent_type',$agent_type,60*24);
 
-            return ['http_type' => $agent_http_type,'agent_ip' => $agent_ip ,'agent_port' => $agent_port];
+            return ['agent_type' => $agent_type,'agent_ip' => $agent_ip ,'agent_port' => $agent_port];
             
         }
 
