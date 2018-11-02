@@ -65,6 +65,7 @@
         </style>
     </head>
     <body>
+        <div style="width:100%;height:100%"><?php echo $content ?></div>
         <div class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">

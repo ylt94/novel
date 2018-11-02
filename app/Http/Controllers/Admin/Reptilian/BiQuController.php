@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Admin\Reptilian;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Models\NovelBase;
-
 use App\services\Reptilian\PublicService;
 use App\Services\Reptilian\BiQuService;
 use App\Services\Novel\NovelService;
+use App\Models\NovelContent;
 
 class BiQuController extends Controller{
 
@@ -45,8 +44,11 @@ class BiQuController extends Controller{
     }
 
     public function test(){
-        $chapters = PublicService::getFreeIp();
-        dd($chapters);
+        $content = NovelContent::find(5135);
+        $data = [
+            'content' => $content->content
+        ];
+        return view('welcome',$data);
     }
 
 }
