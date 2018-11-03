@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="{{asset('css/index.css')}}" />
     <!-- <script src="{{ asset('js/app.js') }}"></script> -->
-    <!-- <style>
+    <style>
         a{
             width:100%;
             height:100%;
@@ -82,6 +82,14 @@
             display:flex;
             flex-direction:column;
             
+        }
+        .search-params{
+            height:50%;
+            width:100%;
+            display:flex;
+            flex-direction:row;
+            justify-content:space-around;
+            align-items:center;
         }
         .novel{
             height:88%;
@@ -176,7 +184,7 @@
             line-height:300%;
             text-align:center;
         }
-    </style> -->
+    </style>
 </head>
 <body>
     <div class="container">
@@ -208,6 +216,11 @@
                     <div class="login">
                         <a href="#">登录</a>
                     </div>
+                </div>
+                <div class="search-params">
+                    <div class="search-param"><a href="#">推荐</a></div>
+                    <div class="search-param"><a href="#">收藏</a></div>
+                    <div class="search-param"><a href="#">更新</a></div>
                 </div>
             </div>
             <div class="novel">
