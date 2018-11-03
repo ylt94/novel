@@ -4,7 +4,7 @@ a{
     font-weight:450;
     display:inline-block;
 }
-a:link {color: black;text-decoration:blink; text-decoration:none;} 
+a:link {color: grey;text-decoration:blink; text-decoration:none;} 
 a:visited {color:grey;text-decoration:none;} 
 a:hover {color: #f57070; text-decoration:underline;background-color:white;text-decoration:none;}
 img{
