@@ -16,3 +16,6 @@ Route::get('/', function () {
     return view('client.index');
     //echo "盗用IP者，死全家，请三思!!!";
 });
+Route::get('/novel',function(){
+    return view('client.novel');
+});

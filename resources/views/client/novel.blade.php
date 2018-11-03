@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script src="main.js"></script> -->
+    <style>
+        a:link {text-decoration:none;background-color:none;} 
+        a:active:{text-decoration:none;background-color:none; } 
+        a:visited {text-decoration:none;background-color:none;} 
+        a:hover {text-decoration:none;background-color:none;}
+        a{-webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+        -webkit-user-select: none;
+        -moz-user-focus: none;
+        -moz-user-select: none;}
+        html, body {
+            background-color: #fff;
+            color: black;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 100;
+            height:98%;
+            width:98%;
+            margin: 0;
+            padding: 1% 0 1% 2%;
+        }
+        img{
+            background-size:cover;
+            height:100%;
+            width:100%;
+        }
+        
+        .header{
+            height:40%;
+            width:100%;
+            display:flex;
+            flex-direction:column;
+            box-sizing:border-box;
+            border-bottom:1px solid #e1e5e8;
+            /* background: url("//bookcover.yuewen.com/qdbimg/349573/1010734492/150") no-repeat fixed;
+            background-size:cover;
+            -moz-filter: blur(10px);
+            -ms-filter: blur(10px);    
+            filter: blur(10px); */
+        }
+        .book-info{
+            height:70%;
+            width:100%;
+            display:flex;
+            flex-direction:row;
+        }
+        .novel-image{
+            height:100%;
+            width:30%;
+            border:1px solid grey;
+            box-sizing:border-box;
+        }
+        .book-detail{
+            height:100%;
+            width:68%;
+            padding-left:2%;
+            display:flex;
+            flex-direction:column;
+        }
+        .novel-title{
+            height:25%;
+            width:100%;
+            font-weight:600;
+            color:black;
+            line-height:200%;
+            overflow: hidden;        
+            white-space:nowrap;
+            text-overflow:ellipsis;
+        }
+        .novel-auther{
+            height:20%;
+            width:100%;
+            font-size:16px;
+            font-weight:400;
+            color:black;
+            line-height:200%;
+            overflow: hidden;        
+            white-space:nowrap;
+            text-overflow:ellipsis;
+        }
+        .novel-type{
+            height:20%;
+            width:100%;
+            font-size:14px;
+            color:black;
+            line-height:200%;
+            overflow: hidden;        
+            white-space:nowrap;
+            text-overflow:ellipsis;
+        }
+        .novel-other{
+            height:20%;
+            width:100%;
+            font-size:14px;
+            color:black;
+            line-height:200%;
+            overflow: hidden;        
+            white-space:nowrap;
+            text-overflow:ellipsis;
+        }
+        .book-action{
+            height:30%;
+            width:100%;
+            display:flex;
+            flex-direction:row;
+            align-items:center;
+            justify-content:space-around;
+        }
+        .action-item{
+            height:50%;
+            width:29%;
+            box-sizing:border-box;
+            border:1px solid #e1e5e8;
+            border-radius:5px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        }
+        .book-desc{
+            width:98%;
+            font-size: .875rem;
+            text-align: justify;
+            padding: 5% 2% 5% 0;
+            box-sizing:border-box;
+            border-bottom:1px solid #e1e5e8;
+        }
+        .chapters{
+            height:40px;
+            padding-left: 2%;
+            width:98%;
+            box-sizing:border-box;
+            border-bottom:1px solid #e1e5e8;
+            display:flex;
+            flex-direction:row;
+            align-items:center;
+            
+        }
+        .chapters-newset{
+            font-size:13px;
+            width:70%;
+            height:40px;
+            line-height:40px;
+            overflow: hidden;        
+            white-space:nowrap;
+            text-overflow:ellipsis;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="header">
+        <div class="book-info">
+            <div class="novel-image">
+                <img src="//bookcover.yuewen.com/qdbimg/349573/1010734492/150" />
+            </div>
+            <div class="book-detail">
+                <div class="novel-title">凡人修仙传之仙界篇</div>
+                <div class="novel-auther">作者:忘语</div>
+                <div class="novel-type">类型:修真</div>
+                <div class="novel-other">160.23万字|连载</div>
+                <div class="novel-other">最后更新:2018-08-01 12:00:00</div>
+            </div>
+        </div>
+        <div class="book-action">
+            <div class="action-item" style="color:white;background-color:#f7483e;"><a style="color:white;" href="#">开始阅读</a></div>
+            <div class="action-item" style="color:black;background-color:white;"><a style="color:black;" href="#">加入书架</a></div>
+            <div class="action-item"style="color:black;background-color:white;"><a style="color:black;" href="#">我的书架</a></div>
+        </div>
+    </div>
+    <div class="book-desc">
+        凡人修仙，风云再起时空穿梭，轮回逆转金仙太乙，大罗道祖三千大道，法则至尊《凡人修仙传》仙界篇，一个韩立叱咤仙界的故事，一个凡人小子修仙的不灭传说。特说明下，没有看过前传的书友，并不影响本书的阅读体验
+    </div>
+    <div class="chapters">
+        <div style="font-weight:600;width:30%;">目录</div>
+        <div class="chapters-newset"><a href="#" style="color:grey;">已更新至： 第五百三十一章 第三部功法</a></div>
+    </div>
+    <div class="author-others">
+        <div>作者相关作品</div>
+    </div>
+    <div class="same-recommd">
+        <div>同类推荐</div>
+    </div>
+</body>
+</html>
