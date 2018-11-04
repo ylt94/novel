@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Page Title</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1;user-scalable=no">
     <!-- <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
     <script src="main.js"></script> -->
     <style>
@@ -16,6 +16,11 @@
         -webkit-user-select: none;
         -moz-user-focus: none;
         -moz-user-select: none;}
+        ::-webkit-scrollbar{
+            display:none;
+            width:0px;
+            height:0px;
+        }
         html, body {
             background-color: #fff;
             color: black;
@@ -151,6 +156,66 @@
             white-space:nowrap;
             text-overflow:ellipsis;
         }
+        .author-others{
+            margin-top:20px;
+            width:100%;
+            display:flex;
+            flex-direction:column;
+        }
+        .other-title{
+            border-bottom:1px solid #e1e5e8;
+            width:100px;
+        }
+        .other-novels{
+            margin-top:10px;
+            height:160px;
+            width:100%;
+            box-sizing:border-box;
+            display:flex;
+            flex-direction:row;
+            align-items:center;
+            justify-content:flex-start;
+            -webkit-overflow-scrolling: touch;
+            overflow-x: scroll;
+            overflow-y: hidden;
+            border-bottom:1px solid  #e1e5e8;  
+        }
+        .other-novel-item{
+            margin-right:20px;
+            box-sizing:border-box;
+            height:140px;
+            width:90px;
+            min-width:90px;
+            border:1px solid #e1e5e8;
+            display:flex;
+            flex-direction:column;
+        }
+        .other-novel-image{
+            height:110px;
+            width:100%;
+        }
+        .other-novel-title{
+            height:30px;
+            width:100%;
+            overflow: hidden;        
+            white-space:nowrap;
+            text-overflow:ellipsis;
+            font-size:12px;
+            color:black;
+            line-height:30px;
+            font-weight:550;
+        }
+        .other-same{
+            margin-top:20px;
+            width:100%;
+            display:flex;
+            flex-direction:column;
+            margin-bottom:10px;
+        }
+        .same-title{
+            border-bottom:1px solid #e1e5e8;
+            width:65px;
+        }
     </style>
 
 </head>
@@ -182,10 +247,94 @@
         <div class="chapters-newset"><a href="#" style="color:grey;">已更新至： 第五百三十一章 第三部功法</a></div>
     </div>
     <div class="author-others">
-        <div>作者相关作品</div>
+        <div class="other-title">作者相关作品</div>
+        <div class="other-novels">
+            <div class="other-novel-item">
+                <a href="#">
+                    <div class="other-novel-image">
+                        <img src="//bookcover.yuewen.com/qdbimg/349573/1010734492/150" />
+                    </div>
+                    <div class="other-novel-title">凡人修仙传之仙界篇</div>
+                </a>
+            </div>
+            <div class="other-novel-item">
+                <a href="#">
+                    <div class="other-novel-image">
+                        <img src="//bookcover.yuewen.com/qdbimg/349573/1010734492/150" />
+                    </div>
+                    <div class="other-novel-title">凡人修仙传之仙界篇</div>
+                </a>
+            </div>
+            <div class="other-novel-item">
+                <a href="#">
+                    <div class="other-novel-image">
+                        <img src="//bookcover.yuewen.com/qdbimg/349573/1010734492/150" />
+                    </div>
+                    <div class="other-novel-title">凡人修仙传之仙界篇</div>
+                </a>
+            </div>
+            <div class="other-novel-item">
+                <a href="#">
+                    <div class="other-novel-image">
+                        <img src="//bookcover.yuewen.com/qdbimg/349573/1010734492/150" />
+                    </div>
+                    <div class="other-novel-title">凡人修仙传之仙界篇</div>
+                </a>
+            </div>
+            <div class="other-novel-item">
+                <a href="#">
+                    <div class="other-novel-image">
+                        <img src="//bookcover.yuewen.com/qdbimg/349573/1010734492/150" />
+                    </div>
+                    <div class="other-novel-title">凡人修仙传之仙界篇</div>
+                </a>
+            </div>
+        </div>
     </div>
-    <div class="same-recommd">
-        <div>同类推荐</div>
+    <div class="other-same">
+        <div class="same-title">同类推荐</div>
+        <div class="other-novels">
+        <div class="other-novel-item">
+                <a href="#">
+                    <div class="other-novel-image">
+                        <img src="//bookcover.yuewen.com/qdbimg/349573/1010734492/150" />
+                    </div>
+                    <div class="other-novel-title">凡人修仙传之仙界篇</div>
+                </a>
+            </div>
+            <div class="other-novel-item">
+                <a href="#">
+                    <div class="other-novel-image">
+                        <img src="//bookcover.yuewen.com/qdbimg/349573/1010734492/150" />
+                    </div>
+                    <div class="other-novel-title">凡人修仙传之仙界篇</div>
+                </a>
+            </div>
+            <div class="other-novel-item">
+                <a href="#">
+                    <div class="other-novel-image">
+                        <img src="//bookcover.yuewen.com/qdbimg/349573/1010734492/150" />
+                    </div>
+                    <div class="other-novel-title">凡人修仙传之仙界篇</div>
+                </a>
+            </div>
+            <div class="other-novel-item">
+                <a href="#">
+                    <div class="other-novel-image">
+                        <img src="//bookcover.yuewen.com/qdbimg/349573/1010734492/150" />
+                    </div>
+                    <div class="other-novel-title">凡人修仙传之仙界篇</div>
+                </a>
+            </div>
+            <div class="other-novel-item">
+                <a href="#">
+                    <div class="other-novel-image">
+                        <img src="//bookcover.yuewen.com/qdbimg/349573/1010734492/150" />
+                    </div>
+                    <div class="other-novel-title">凡人修仙传之仙界篇</div>
+                </a>
+            </div>
+        </div>
     </div>
 </body>
 </html>
