@@ -19,3 +19,10 @@ Route::get('/', function () {
 Route::get('/novel',function(){
     return view('client.novel');
 });
+
+Route::get('/detail',function(){
+    return view('client.detail');
+});
+Route::get('/content',function(){
+    return view('client.content');
+});

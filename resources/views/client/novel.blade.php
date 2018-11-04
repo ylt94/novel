@@ -227,10 +227,10 @@
             </div>
             <div class="book-detail">
                 <div class="novel-title">凡人修仙传之仙界篇</div>
-                <div class="novel-auther">作者:忘语</div>
-                <div class="novel-type">类型:修真</div>
-                <div class="novel-other">160.23万字|连载</div>
-                <div class="novel-other">最后更新:2018-08-01 12:00:00</div>
+                <div class="novel-auther">作者：忘语</div>
+                <div class="novel-type">类型：修真</div>
+                <div class="novel-other">状态：160.23万字|连载</div>
+                <div class="novel-other">最后更新：2018-08-01 12:00:00</div>
             </div>
         </div>
         <div class="book-action">
