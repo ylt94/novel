@@ -82,7 +82,7 @@
         .novel-auther{
             height:20%;
             width:100%;
-            font-size:16px;
+            font-size:14px;
             font-weight:400;
             color:black;
             line-height:200%;
