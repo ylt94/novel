@@ -102,9 +102,12 @@
             border-bottom:1px solid #e1e5e8;
             min-height:22%;
             padding: 5% 5% 5% 0;
+            
+        }
+        .novel-item-a{
+            height:100%;
             display:flex;
             flex-direction:row;
-            
         }
         .novel-image{
             height:100%;
@@ -190,18 +193,10 @@
     <div class="container">
         <div class="left">
             <ul class="novel_category">
-                <li class="novel_category_item"><a href="#">全部</a></li>
-                <li class="novel_category_item"><a href="#">玄幻</a></li>
-                <li class="novel_category_item"><a href="#">仙侠</a></li>
-                <li class="novel_category_item"><a href="#">都市</a></li>
-                <li class="novel_category_item"><a href="#">科幻</a></li>
-                <li class="novel_category_item"><a href="#">武侠</a></li>
-                <li class="novel_category_item"><a href="#">军事</a></li>
-                <li class="novel_category_item"><a href="#">体育</a></li>
-                <li class="novel_category_item"><a href="#">游戏</a></li>
-                <li class="novel_category_item"><a href="#">灵异</a></li>
-                <li class="novel_category_item"><a href="#">历史</a></li>
-                <li class="novel_category_item"><a href="#">奇幻</a></li>
+                <li class="novel_category_item"><a href="javascript:getNewByNovelType(0)">全部</a></li>
+                @foreach($types as $type)
+                <li class="novel_category_item"><a href="javascript:getNewByNovelType({{$type->id}})">{{$type->name}}</a></li>
+                @endforeach
             </ul>
             
         </div>
@@ -218,95 +213,36 @@
                     </div>
                 </div>
                 <div class="search-params">
-                    <div class="search-param"><a href="#">推荐</a></div>
-                    <div class="search-param"><a href="#">收藏</a></div>
-                    <div class="search-param"><a href="#">更新</a></div>
+                    <div class="search-param"><a href="javascript:getNewByOrderType('recommend')">推荐</a></div>
+                    <div class="search-param"><a href="javascript:getNewByOrderType('collection_num')">收藏</a></div>
+                    <div class="search-param"><a href="javascript:getNewByOrderType('newset')">更新</a></div>
                 </div>
             </div>
             <div class="novel">
+                @foreach($novels as $novel)
                 <div class="novel-item">
-                    <div class="novel-image">
-                        <img src="//bookcover.yuewen.com/qdbimg/349573/1010734492/150" />
-                    </div>
-                    <div class="novel-info">
-                        <div class="novel-title">凡人修仙传之仙界篇</div>
-                        <div class="novel-desc">凡人修仙，风云再起时空穿梭，轮回逆转金仙太乙，大罗道祖三千大道，法则至尊《凡人修仙传》仙界篇，一个韩立叱咤仙界的故事，一个凡人小子修仙的不灭传说。特说明下，没有看过前传的书友，并不影响本书的阅读体验，</div>
-                        <div class="novel-auther">---忘语</div>
-                    </div>
+                    <a class="novel-item-a" href="/novel/{{$novel->id}}">
+                        <div class="novel-image">
+                            <img src="{{$novel->img_url}}" />
+                        </div>
+                        <div class="novel-info">
+                            <div class="novel-title">{{$novel->desc}}</div>
+                            <div class="novel-auther">---{{$novel->author}}</div>
+                        </div>
+                    </a>
                 </div>
-                <div class="novel-item">
-                    <div class="novel-image">
-                        <img src="//bookcover.yuewen.com/qdbimg/349573/1004608738/150" />
-                    </div>
-                    <div class="novel-info">
-                        <div class="novel-title">圣墟</div>
-                        <div class="novel-desc">在破败中崛起，在寂灭中复苏。沧海成尘，雷电枯竭，那一缕幽雾又一次临近大地，世间的枷锁被打开了，一个全新的世界就此揭开神秘的一角……</div>
-                        <div class="novel-auther">---辰东</div>
-                    </div>
-                </div>
-                <div class="novel-item">
-                    <div class="novel-image">
-                        <img src="//bookcover.yuewen.com/qdbimg/349573/1010468795/150" />
-                    </div>
-                    <div class="novel-info">
-                        <div class="novel-title">飞剑问道</div>
-                        <div class="novel-desc">在这个世界，有狐仙、河神、水怪、大妖，也有求长生的修行者。修行者们，开法眼，可看妖魔鬼怪。炼一口飞剑，可千里杀敌。千里眼、顺风耳，更可探查四方。……秦府二公子‘秦云’，便是一位修行者……</div>
-                        <div class="novel-auther">---我吃西红柿</div>
-                    </div>
-                </div>
-                <div class="novel-item">
-                    <div class="novel-image">
-                        <img src="//bookcover.yuewen.com/qdbimg/349573/1010399782/150" />
-                    </div>
-                    <div class="novel-info">
-                        <div class="novel-title">太初</div>
-                        <div class="novel-desc">一树生的万朵花，天下道门是一家。法术千般变化，人心却亘古不变</div>
-                        <div class="novel-auther">---高楼大厦</div>
-                    </div>
-                </div>
-                <div class="novel-item">
-                    <div class="novel-image">
-                        <img src="//bookcover.yuewen.com/qdbimg/349573/1010734492/150" />
-                    </div>
-                    <div class="novel-info">
-                        <div class="novel-title">凡人修仙传之仙界篇</div>
-                        <div class="novel-desc">凡人修仙，风云再起时空穿梭，轮回逆转金仙太乙，大罗道祖三千大道，法则至尊《凡人修仙传》仙界篇，一个韩立叱咤仙界的故事，一个凡人小子修仙的不灭传说。特说明下，没有看过前传的书友，并不影响本书的阅读体验，</div>
-                        <div class="novel-auther">---忘语</div>
-                    </div>
-                </div>
-                <div class="novel-item">
-                    <div class="novel-image">
-                        <img src="//bookcover.yuewen.com/qdbimg/349573/1010734492/150" />
-                    </div>
-                    <div class="novel-info">
-                        <div class="novel-title">凡人修仙传之仙界篇</div>
-                        <div class="novel-desc">凡人修仙，风云再起时空穿梭，轮回逆转金仙太乙，大罗道祖三千大道，法则至尊《凡人修仙传》仙界篇，一个韩立叱咤仙界的故事，一个凡人小子修仙的不灭传说。特说明下，没有看过前传的书友，并不影响本书的阅读体验，</div>
-                        <div class="novel-auther">---忘语</div>
-                    </div>
-                </div>
-                <div class="novel-item">
-                    <div class="novel-image">
-                        <img src="//bookcover.yuewen.com/qdbimg/349573/1010734492/150" />
-                    </div>
-                    <div class="novel-info">
-                        <div class="novel-title">凡人修仙传之仙界篇</div>
-                        <div class="novel-desc">凡人修仙，风云再起时空穿梭，轮回逆转金仙太乙，大罗道祖三千大道，法则至尊《凡人修仙传》仙界篇，一个韩立叱咤仙界的故事，一个凡人小子修仙的不灭传说。特说明下，没有看过前传的书友，并不影响本书的阅读体验，</div>
-                        <div class="novel-auther">---忘语</div>
-                    </div>
-                </div>
-                <div class="novel-item">
-                    <div class="novel-image">
-                        <img src="//bookcover.yuewen.com/qdbimg/349573/1010734492/150" />
-                    </div>
-                    <div class="novel-info">
-                        <div class="novel-title">凡人修仙传之仙界篇</div>
-                        <div class="novel-desc">凡人修仙，风云再起时空穿梭，轮回逆转金仙太乙，大罗道祖三千大道，法则至尊《凡人修仙传》仙界篇，一个韩立叱咤仙界的故事，一个凡人小子修仙的不灭传说。特说明下，没有看过前传的书友，并不影响本书的阅读体验，</div>
-                        <div class="novel-auther">---忘语</div>
-                    </div>
-                </div>
+                @endforeach
             </div>
 
         </div>
     </div>
+    <script type="text/javascript">
+        function getNewByNovelType(novel_type){
+            window.location.href = window.location.href +'?novel_type='+novel_type;
+        }
+        function getNewByOrderType(order_type){
+            alert(window.location.href);
+        }
+    </script>
 </body>
 </html>

@@ -32,32 +32,36 @@ class CommonService extends BaseService{
     }
 
     //推荐
-    public static function recommend(){
+    public static function recommend($novel_type){
         $search = [
             'is_hide' => 0,
             'is_recommend' => 1
         ];
-
-        $result = BaseService::where($search)->select(
+        if($novel_type){
+            $search['type'] = $novel_type;
+        }
+        $result = NovelBase::where($search)->select(
             'id',
             'title',
+            'desc',
             'author',
             'status',
             'words',
             'img_url'
-        )->orderBy('created_at','desc')->get();
+        )->orderBy('id','asc')->get();
+
         return $result;
         
     }
 
     //热门
-    public static function orderCollection(){
+    public static function orderCollection($novel_type){
         $search = [
             'is_hide' => 0,
             'is_recommend' => 0,
         ];
 
-        $result = BaseService::where($search)->select(
+        $result = NovelBase::where($search)->select(
             'id',
             'title',
             'author',
@@ -69,13 +73,13 @@ class CommonService extends BaseService{
     }
 
     //点击量
-    public static function orderClick(){
+    public static function orderClick($novel_type){
         $search = [
             'is_hide' => 0,
             'is_recommend' => 0,
         ];
 
-        $result = BaseService::where($search)->select(
+        $result = NovelBase::where($search)->select(
             'id',
             'title',
             'author',
@@ -87,12 +91,12 @@ class CommonService extends BaseService{
     }
 
     //推荐量
-    public static function orderRecommend(){
+    public static function orderRecommend($novel_type){
         $search = [
             'is_hide' => 0,
             'is_recommend' => 0,
         ];
-        $result = BaseService::where($search)->select(
+        $result = NovelBase::where($search)->select(
             'id',
             'title',
             'author',
@@ -105,12 +109,12 @@ class CommonService extends BaseService{
     }
 
     //最新更新
-    public static function orderNewUpdate(){
+    public static function orderNewUpdate($novel_type){
         $search = [
             'is_hide' => 0,
             'is_recommend' => 0,
         ];
-        $result = BaseService::where($search)->select(
+        $result = NovelBase::where($search)->select(
             'id',
             'title',
             'author',
@@ -123,12 +127,12 @@ class CommonService extends BaseService{
     }
 
     //最新入库
-    public static function orderNewCreate(){
+    public static function orderNewCreate($novel_type){
         $search = [
             'is_hide' => 0,
             'is_recommend' => 0,
         ];
-        $result = BaseService::where($search)->select(
+        $result = NovelBase::where($search)->select(
             'id',
             'title',
             'author',
