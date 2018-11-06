@@ -226,7 +226,8 @@
                             <img src="{{$novel->img_url}}" />
                         </div>
                         <div class="novel-info">
-                            <div class="novel-title">{{$novel->desc}}</div>
+                            <div class="novel-title">{{$novel->title}}</div>
+                            <div class="novel-desc">{{$novel->desc}}</div>
                             <div class="novel-auther">---{{$novel->author}}</div>
                         </div>
                     </a>
