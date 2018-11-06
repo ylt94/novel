@@ -188,7 +188,7 @@ class CommonService extends BaseService{
             static::addError('该章节不存在或已被删除',-1);
             return false;
         }
-        $detail->title = NovelBase::where('id',$detail->novel_id)->pluck('title')->first();
+        $detail->novel_title = NovelBase::where('id',$detail->novel_id)->pluck('title')->first();
 
         $detail->content = $content;
         return $detail;
