@@ -75,3 +75,7 @@ function my_log($msg,$path,$log_type){
     \Log::useDailyFiles(storage_path($path));
     \Log::$log_type($msg);
 }
+
+function my_view($view,$data){
+    return view($view,$data);
+}

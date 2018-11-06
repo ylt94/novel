@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Http\Controllers\Commom;
+namespace App\Http\Controllers\Common;
 
 use App\Http\Controllers\Controller;
 use Request;
@@ -36,18 +36,19 @@ class IndexController extends Controller {
         return ['status'=>1,'msg'=>'请求成功','data'=>$return];
     }
 
-    public function novelDetail(Request $request){
-        $id = $request->id;
-        if(!$id) {
+    public function novelDetail($novel_id){
+        
+        if(!$novel_id) {
             return ['status'=>0,'msg'=>'数据异常，请稍后再试'];
         }
 
-        $result = CommonService::novelDetail($id);
+        $result = CommonService::novelDetail($novel_id);
         if(!$result) {
             return ['status'=>0,'msg'=>CommonService::getLastError()];
         }
 
-        return ['status'=>1,'msg'=>'请求成功','data'=>$result];
+        //return view();
+        return my_view('client.novel',$result);
 
     }
 

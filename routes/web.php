@@ -16,12 +16,10 @@ Route::get('/', function () {
     return view('client.index');
     //echo "盗用IP者，死全家，请三思!!!";
 });
-Route::get('/novel',function(){
-    return view('client.novel');
-});
+Route::get('/novel/{novel_id}','Common\IndexController@novelDetail');
 
-Route::get('/detail',function(){
-    return view('client.detail');
+Route::get('/chapters',function(){
+    return view('client.chapters');
 });
 Route::get('/content',function(){
     return view('client.content');

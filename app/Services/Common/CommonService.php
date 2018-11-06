@@ -145,23 +145,25 @@ class CommonService extends BaseService{
             'id' => $id,
             'is_hide' => 0
         ];
-        $result = BaseService::where($search)->first();
+        $result = NovelBase::where($search)->first()->toArray();
         if(!$result) {
             static::addError('该小说不存在或已被删除',-1);
             return false;
         }
-        $result->novel_type = NovelCategory::where('id',$result->type)->pluck('name')->first();
-        $chapters = NovelDetail::where('novel_id',$id)
+        $result['novel_type'] = NovelCategory::where('id',$result['type'])->pluck('name')->first();
+        $chapter = NovelDetail::where('novel_id',$id)
                     ->where('is_update',1)
-                    ->orderBy('created','asc')
+                    ->orderBy('create_at','desc')
                     ->select(
                         'id',
-                        'title'
+                        'title',
+                        'words',
+                        'create_at'
                     )
-                    ->get();
+                    ->first()->toArray();
 
 
-        return ['novel_base'=>$result,'chapters'=>$chapters];
+        return ['novel_base'=>$result,'last_chapter'=>$chapter];
     }
 
     public static function novelContent($id){
