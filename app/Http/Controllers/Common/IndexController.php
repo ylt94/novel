@@ -52,14 +52,26 @@ class IndexController extends Controller {
 
     }
 
-    public function novelContent(Request $request){
-        $chapter_id = $request->chapter_id;
+    public function novelChapters($novel_id){
+        if(!$novel_id){
+            return ['status'=>0,'msg'=>'数据异常，请稍后再试'];
+        }
+
+        $result = CommonService::novelChapters($novel_id);
+        if (!$result) {
+            return ['status'=>0,'msg'=>'数据异常，请稍后再试'];
+        }
+
+        return my_view('client.chapters',$result);
+    }
+
+    public function novelContent($chapter_id){
         if(!$chapter_id){
             return ['status'=>0,'msg'=>'请求异常，请稍后再试'];
         }
 
         $result = CommonService::novelContent($chapter_id);
 
-        return ['status'=>1,'msg'=>'请求成功','data'=>$result];
+        return my_view('client.content',$result);;
     }
 }

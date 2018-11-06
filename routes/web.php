@@ -18,9 +18,5 @@ Route::get('/', function () {
 });
 Route::get('/novel/{novel_id}','Common\IndexController@novelDetail');
 
-Route::get('/chapters',function(){
-    return view('client.chapters');
-});
-Route::get('/content',function(){
-    return view('client.content');
-});
+Route::get('/chapters/{novel_id}','Common\IndexController@novelChapters');
+Route::get('/content/{chapter_id}','Common\IndexController@novelContent');

@@ -166,6 +166,17 @@ class CommonService extends BaseService{
         return ['novel_base'=>$result,'last_chapter'=>$chapter];
     }
 
+    public static function novelChapters($novel_id){
+        $title = NovelBase::where('id',$novel_id)->where('is_hide',0)->pluck('title')->first();
+        if (!$title) {
+            static::addError('该内容不存在或已被删除',-1);
+            return false;
+        }
+        $chapters = NovelDetail::where('novel_id',$novel_id)->where('is_update',1)->orderBy('create_at','asc')->get()->toArray();
+
+        return ['title' => $title, 'chapters'=>$chapters];
+    }
+
     public static function novelContent($id){
         $detail = NovelDetail::find($id);
         $content = NovelContent::where('capter_id',$id)->pluck('content')->first();
