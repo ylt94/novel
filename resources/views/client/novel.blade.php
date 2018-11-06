@@ -234,7 +234,7 @@
             </div>
         </div>
         <div class="book-action">
-            <div class="action-item" style="color:white;background-color:#f7483e;"><a style="color:white;" href="#">开始阅读</a></div>
+            <div class="action-item" style="color:white;background-color:#f7483e;"><a style="color:white;" href="/chapters/{{ $novel_base['id'] }}">开始阅读</a></div>
             <div class="action-item" style="color:black;background-color:white;"><a style="color:black;" href="#">加入书架</a></div>
             <div class="action-item"style="color:black;background-color:white;"><a style="color:black;" href="#">我的书架</a></div>
         </div>
@@ -244,7 +244,7 @@
     </div>
     <div class="chapters">
         <div style="font-weight:600;width:30%;">目录</div>
-        <div class="chapters-newset"><a href="#" style="color:grey;">已更新至： {{$last_chapter['title']}}</a></div>
+        <div class="chapters-newset"><a href="/content/{{ $last_chapter['id'] }}" style="color:grey;">已更新至： {{$last_chapter['title']}}</a></div>
     </div>
     <div class="author-others">
         <div class="other-title">作者相关作品</div>

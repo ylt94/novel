@@ -11,11 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    //return view('welcome');
-    return view('client.index');
-    //echo "盗用IP者，死全家，请三思!!!";
-});
+Route::get('/', 'Common\IndexController@index');
 Route::get('/novel/{novel_id}','Common\IndexController@novelDetail');
 
 Route::get('/chapters/{novel_id}','Common\IndexController@novelChapters');

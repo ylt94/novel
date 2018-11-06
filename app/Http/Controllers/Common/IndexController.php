@@ -22,7 +22,7 @@ class IndexController extends Controller {
         $return['order_update'] = CommonService::orderNewUpdate();
         $return['order_create'] = CommonService::orderNewCreate();
 
-
+        
         return ['status'=>1,'msg'=>'请求成功','data'=>$return];
     }
 
