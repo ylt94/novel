@@ -16,3 +16,4 @@ Route::get('/novel/{novel_id}','Common\IndexController@novelDetail');
 
 Route::get('/chapters/{novel_id}','Common\IndexController@novelChapters');
 Route::get('/content/{chapter_id}','Common\IndexController@novelContent');
+Route::get('/content/next/{chapter_id}','Common\IndexController@nextContent');

@@ -3,11 +3,21 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{{$novel_title}}</title>
+    <title>{{$novel_title}}_{{$title}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
     <script src="main.js"></script> -->
     <style>
+        a{
+            width:100%;
+            height:100%;
+            font-weight:450;
+            display:inline-block;
+        }
+        a:link {color: white;text-decoration:blink; text-decoration:none;} 
+        a:active:{color: white;text-decoration:none; } 
+        a:visited {color:white;text-decoration:none;} 
+        a:hover {color: white; text-decoration:underline;text-decoration:none;}
         html, body {
             padding:0 5% 0 5%;
             width:90%;
@@ -45,6 +55,18 @@
             overflow: hidden;
             width:100%;
         }
+        .load-more{
+            
+        }
+        .load-more-btn{
+            background-color: #ed424b;
+            font-size: .875rem;
+            line-height: 2.25rem;
+            border-radius: 99px;
+            color:white;
+            width: 17.5rem;
+            border:none;
+        }
     </style>
 </head>
 <body>
@@ -56,6 +78,9 @@
         </div>
         <div class="load-more">
         </div>
+    </div>
+    <div class="load-more">
+        <button class="load-more-btn"><a href="/content/next/{{$id}}">下一章</a></button>
     </div>
 </body>
 </html>

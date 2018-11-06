@@ -193,4 +193,19 @@ class CommonService extends BaseService{
         $detail->content = $content;
         return $detail;
     }
+
+    public static function nextContent($chapter_id){
+        $detail = NovelDetail::find($chapter_id);
+        $novel_id = $detail->novel_id;
+        $next_detail = NovelDetail::where('id','>',$chapter_id)->where('novel_id',$novel_id)->orderBy('id','asc')->first();
+        if(!$next_detail){
+            return false;
+        }
+
+        $content = NovelContent::where('capter_id',$next_detail->id)->pluck('content')->first();
+        $next_detail->novel_title = NovelBase::where('id',$novel_id)->pluck('title')->first();
+        $next_detail->content = $content;
+
+        return $next_detail;
+    }
 }

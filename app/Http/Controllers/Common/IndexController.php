@@ -79,6 +79,18 @@ class IndexController extends Controller {
         if(!$result){
             return ['status'=>0,'msg'=>'请求异常，请稍后再试'];
         }
-        return my_view('client.content',$result);;
+        return my_view('client.content',$result);
+    }
+
+    public function nextContent($chapter_id){
+        if(!$chapter_id){
+            return ['status'=>0,'msg'=>'请求异常，请稍后再试'];
+        }
+        
+        $result = CommonService::nextContent($chapter_id);
+        if(!$result){
+            return ['status'=>0,'msg'=>'请求异常，请稍后再试'];
+        }
+        return my_view('client.content',$result);
     }
 }
