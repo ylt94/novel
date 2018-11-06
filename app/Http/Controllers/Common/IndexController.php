@@ -76,7 +76,9 @@ class IndexController extends Controller {
         }
 
         $result = CommonService::novelContent($chapter_id);
-
+        if(!$result){
+            return ['status'=>0,'msg'=>'请求异常，请稍后再试'];
+        }
         return my_view('client.content',$result);;
     }
 }
