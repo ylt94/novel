@@ -98,6 +98,7 @@
         }
         .novel-item{
             height:22%;
+            width:95%;
             box-sizing:border-box;
             border-bottom:1px solid #e1e5e8;
             min-height:22%;
@@ -112,6 +113,7 @@
         .novel-image{
             height:100%;
             width:20%;
+            max-width:60px;
             border:1px solid grey;
             box-sizing:border-box;
         }
