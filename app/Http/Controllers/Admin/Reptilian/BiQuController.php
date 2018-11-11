@@ -46,7 +46,19 @@ class BiQuController extends Controller{
 
 
     public function test(){
-        dd(BiQuService::updateDetail(183));
+        $search = [
+            'novel_id' => 183,
+            'is_update' => 0
+        ];
+        $novel_detail_ids = NovelDetailTable::where($search)->pluck('id')->all();
+        if(!$novel_detail_ids){
+            return true;
+        }
+
+        foreach($novel_detail_ids as $val){
+            RedisService::setNovelDetailId($val);
+        }
+        return true;
     }
 
 }
