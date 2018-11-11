@@ -221,8 +221,8 @@ class BiQuService extends BaseService{
             return false;
         }
         $chapter = NovelDetail::find($chapter_id);
-        if($chapter->is_update){
-            return true;
+        if(!$chapter || $chapter->is_update){
+            return false;
         }
 
         if(!$chapter->biqu_url){
