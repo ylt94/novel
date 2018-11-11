@@ -59,6 +59,8 @@ class BiQuService extends BaseService{
         curl_close($ch);
         $url = isset($content['redirect_url']) ? $content['redirect_url'] : '';
         if(!$url){
+            $msg = '小说:'.$novel_id.'在笔趣网没有查到相关信息';
+            my_log($msg,'logs/reptilian/biqu');
             return false;
         }
         $novel->biqu_url = rtrim($url,'/');
@@ -97,13 +99,13 @@ class BiQuService extends BaseService{
             $insert_data['capter_id'] = $item['id'];
             if(!$item['biqu_url']){
                 $msg = '章节id：'.$item['id'].'未匹配到url';
-                my_log($msg,'logs/capter/biqu','error');
+                my_log($msg,'logs/reptilian/biqu','error');
                 continue;
             }
             $insert_data['content'] = self::getChapterContent($item['biqu_url']);
             if(!$insert_data['content']){
                 $error = '小说章节:'.$item['id'].'更新失败:没有抓取到具体内容';
-                my_log($error,'logs/capter/qidian','error');
+                my_log($error,'logs/reptilian/qidian','error');
                 continue;
             }
             if($insert_data['content']){
@@ -115,7 +117,7 @@ class BiQuService extends BaseService{
                 }catch(\Exception $e){
                     DB::rollback();
                     $error = '小说章节:'.$item['id'].'更新失败:'.$e->getMessage();
-                    my_log($error,'logs/capter/biqu','error');
+                    my_log($error,'logs/reptilian/biqu','error');
                     return false;
                 }
                 
@@ -138,6 +140,8 @@ class BiQuService extends BaseService{
                     ->getData();
         $result = mb_convert_encoding($result[0]['content'],'UTF-8','GBK');
         if(!$result){
+            $error = '小说url:'.$url.'未获取到内容';
+            my_log($error,'logs/reptilian/biqu','error');
             return false;
         }
 
@@ -155,13 +159,19 @@ class BiQuService extends BaseService{
             return true;
         }
         $insert_data = [];
+        $time = date('Y-m-d H:i:s',time());
+        $day_time = date('Y-m-d',time());
         foreach(dataYieldRange($unupdate_chapters) as $item){
+            
             $insert_data_item = [
                 'novel_id' => $novel_id,
                 'title' => $item['title'],
                 'site_resource' =>  Sites::BIQU,
                 'biqu_url' => self::BIQU_BASE_URL.$item['href'],
-                'is_update' => 0
+                'is_update' => 0,
+                'created_at' => $time,
+                'updated_at' => $time,
+                'create_at' => $day_time
             ];
             array_push($insert_data,$insert_data_item);
         }
@@ -227,7 +237,7 @@ class BiQuService extends BaseService{
         $insert_data['content'] = self::getChapterContent($chapter->biqu_url);
         if(!$insert_data['content']){
             $error = '小说章节:'.$item['id'].'更新失败:没有抓取到具体内容';
-            my_log($error,'logs/capter/qidian','error');
+            my_log($error,'logs/reptilian/qidian','error');
             return false;
         }
         //获取小说字数
@@ -245,7 +255,7 @@ class BiQuService extends BaseService{
         }catch(\Exception $e){
             DB::rollback();
             $error = '小说章节:'.$chapter_id.'更新失败:'.$e->getMessage();
-            my_log($error,'logs/capter/biqu','error');
+            my_log($error,'logs/reptilian/biqu','error');
             return false;
         }
     }

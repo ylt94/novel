@@ -103,6 +103,9 @@
             ];
             $chapter = NovelDetail::where($search)->orderBy('id','desc')->first();
             if ($return_array) {
+                if(!$chapter){
+                    return [];
+                }
                 return $chapter->toArray();
             }
             return $chapter;

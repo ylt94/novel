@@ -12,7 +12,7 @@ use App\Models\NovelContent;
 class BiQuController extends Controller{
 
     /**
-     * 获取小说章节
+     * 手动更新小说
      */
     public function novelChapters(Request $requset){
         $novel_id = $requset->novel_id;
@@ -40,6 +40,7 @@ class BiQuController extends Controller{
         
         //更新章节内容
         $result = BiQuService::updateChaptersContent($chapter_result);
+
 
     }
 
