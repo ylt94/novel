@@ -48,31 +48,33 @@ class BiQuController extends Controller{
 
 
     public function test(){
-        $search = [
-            'novel_id' => 183,
-            'is_update' => 0
-        ];
-        $novel_detail_ids = NovelDetail::where($search)->orderBy('id','asc')->pluck('id')->all();
-        if(!$novel_detail_ids){
-            return true;
-        }
-
-        foreach($novel_detail_ids as $val){
-            RedisService::setNovelDetailId($val);
-        }
-        return 1;
-        // set_time_limit(0);
-        // fastcgi_finish_request();
-        // while(true){
-        //     $detail_id = RedisService::getNovelDetailId();
-        //     if(!$detail_id){
-        //         echo 1;
-        //         break;
-        //     }
-        //     BiQuService::updateChapterContent($detail_id);
-
-        //    echo 1;
+        // $search = [
+        //     'novel_id' => 183,
+        //     'is_update' => 0
+        // ];
+        // $novel_detail_ids = NovelDetail::where($search)->orderBy('id','asc')->pluck('id')->all();
+        // if(!$novel_detail_ids){
+        //     return true;
         // }
+
+        // foreach($novel_detail_ids as $val){
+        //     RedisService::setNovelDetailId($val);
+        // }
+        // return 1;
+        
+        return 1;
+        fastcgi_finish_request();
+        set_time_limit(0);
+        while(true){
+            $detail_id = RedisService::getNovelDetailId();
+            if(!$detail_id){
+                echo 1;
+                break;
+            }
+            BiQuService::updateChapterContent($detail_id);
+
+           echo 1;
+        }
     }
 
 }
