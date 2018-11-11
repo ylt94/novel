@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,4 +24,22 @@ Route::get('/detail',function(){
 });
 Route::get('/content',function(){
     return view('client.content');
+});
+
+Route::get('test',function(){
+    $a = 1;
+    $b = $a+$a+$a++;
+    echo $b;
+
+    $a = 1;
+    $b = $a + $a++ + $a;
+    echo $b;
+
+    $a = 1;
+    $b = $a++ + $a+$a;
+    echo $b;
+
+    $a = 1;
+    $b = $a+$a++;
+    echo $b;
 });

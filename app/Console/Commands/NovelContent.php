@@ -83,6 +83,7 @@ class NovelContent extends Command
             if($detail_id && $novel_detail = NovelDetail::find($detail_id)) {
                 self::checkChannel($novel_detail);
             }
+            DB::disconnect();
             sleep($this->sleep_seconds);
         }
         

@@ -89,6 +89,7 @@ class NovelDetail extends Command
             if($result){
                 self::setNovelDetailId($novel_id);
             }
+            DB::disconnect();
             sleep($this->sleep_seconds);
         }
         

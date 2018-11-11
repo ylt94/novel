@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use DB;
 
 use App\Services\RedisService;
 use App\Services\ProcessService;
@@ -86,6 +87,7 @@ class NovelBase extends Command
             $time = date('Y-m-d H:i:s',$time);
             $novels = NovelBaseModel::where('last_update','<=',$time)->get();
             if(!$novels){
+                DB::disconnect();
                 sleep($this->sleep_seconds);
                 continue;
             }
@@ -93,6 +95,7 @@ class NovelBase extends Command
                 $this->info($item->id);
                 RedisService::setNovelId($item->id);
             }
+            DB::disconnect();
             sleep($this->sleep_seconds);
         }
 
