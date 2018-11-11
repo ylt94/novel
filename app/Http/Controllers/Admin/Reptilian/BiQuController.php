@@ -39,16 +39,13 @@ class BiQuController extends Controller{
         $chapter_result = PublicService::checkChapters($chapters,$unupdate_chapters);
         
         //更新章节内容
-        $result = BiQuService::updateChapters($chapter_result);
+        $result = BiQuService::updateChaptersContent($chapter_result);
 
     }
 
+
     public function test(){
-        $content = NovelContent::find(5135);
-        $data = [
-            'content' => $content->content
-        ];
-        return view('welcome',$data);
+        dd(BiQuService::updateDetail(183));
     }
 
 }

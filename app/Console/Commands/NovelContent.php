@@ -7,6 +7,7 @@ use Illuminate\Console\Command;
 use App\Services\RedisService;
 use App\Services\Reptilian\QiDianService;
 use App\Services\ProcessService;
+use App\Services\Reptilian\BiQuService;
 
 use App\Models\NovelDetail;
 use App\Models\Sites;
@@ -80,27 +81,32 @@ class NovelContent extends Command
         Process::where('type',Process::NOVEL_CONTENT)->update(['pid'=>getmypid()]);
         while(true){
             $detail_id = RedisService::getNovelDetailId();
-            if($detail_id && $novel_detail = NovelDetail::find($detail_id)) {
-                self::checkChannel($novel_detail);
+            if(!$detail_id){
+                DB::disconnect();
+                sleep(3);
+                continue;
             }
+            self::checkChannel($detail_id);
+
             DB::disconnect();
             sleep($this->sleep_seconds);
         }
         
     }
 
-    public static function checkChannel(NovelDetail $novel_detail){
+    public static function checkChannel($detail_id){
         $result = false;
-        switch($novel_detail->site_resource){
-            case Sites::QIDIAN:
-                $result = QiDianService::updateContentByQuery($novel_detail);
-                break;
-            case Sites::ZONGHENG:
-                break;
-        }
-        if(!$result){
-            //$this->info('result-------:'.QiDianService::getLastError());
-        }
+        // switch($novel_detail->site_resource){
+        //     case Sites::QIDIAN:
+        //         $result = QiDianService::updateContentByQuery($novel_detail);
+        //         break;
+        //     case Sites::ZONGHENG:
+        //         break;
+        // }
+        // if(!$result){
+        //     //$this->info('result-------:'.QiDianService::getLastError());
+        // }
+        $result = BiQuService::updateChapterContent($detail_id);
         return $result; 
     }
 

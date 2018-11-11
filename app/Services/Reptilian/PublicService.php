@@ -128,7 +128,7 @@
         }
 
         /**
-         * 对比章节获取未更新章节
+         * 对比章节获取未更新章节（全部检查）
          * @param  $site_chapters抓取的章节
          * @param $my_chapters 本站w未更新章节
          * */
@@ -141,5 +141,46 @@
                 }
             }
             return $my_chapters;
+        }
+
+        /**
+         * 根据最后一章已更新记录获取未更新记录
+         * @param $last_updated_chapter 我方最后条已更新章节
+         * @param $chapters 爬取到的所有章节
+         * @return $unupdate_chapters array
+         */
+        public static function getUnupdateChapters($last_updated_chapter,$chapters){
+            if(!$last_updated_chapter){//小说未更新过
+                return $chapters;
+            }
+            $unupdate_chapters = [];
+            $is_find = 0;
+            foreach(dataYieldRange($chapters) as $item){
+                if($is_find == 1){
+                    array_push($unupdate_chapters,$item);
+                    continue;
+                }elseif($is_find > 1){
+                    $error_msg = '小说id:'.$last_updated_chapter['novel_id'].'更新数据异常';
+                    my_log($error_msg,'logs/reptilian/biqu');
+                    return false;
+                }
+                if($item['title'] == $last_updated_chapter['title']) {
+                    $is_find ++;
+                }
+            }
+
+            return $unupdate_chapters;
+
+        }
+
+        /**
+         * 获取章节内容的中文长度
+         */
+        public static function getContentWords($content){
+            $content = (string)$content;
+            $content = str_replace('&#160;','',$content);
+            $content = str_replace('<br>','',$content);
+            $content = str_replace("\r\n",'',$content);
+            return mb_strlen($content,'utf-8');
         }
     }

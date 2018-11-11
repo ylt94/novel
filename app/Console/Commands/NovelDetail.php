@@ -7,6 +7,7 @@ use Illuminate\Console\Command;
 use App\Services\RedisService;
 use App\Services\Reptilian\QiDianService;
 use App\Services\ProcessService;
+use App\Services\Reptilian\BiQuService;
 
 use App\Models\NovelBase;
 use App\Models\NovelDetail as NovelDetailTable;
@@ -82,10 +83,12 @@ class NovelDetail extends Command
         Process::where('type',Process::NOVEL_DETAIL)->update(['pid'=>getmypid()]);
         while(true){
             $novel_id = RedisService::getNovelId();
-            if(!$novel_id || !$novel_base = NovelBase::find($novel_id)) {
+            if(!$novel_id) {
+                DB::disconnect();
+                sleep(3);
                 continue;
             }
-            $result = self::checkChannel($novel_base);
+            $result = self::checkChannel($novel_id);
             if($result){
                 self::setNovelDetailId($novel_id);
             }
@@ -95,18 +98,19 @@ class NovelDetail extends Command
         
     }
 
-    public static function checkChannel(NovelBase $novel_base){
+    public static function checkChannel($novel_id){
         $result = false;
-        switch($novel_base->site_source){
-            case Sites::QIDIAN:
-                $result = QiDianService::updateDetailByQuery($novel_base);
-                break;
-            case Sites::ZONGHENG:
-                break;
-        }
-        if(!$result){
-            //$this->info('result-------:'.QiDianService::getLastError());
-        }
+        // switch($novel_base->site_source){
+        //     case Sites::QIDIAN:
+        //         $result = QiDianService::updateDetailByQuery($novel_base);
+        //         break;
+        //     case Sites::ZONGHENG:
+        //         break;
+        // }
+        // if(!$result){
+        //     //$this->info('result-------:'.QiDianService::getLastError());
+        // }
+        $result = BiQuService::updateDetail($novel_id);
         return $result; 
     }
 
@@ -137,15 +141,13 @@ class NovelDetail extends Command
             'novel_id' => $novel_id,
             'is_update' => 0
         ];
-        $novel_detail_ids = NovelDetailTable::where($search)->get();
+        $novel_detail_ids = NovelDetailTable::where($search)->pluck('id')->all();
         if(!$novel_detail_ids){
             return true;
         }
 
         foreach($novel_detail_ids as $val){
-            if($val->is_free){
-                RedisService::setNovelDetailId($val);
-            }
+            RedisService::setNovelDetailId($val);
         }
         return true;
     }

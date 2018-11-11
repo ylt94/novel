@@ -5,13 +5,15 @@ use App\Services\BaseService;
 use QL\QueryList;
 use DB;
 use App\Services\Reptilian\PublicService;
+use App\Services\Novel\NovelService;
 
 use App\Models\NovelDetail;
 use App\Models\NovelBase;
 use App\Models\NovelContent;
+use App\Models\Sites;
 
 class BiQuService extends BaseService{
-
+    const BIQU_BASE_URL = 'http://www.biquge.com.tw';
     /**
      * 获取小说章节url
      */
@@ -81,16 +83,16 @@ class BiQuService extends BaseService{
         foreach ( dataYieldRange($result) as $item) {
             $value = array();
             $value['title'] = mb_convert_encoding($item['title'],'UTF-8','GBK');
-            $value['href'] = 'http://www.biquge.com.tw'.$item['href'];
+            $value['href'] = self::BIQU_BASE_URL.$item['href'];
             array_push($data,$value);
         }
         return $data;
     }
 
     /**
-     * 更新小说章节内容
+     * 更新小说章节内容(所有)
      */
-    public static function updateChapters($chapters){
+    public static function updateChaptersContent($chapters){
         foreach(dataYieldRange($chapters) as $item){
             $insert_data['capter_id'] = $item['id'];
             if(!$item['biqu_url']){
@@ -140,5 +142,111 @@ class BiQuService extends BaseService{
         }
 
         return $result;
+    }
+
+    /**
+     * 将获取到的未更新章节插入到数据库
+     */
+    public static function insertChapters($novel_id,$unupdate_chapters){
+        if(!$novel_id) {
+            return false;
+        }
+        if (!$unupdate_chapters) {
+            return true;
+        }
+        $insert_data = [];
+        foreach(dataYieldRange($unupdate_chapters) as $item){
+            $insert_data_item = [
+                'novel_id' => $novel_id,
+                'title' => $item['title'],
+                'site_resource' =>  Sites::BIQU,
+                'biqu_url' => self::BIQU_BASE_URL.$item['href'],
+                'is_update' => 0
+            ];
+            array_push($insert_data,$insert_data_item);
+        }
+        NovelDetail::insert($insert_data);
+        return true;
+    }
+
+    /**
+     * 更新章节
+     */
+    public static function updateDetail($novel_id){
+        if(!$novel_id) {
+            return false;
+        }
+
+        //获取url
+        $biqu_url = self::novelChaptersUrl($novel_id);
+        if(!$biqu_url){
+            return false;
+        }
+
+        //获取url页面的所有章节信息
+        $biqu_chapters = self::novelChapters($biqu_url);
+        if (!$biqu_chapters) {
+            return false;
+        }
+
+        //获取我方已更新章节的最后一章
+        $last_updated_chapter = NovelService::lastUpdatedChapter($novel_id,true);
+
+        //获取未更新章节
+        $unupdate_chapters = PublicService::getUnupdateChapters($last_updated_chapter,$biqu_chapters);
+        if (!$unupdate_chapters) {
+            return false;
+        }
+
+        //将未更新章节存到数据库
+        $result = self::insertChapters($novel_id,$unupdate_chapters);
+        return $result;
+    }
+
+    /**
+     * 更新单个章节内容
+     */
+    public static function updateChapterContent($chapter_id){
+        if(!$chapter_id){
+            return false;
+        }
+        $chapter = NovelDetail::find($chapter_id);
+        if($chapter->is_update){
+            return true;
+        }
+
+        if(!$chapter->biqu_url){
+            $msg = '章节:'.$chapter_id.'笔趣内容连接采集到,无法更新章节内容';
+            my_log($msg,'logs/reptilian/biqu');
+            return false;
+        }
+        $insert_data = [
+            'capter_id' => $chapter_id
+        ];
+
+        $insert_data['content'] = self::getChapterContent($chapter->biqu_url);
+        if(!$insert_data['content']){
+            $error = '小说章节:'.$item['id'].'更新失败:没有抓取到具体内容';
+            my_log($error,'logs/capter/qidian','error');
+            return false;
+        }
+        //获取小说字数
+        $content_words = PublicService::getContentWords($insert_data['content']);
+        DB::beginTransaction();
+        try{
+            NovelContent::create($insert_data);
+            NovelDetail::where('id',$item['id'])->update([
+                'is_update'=>1,
+                'biqu_url' => $item['biqu_url'],
+                'words' => $content_words,
+            ]);
+            NovelBase::where('id',$id)->increment('words',$content_words);
+            DB::commit();
+        }catch(\Exception $e){
+            DB::rollback();
+            $error = '小说章节:'.$chapter_id.'更新失败:'.$e->getMessage();
+            my_log($error,'logs/capter/biqu','error');
+            return false;
+        }
     }
 }

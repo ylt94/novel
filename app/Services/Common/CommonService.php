@@ -150,6 +150,7 @@ class CommonService extends BaseService{
             'is_hide' => 0
         ];
         $result = NovelBase::where($search)->first()->toArray();
+        $result['words'] = bcdiv($result['words'],10000,2);
         if(!$result) {
             static::addError('该小说不存在或已被删除',-1);
             return false;

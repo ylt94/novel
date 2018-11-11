@@ -93,4 +93,18 @@
             }
             return $chapters;
         }
+
+        /**
+         * 获取我方最后一章已更新章节
+         */
+        public static function lastUpdatedChapter($novel_id,$return_array = false){
+            $search = [
+                'novel_id' => $novel_id,
+            ];
+            $chapter = NovelDetail::where($search)->orderBy('id','desc')->first();
+            if ($return_array) {
+                return $chapter->toArray();
+            }
+            return $chapter;
+        }
     }
