@@ -158,7 +158,7 @@ class CommonService extends BaseService{
         $result['novel_type'] = NovelCategory::where('id',$result['type'])->pluck('name')->first();
         $chapter = NovelDetail::where('novel_id',$id)
                     ->where('is_update',1)
-                    ->orderBy('create_at','desc')
+                    ->orderBy('id','desc')
                     ->select(
                         'id',
                         'title',
