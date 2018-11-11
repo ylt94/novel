@@ -9,22 +9,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    //return view('welcome');
-    return view('client.index');
-    //echo "盗用IP者，死全家，请三思!!!";
-});
-Route::get('/novel',function(){
-    return view('client.novel');
-});
-
-Route::get('/detail',function(){
-    return view('client.detail');
-});
-Route::get('/content',function(){
-    return view('client.content');
-});
+Route::get('/chapters/{novel_id}','Common\IndexController@novelChapters');
+Route::get('/content/{chapter_id}','Common\IndexController@novelContent');
+Route::get('/content/next/{chapter_id}','Common\IndexController@nextContent');
 
 Route::get('test',function(){
     $a = 1;
@@ -43,3 +30,4 @@ Route::get('test',function(){
     $b = $a+$a++;
     echo $b;
 });
+

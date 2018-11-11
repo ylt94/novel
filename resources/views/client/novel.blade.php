@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Page Title</title>
+    <title>{{$novel_base['title']}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1;user-scalable=no">
     <!-- <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
     <script src="main.js"></script> -->
@@ -82,7 +82,7 @@
         .novel-auther{
             height:20%;
             width:100%;
-            font-size:16px;
+            font-size:14px;
             font-weight:400;
             color:black;
             line-height:200%;
@@ -223,28 +223,28 @@
     <div class="header">
         <div class="book-info">
             <div class="novel-image">
-                <img src="//bookcover.yuewen.com/qdbimg/349573/1010734492/150" />
+                <img src="{{$novel_base['img_url']}}" />
             </div>
             <div class="book-detail">
-                <div class="novel-title">凡人修仙传之仙界篇</div>
-                <div class="novel-auther">作者：忘语</div>
-                <div class="novel-type">类型：修真</div>
-                <div class="novel-other">状态：160.23万字|连载</div>
-                <div class="novel-other">最后更新：2018-08-01 12:00:00</div>
+                <div class="novel-title">{{$novel_base['title']}}</div>
+                <div class="novel-auther">作者：{{$novel_base['author']}}</div>
+                <div class="novel-type">类型：{{$novel_base['novel_type']}}</div>
+                <div class="novel-other">状态：{{$novel_base['words']}}字|{{$novel_base['status'] == 1 ? '连载' : '完本'}}</div>
+                <div class="novel-other">最后更新：{{$last_chapter['create_at']}}</div>
             </div>
         </div>
         <div class="book-action">
-            <div class="action-item" style="color:white;background-color:#f7483e;"><a style="color:white;" href="#">开始阅读</a></div>
+            <div class="action-item" style="color:white;background-color:#f7483e;"><a style="color:white;" href="/chapters/{{ $novel_base['id'] }}">开始阅读</a></div>
             <div class="action-item" style="color:black;background-color:white;"><a style="color:black;" href="#">加入书架</a></div>
             <div class="action-item"style="color:black;background-color:white;"><a style="color:black;" href="#">我的书架</a></div>
         </div>
     </div>
     <div class="book-desc">
-        凡人修仙，风云再起时空穿梭，轮回逆转金仙太乙，大罗道祖三千大道，法则至尊《凡人修仙传》仙界篇，一个韩立叱咤仙界的故事，一个凡人小子修仙的不灭传说。特说明下，没有看过前传的书友，并不影响本书的阅读体验
+        {{$novel_base['desc']}}
     </div>
     <div class="chapters">
         <div style="font-weight:600;width:30%;">目录</div>
-        <div class="chapters-newset"><a href="#" style="color:grey;">已更新至： 第五百三十一章 第三部功法</a></div>
+        <div class="chapters-newset"><a href="/content/{{ $last_chapter['id'] }}" style="color:grey;">已更新至： {{$last_chapter['title']}}</a></div>
     </div>
     <div class="author-others">
         <div class="other-title">作者相关作品</div>

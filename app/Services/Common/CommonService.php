@@ -32,32 +32,36 @@ class CommonService extends BaseService{
     }
 
     //推荐
-    public static function recommend(){
+    public static function recommend($novel_type){
         $search = [
             'is_hide' => 0,
             'is_recommend' => 1
         ];
-
-        $result = BaseService::where($search)->select(
+        if($novel_type){
+            $search['type'] = $novel_type;
+        }
+        $result = NovelBase::where($search)->select(
             'id',
             'title',
+            'desc',
             'author',
             'status',
             'words',
             'img_url'
-        )->orderBy('created_at','desc')->get();
+        )->orderBy('id','asc')->get();
+
         return $result;
         
     }
 
     //热门
-    public static function orderCollection(){
+    public static function orderCollection($novel_type){
         $search = [
             'is_hide' => 0,
             'is_recommend' => 0,
         ];
 
-        $result = BaseService::where($search)->select(
+        $result = NovelBase::where($search)->select(
             'id',
             'title',
             'author',
@@ -69,13 +73,13 @@ class CommonService extends BaseService{
     }
 
     //点击量
-    public static function orderClick(){
+    public static function orderClick($novel_type){
         $search = [
             'is_hide' => 0,
             'is_recommend' => 0,
         ];
 
-        $result = BaseService::where($search)->select(
+        $result = NovelBase::where($search)->select(
             'id',
             'title',
             'author',
@@ -87,12 +91,12 @@ class CommonService extends BaseService{
     }
 
     //推荐量
-    public static function orderRecommend(){
+    public static function orderRecommend($novel_type){
         $search = [
             'is_hide' => 0,
             'is_recommend' => 0,
         ];
-        $result = BaseService::where($search)->select(
+        $result = NovelBase::where($search)->select(
             'id',
             'title',
             'author',
@@ -105,12 +109,12 @@ class CommonService extends BaseService{
     }
 
     //最新更新
-    public static function orderNewUpdate(){
+    public static function orderNewUpdate($novel_type){
         $search = [
             'is_hide' => 0,
             'is_recommend' => 0,
         ];
-        $result = BaseService::where($search)->select(
+        $result = NovelBase::where($search)->select(
             'id',
             'title',
             'author',
@@ -123,12 +127,12 @@ class CommonService extends BaseService{
     }
 
     //最新入库
-    public static function orderNewCreate(){
+    public static function orderNewCreate($novel_type){
         $search = [
             'is_hide' => 0,
             'is_recommend' => 0,
         ];
-        $result = BaseService::where($search)->select(
+        $result = NovelBase::where($search)->select(
             'id',
             'title',
             'author',
@@ -145,23 +149,36 @@ class CommonService extends BaseService{
             'id' => $id,
             'is_hide' => 0
         ];
-        $result = BaseService::where($search)->first();
+        $result = NovelBase::where($search)->first()->toArray();
         if(!$result) {
             static::addError('该小说不存在或已被删除',-1);
             return false;
         }
-        $result->novel_type = NovelCategory::where('id',$result->type)->pluck('name')->first();
-        $chapters = NovelDetail::where('novel_id',$id)
+        $result['novel_type'] = NovelCategory::where('id',$result['type'])->pluck('name')->first();
+        $chapter = NovelDetail::where('novel_id',$id)
                     ->where('is_update',1)
-                    ->orderBy('created','asc')
+                    ->orderBy('create_at','desc')
                     ->select(
                         'id',
-                        'title'
+                        'title',
+                        'words',
+                        'create_at'
                     )
-                    ->get();
+                    ->first()->toArray();
 
 
-        return ['novel_base'=>$result,'chapters'=>$chapters];
+        return ['novel_base'=>$result,'last_chapter'=>$chapter];
+    }
+
+    public static function novelChapters($novel_id){
+        $title = NovelBase::where('id',$novel_id)->where('is_hide',0)->pluck('title')->first();
+        if (!$title) {
+            static::addError('该内容不存在或已被删除',-1);
+            return false;
+        }
+        $chapters = NovelDetail::where('novel_id',$novel_id)->where('is_update',1)->orderBy('create_at','asc')->get()->toArray();
+
+        return ['title' => $title, 'chapters'=>$chapters];
     }
 
     public static function novelContent($id){
@@ -171,8 +188,24 @@ class CommonService extends BaseService{
             static::addError('该章节不存在或已被删除',-1);
             return false;
         }
+        $detail->novel_title = NovelBase::where('id',$detail->novel_id)->pluck('title')->first();
 
         $detail->content = $content;
         return $detail;
+    }
+
+    public static function nextContent($chapter_id){
+        $detail = NovelDetail::find($chapter_id);
+        $novel_id = $detail->novel_id;
+        $next_detail = NovelDetail::where('id','>',$chapter_id)->where('novel_id',$novel_id)->orderBy('id','asc')->first();
+        if(!$next_detail){
+            return false;
+        }
+
+        $content = NovelContent::where('capter_id',$next_detail->id)->pluck('content')->first();
+        $next_detail->novel_title = NovelBase::where('id',$novel_id)->pluck('title')->first();
+        $next_detail->content = $content;
+
+        return $next_detail;
     }
 }
