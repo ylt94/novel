@@ -18,4 +18,8 @@
 
             return $site;
         }
+        
+        public static function getQiDianSite(){
+            return Sites::find(Sites::QIDIAN);
+        }
     }

@@ -21,7 +21,7 @@ class QiDianController extends Controller{
     public function getNovelBase() {
         
         $categories = NovelCategoryService::getCategories();
-        $site =  SiteService::getSiteByName('起点中文网');
+        $site =  SiteService::getQiDianSite();
         $rules = array(
             'novel_id' => array('.book-mid-info>h4>a','data-bid'),
             'img_url' => array('.book-img-box>a>img','src'),
@@ -42,8 +42,8 @@ class QiDianController extends Controller{
                     ->getData();
             $data =  $data->all();
             $data = array_slice($data,0,20);
-            //$data = PublicService::careteNovelBase($data,$site,$categories);
-            //$result = PublicService::insertNovelBase($data,$page);
+            $data = PublicService::careteNovelBase($data,$site,$categories);
+            $result = PublicService::insertNovelBase($data,$page);
             $ql->destruct();
             $arr = array_merge($arr,$data);
             $page++;

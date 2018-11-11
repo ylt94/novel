@@ -76,11 +76,11 @@ class BiQuService extends BaseService{
             'title' => array('dd>a','text'),
             'href' => array('dd>a','href')
         ];
-        
-        $ql = QueryList::rules($rules);
-        $result = $ql->get($url)
-                    ->query()
-                    ->getData();
+        $result = PublicService::getDataFromQueryList($url,$rules);
+        // $ql = QueryList::rules($rules);
+        // $result = $ql->get($url)
+        //             ->query()
+        //             ->getData();
         $data = array();
         foreach ( dataYieldRange($result) as $item) {
             $value = array();
@@ -133,11 +133,11 @@ class BiQuService extends BaseService{
         $rules = [
             'content' => array('#content','html'),
         ];
-
-        $ql = QueryList::rules($rules);
-        $result = $ql->get($url)
-                    ->query()
-                    ->getData();
+        $result = PublicService::getDataFromQueryList($url,$rules);
+        // $ql = QueryList::rules($rules);
+        // $result = $ql->get($url)
+        //             ->query()
+        //             ->getData();
         $result = mb_convert_encoding($result[0]['content'],'UTF-8','GBK');
         if(!$result){
             $error = '小说url:'.$url.'未获取到内容';
@@ -251,6 +251,7 @@ class BiQuService extends BaseService{
                 'words' => $content_words,
             ]);
             NovelBase::where('id',$chapter->novel_id)->increment('words',$content_words);
+            NovelBase::where('id',$chapter->novel_id)->increment('total_chapters');
             DB::commit();
         }catch(\Exception $e){
             DB::rollback();
