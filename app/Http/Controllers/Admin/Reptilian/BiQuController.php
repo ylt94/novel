@@ -62,7 +62,7 @@ class BiQuController extends Controller{
         // }
         // return 1;
         
-        return 1;
+        echo 1;
         fastcgi_finish_request();
         set_time_limit(0);
         while(true){
