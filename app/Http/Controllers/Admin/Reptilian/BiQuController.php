@@ -9,6 +9,7 @@ use App\Services\Reptilian\BiQuService;
 use App\Services\Novel\NovelService;
 use App\Models\NovelContent;
 use App\Models\NovelDetail;
+use App\Services\RedisService;
 
 class BiQuController extends Controller{
 
