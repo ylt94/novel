@@ -167,7 +167,7 @@ class BiQuService extends BaseService{
                 'novel_id' => $novel_id,
                 'title' => $item['title'],
                 'site_resource' =>  Sites::BIQU,
-                'biqu_url' => self::BIQU_BASE_URL.$item['href'],
+                'biqu_url' => $item['href'],
                 'is_update' => 0,
                 'created_at' => $time,
                 'updated_at' => $time,
@@ -207,7 +207,7 @@ class BiQuService extends BaseService{
         if (!$unupdate_chapters) {
             return false;
         }
-
+        
         //将未更新章节存到数据库
         $result = self::insertChapters($novel_id,$unupdate_chapters);
         return $result;
@@ -230,13 +230,14 @@ class BiQuService extends BaseService{
             my_log($msg,'logs/reptilian/biqu');
             return false;
         }
+
         $insert_data = [
             'capter_id' => $chapter_id
         ];
 
         $insert_data['content'] = self::getChapterContent($chapter->biqu_url);
         if(!$insert_data['content']){
-            $error = '小说章节:'.$item['id'].'更新失败:没有抓取到具体内容';
+            $error = '小说章节:'.$chapter_id.'更新失败:没有抓取到具体内容';
             my_log($error,'logs/reptilian/qidian','error');
             return false;
         }
@@ -245,12 +246,11 @@ class BiQuService extends BaseService{
         DB::beginTransaction();
         try{
             NovelContent::create($insert_data);
-            NovelDetail::where('id',$item['id'])->update([
-                'is_update'=>1,
-                'biqu_url' => $item['biqu_url'],
+            NovelDetail::where('id',$chapter_id)->update([
+                'is_update'=> 1,
                 'words' => $content_words,
             ]);
-            NovelBase::where('id',$id)->increment('words',$content_words);
+            NovelBase::where('id',$chapter->novel_id)->increment('words',$content_words);
             DB::commit();
         }catch(\Exception $e){
             DB::rollback();
