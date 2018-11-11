@@ -8,6 +8,7 @@ use App\services\Reptilian\PublicService;
 use App\Services\Reptilian\BiQuService;
 use App\Services\Novel\NovelService;
 use App\Models\NovelContent;
+use App\Models\NovelDetail;
 
 class BiQuController extends Controller{
 
@@ -50,7 +51,7 @@ class BiQuController extends Controller{
             'novel_id' => 183,
             'is_update' => 0
         ];
-        $novel_detail_ids = NovelDetailTable::where($search)->pluck('id')->all();
+        $novel_detail_ids = NovelDetail::where($search)->pluck('id')->all();
         if(!$novel_detail_ids){
             return true;
         }
