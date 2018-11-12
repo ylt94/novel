@@ -260,7 +260,6 @@
                 }
                 array_push($insert_data,$item);
             }
-            dd($insert_data);
             $insert_res = self::insertNovelBase($insert_data);
 
             return $insert_res;
