@@ -18,7 +18,7 @@
             if(!$url || !$rules){
                 return false;
             }
-            dd(file_get_contents('http://61.135.217.7:80'));
+            //dd(file_get_contents('http://61.135.217.7:80'));
             $http = [];
             if($use_agent){
                 $agent = self::getFreeIp();
