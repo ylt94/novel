@@ -31,8 +31,8 @@ class BiQuService extends BaseService{
         
         $novel_name = $novel->title;
         $code_name = urlencode(mb_convert_encoding(' '.$novel_name,'gbk','utf-8'));
-        $url = 'http://www.biquge.com.tw/modules/article/soshu.php?searchkey='.$code_name;
-
+        //$url = 'http://www.biquge.com.tw/modules/article/soshu.php?searchkey='.$code_name;
+        $url = 'http://120.78.183.163/api/phpinfo';
         $free_ip = PublicService::getFreeIp();
         $header = array(
             'CLIENT-IP:'.$free_ip['agent_ip'],
