@@ -93,7 +93,7 @@ class NovelBase extends Command
                 continue;
             }
             foreach($novels as $item){
-                $this->info($item->id);
+                //$this->info($item->id);
                 RedisService::setNovelId($item->id);
             }
             DB::disconnect();
