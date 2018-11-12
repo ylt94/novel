@@ -233,7 +233,7 @@
                 'author' => array('.book-mid-info>.author>.name[data-eid=qd_B59]','text')
             );
 
-            $result = PublicService::getDataFromQueryList($url,$rules);
+            $result = PublicService::getDataFromQueryList($url,$rules,false);
             return $result;
         }
 

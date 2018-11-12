@@ -8,6 +8,7 @@ use DB;
 use App\Services\RedisService;
 use App\Services\ProcessService;
 use App\Services\Reptilian\QiDianService;
+use App\Services\Reptilian\PublicService;
 
 use App\Models\NovelBase as NovelBaseModel;
 use App\Models\Sites;
@@ -93,8 +94,11 @@ class NovelNew extends Command
             $page++;
             if($page > $max_page){
                 $page = 1;
-                sleep($this->sleep_seconds);
+                $time = PublicService::createRandomNumber(1200,3600);
+                $sleep_seconds = ($time%2) ? ($this->sleep_seconds+$time) : ($this->sleep_seconds-$time);
+                sleep($sleep_seconds);
             }else{
+                $time = PublicService::createRandomNumber(10,100);
                 sleep(60); 
             }
             

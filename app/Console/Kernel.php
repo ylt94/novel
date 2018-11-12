@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\NovelBase::class,
         \App\Console\Commands\NovelDetail::class,
         \App\Console\Commands\NovelContent::class,
+        \App\Console\Commands\NovelNew::class,
     ];
 
     /**

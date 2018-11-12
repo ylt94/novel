@@ -20,16 +20,17 @@
             }
             $http = [];
             if($use_agent){
-                $agent = self::getFreeIp();dd($agent);
+                $agent = self::getFreeIp();
+                $agent_url = strtolower($agent['agent_type']).'://'.$agent['agent_ip'].':'.$agent['agent_port'];
                 $http = [
                     // 设置代理
-                    'proxy' => strtolower($agent['agent_type']).'://'.$agent['agent_ip'].':'.$agent['agent_port'],//http://222.141.11.17:8118',
+                    'proxy' => $agent_url,//http://222.141.11.17:8118',
                     //设置超时时间，单位：秒
                     'headers' => [
                         'Referer' => 'https://www.baidu.com/',
                         'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3554.0 Safari/537.36',
-                        'CLIENT-IP' => $agent['agent_ip'],
-                        'X-FORWARDED-FOR' => $agent['agent_ip']
+                        // 'CLIENT-IP' => $agent['agent_ip'],
+                        // 'X-FORWARDED-FOR' => $agent['agent_ip']
                     ]
                 ];
             }
@@ -42,15 +43,47 @@
 
         }
 
+        /**
+         * 通过curl获取网页信息
+         */
+        public static function getHtmlByCurl($url,$method = 'get',$use_agent = true){
+
+            if($use_agent){
+                $free_ip = PublicService::getFreeIp();
+                $header = array(
+                    'CLIENT-IP:'.$free_ip['agent_ip'],
+                    'X-FORWARDED-FOR:'.$free_ip['agent_ip'],
+                );
+            }
+            $ch = curl_init();
+            curl_setopt($ch,CURLOPT_URL,$url);
+            if($use_agent){
+                curl_setopt($ch,CURLOPT_HTTPHEADER,$header);
+                curl_setopt($ch,CURLOPT_PROXY,$free_ip['agent_ip']);
+                curl_setopt($ch,CURLOPT_PROXYPORT,$free_ip['agent_port']);
+            }
+            
+            curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE); // https请求 不验证证书和hosts
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+            curl_setopt($ch,CURLOPT_USERAGENT,'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3554.0 Safari/537.36');
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+    
+            $result = curl_exec($ch);
+            curl_close($ch);
+            echo $result;exit;
+        }
+
         //获取网络空闲代理Ip//http://www.xicidaili.com/nn/
         public static function getFreeIp(){
             
-            $agent_type = Cache::get('agent_type');
-            $agent_ip = Cache::get('agent_ip');
-            $agent_port = Cache::get('agent_port');
-            if($agent_type && $agent_ip && $agent_port){
-                return ['agent_type' => $agent_type,'agent_ip' => $agent_ip ,'agent_port' => $agent_port];
-            }
+            // $agent_type = Cache::get('agent_type');
+            // $agent_ip = Cache::get('agent_ip');
+            // $agent_port = Cache::get('agent_port');
+            // if($agent_type && $agent_ip && $agent_port){
+            //     return ['agent_type' => $agent_type,'agent_ip' => $agent_ip ,'agent_port' => $agent_port];
+            // }
 
             
             $resuorce_url = 'http://www.xicidaili.com/nn/';
@@ -144,5 +177,12 @@
             $content = str_replace('<br>','',$content);
             $content = str_replace("\r\n",'',$content);
             return mb_strlen($content,'utf-8');
+        }
+
+        /**
+         * 生成一个随机数
+         */
+        public static function createRandomNumber($min,$mnax){
+            return rand($min,$max);
         }
     }

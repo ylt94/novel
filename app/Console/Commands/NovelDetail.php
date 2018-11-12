@@ -8,6 +8,7 @@ use App\Services\RedisService;
 use App\Services\Reptilian\QiDianService;
 use App\Services\ProcessService;
 use App\Services\Reptilian\BiQuService;
+use App\Services\Reptilian\PublicService;
 
 use App\Models\NovelBase;
 use App\Models\NovelDetail as NovelDetailTable;

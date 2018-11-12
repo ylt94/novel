@@ -7,6 +7,7 @@ use DB;
 
 use App\Services\RedisService;
 use App\Services\ProcessService;
+use App\Services\Reptilian\PublicService;
 
 use App\Models\NovelBase as NovelBaseModel;
 use App\Models\Sites;
