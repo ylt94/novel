@@ -34,7 +34,7 @@
                         'X-FORWARDED-FOR' => $agent['agent_ip']
                     ]
                 ];
-            }dd($http);
+            }
             $data = QueryList::rules($rules)->$type($url,$params,$http)->query()->getData();
             return $data;
         }
