@@ -45,12 +45,12 @@
         //获取网络空闲代理Ip//http://www.xicidaili.com/nn/
         public static function getFreeIp(){
             
-            // $agent_type = Cache::get('agent_type');
-            // $agent_ip = Cache::get('agent_ip');
-            // $agent_port = Cache::get('agent_port');
-            // if($agent_type && $agent_ip && $agent_port){
-            //     return ['agent_type' => $agent_type,'agent_ip' => $agent_ip ,'agent_port' => $agent_port];
-            // }
+            $agent_type = Cache::get('agent_type');
+            $agent_ip = Cache::get('agent_ip');
+            $agent_port = Cache::get('agent_port');
+            if($agent_type && $agent_ip && $agent_port){
+                return ['agent_type' => $agent_type,'agent_ip' => $agent_ip ,'agent_port' => $agent_port];
+            }
 
             
             $resuorce_url = 'http://www.xicidaili.com/nn/';
