@@ -18,7 +18,6 @@
             if(!$url || !$rules){
                 return false;
             }
-            //dd(file_get_contents('http://61.135.217.7:80'));
             $http = [];
             if($use_agent){
                 $agent = self::getFreeIp();
@@ -26,7 +25,6 @@
                     // 设置代理
                     'proxy' => strtolower($agent['agent_type']).'://'.$agent['agent_ip'].':'.$agent['agent_port'],//http://222.141.11.17:8118',
                     //设置超时时间，单位：秒
-                    'timeout' => 30,
                     'headers' => [
                         'Referer' => 'https://www.baidu.com/',
                         'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3554.0 Safari/537.36',
