@@ -20,7 +20,7 @@
             }
             $http = [];
             if($use_agent){
-                $agent = self::getFreeIp();
+                $agent = self::getFreeIp();dd($agent);
                 $http = [
                     // 设置代理
                     'proxy' => strtolower($agent['agent_type']).'://'.$agent['agent_ip'].':'.$agent['agent_port'],//http://222.141.11.17:8118',

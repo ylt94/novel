@@ -20,14 +20,14 @@ class BiQuService extends BaseService{
     public static function novelChaptersUrl($novel_id){
 
         $novel = NovelBase::find($novel_id);
-        if(!$novel){
-            static::addError('小说不存在',2007);
-            return false;
-        }
-        $url = $novel->biqu_url;
-        if($url){
-            return $url;
-        }
+        // if(!$novel){
+        //     static::addError('小说不存在',2007);
+        //     return false;
+        // }
+        // $url = $novel->biqu_url;
+        // if($url){
+        //     return $url;
+        // }
         
         $novel_name = $novel->title;
         $code_name = urlencode(mb_convert_encoding(' '.$novel_name,'gbk','utf-8'));
@@ -57,14 +57,14 @@ class BiQuService extends BaseService{
         $result = curl_exec($ch);
         $content = curl_getinfo($ch);
         curl_close($ch);
-        $url = isset($content['redirect_url']) ? $content['redirect_url'] : '';
+        $url = isset($content['redirect_url']) ? $content['redirect_url'] : '';dd($url);
         if(!$url){
             $msg = '小说:'.$novel_id.'在笔趣网没有查到相关信息';
             my_log($msg,'logs/reptilian/biqu');
             return false;
         }
-        $novel->biqu_url = rtrim($url,'/');
-        $novel->save(); 
+        // $novel->biqu_url = rtrim($url,'/');
+        // $novel->save(); 
         return $url;
     }
 

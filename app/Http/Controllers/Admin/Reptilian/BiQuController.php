@@ -76,11 +76,12 @@ class BiQuController extends Controller{
 
         //    echo 1;
         // }
-        $url = env('QIDIAN_NEW_NOVELS_URL');
-        $max_page = env('QIDIAN_NEW_NOVELS_PAGES');
-        $page = 1;
-        $url = $url.$page;
-        QiDianService::getNewNovels($url);
+        // $url = env('QIDIAN_NEW_NOVELS_URL');
+        // $max_page = env('QIDIAN_NEW_NOVELS_PAGES');
+        // $page = 1;
+        // $url = $url.$page;
+        // QiDianService::getNewNovels($url);
+        BiQuService::novelChaptersUrl(181);
     }
 
 }

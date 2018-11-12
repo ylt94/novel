@@ -91,7 +91,7 @@ Route::get('/phpinfo',function(Request $request){
     // $error = curl_error($ch);
     // curl_close($ch); dd($error);
     // echo $page_content;
-    echo  mb_convert_encoding(urldecode('+%B7%C9%BD%A3%CE%CA%B5%C0'),'utf-8','gbk');
+    $request->getClientIp();
 });
 // Route::get('/test',function(){
 //     return ['status'=>1,'password'=>bcrypt(123456)];
