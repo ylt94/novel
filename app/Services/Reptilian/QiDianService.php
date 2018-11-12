@@ -248,11 +248,10 @@
             //爬取内容
             $result = self::getNovelBase($url);
             //获取小说类型
-
             $insert_data = [];
             foreach($result as $item){
                 $search = [
-                    'title' => $time['title'],
+                    'title' => $item['title'],
                     'author' => $item['author']
                 ];
                 $novel = NovelBase::where($search)->first();
@@ -261,7 +260,7 @@
                 }
                 array_push($insert_data,$item);
             }
-
+            dd($insert_data);
             $insert_res = self::insertNovelBase($insert_data);
 
             return $insert_res;

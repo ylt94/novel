@@ -84,12 +84,20 @@ class NovelNew extends Command
         */
         Process::where('type',Process::NOVEL_NEW)->update(['pid'=>getmypid()]);
         $url = env('QIDIAN_NEW_NOVELS_URL');
+        $max_page = env('QIDIAN_NEW_NOVELS_PAGES');
+        $page = 1;
         while(true){
-            $time = time()-$this->update_seconds;
-            $time = date('Y-m-d H:i:s',$time);
-            QiDianService::getNovelBase($url);
+            $url = $url.$page;
+            QiDianService::getNewNovels($url);
             DB::disconnect();
-            sleep($this->sleep_seconds);
+            $page++;
+            if($page > $max_page){
+                $page = 1;
+                sleep($this->sleep_seconds);
+            }else{
+                sleep(60); 
+            }
+            
         }
 
     }

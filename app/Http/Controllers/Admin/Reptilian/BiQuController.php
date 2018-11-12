@@ -10,6 +10,7 @@ use App\Services\Novel\NovelService;
 use App\Models\NovelContent;
 use App\Models\NovelDetail;
 use App\Services\RedisService;
+use App\Services\Reptilian\QiDianService;
 
 class BiQuController extends Controller{
 
@@ -62,19 +63,24 @@ class BiQuController extends Controller{
         // }
         // return 1;
         
-        echo 1;
-        fastcgi_finish_request();
-        set_time_limit(0);
-        while(true){
-            $detail_id = RedisService::getNovelDetailId();
-            if(!$detail_id){
-                echo 1;
-                break;
-            }
-            BiQuService::updateChapterContent($detail_id);
+        // echo 1;
+        // fastcgi_finish_request();
+        // set_time_limit(0);
+        // while(true){
+        //     $detail_id = RedisService::getNovelDetailId();
+        //     if(!$detail_id){
+        //         echo 1;
+        //         break;
+        //     }
+        //     BiQuService::updateChapterContent($detail_id);
 
-           echo 1;
-        }
+        //    echo 1;
+        // }
+        $url = env('QIDIAN_NEW_NOVELS_URL');
+        $max_page = env('QIDIAN_NEW_NOVELS_PAGES');
+        $page = 1;
+        $url = $url.$page;
+        QiDianService::getNewNovels($url);
     }
 
 }

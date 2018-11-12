@@ -14,23 +14,27 @@
     class PublicService extends BaseService{
 
         //querylist获取信息
-        public static function getDataFromQueryList($url,$rules,$type = 'get',$params = []){
+        public static function getDataFromQueryList($url,$rules,$use_agent = true,$type = 'get',$params = []){
             if(!$url || !$rules){
                 return false;
             }
-            $agent = self::getFreeIp();
-            $http = [
-                // 设置代理
-                'proxy' => $agent['agent_type'].'://'.$agent['agent_ip'].':'.$agent['agent_port'],//http://222.141.11.17:8118',
-                //设置超时时间，单位：秒
-                'timeout' => 30,
-                'headers' => [
-                    'Referer' => 'https://www.baidu.com/',
-                    'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3554.0 Safari/537.36',
-                    'CLIENT-IP' => $agent['agent_ip'],
-                    'X-FORWARDED-FOR' => $agent['agent_ip']
-                ]
-            ];
+            dd(file_get_contents('http://61.135.217.7:80'));
+            $http = [];
+            if($use_agent){
+                $agent = self::getFreeIp();
+                $http = [
+                    // 设置代理
+                    'proxy' => strtolower($agent['agent_type']).'://'.$agent['agent_ip'].':'.$agent['agent_port'],//http://222.141.11.17:8118',
+                    //设置超时时间，单位：秒
+                    'timeout' => 30,
+                    'headers' => [
+                        'Referer' => 'https://www.baidu.com/',
+                        'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3554.0 Safari/537.36',
+                        'CLIENT-IP' => $agent['agent_ip'],
+                        'X-FORWARDED-FOR' => $agent['agent_ip']
+                    ]
+                ];
+            }dd($http);
             $data = QueryList::rules($rules)->$type($url,$params,$http)->query()->getData();
             return $data;
         }
@@ -43,12 +47,12 @@
         //获取网络空闲代理Ip//http://www.xicidaili.com/nn/
         public static function getFreeIp(){
             
-            $agent_type = Cache::get('agent_type');
-            $agent_ip = Cache::get('agent_ip');
-            $agent_port = Cache::get('agent_port');
-            if($agent_type && $agent_ip && $agent_port){
-                return ['agent_type' => $agent_type,'agent_ip' => $agent_ip ,'agent_port' => $agent_port];
-            }
+            // $agent_type = Cache::get('agent_type');
+            // $agent_ip = Cache::get('agent_ip');
+            // $agent_port = Cache::get('agent_port');
+            // if($agent_type && $agent_ip && $agent_port){
+            //     return ['agent_type' => $agent_type,'agent_ip' => $agent_ip ,'agent_port' => $agent_port];
+            // }
 
             
             $resuorce_url = 'http://www.xicidaili.com/nn/';
