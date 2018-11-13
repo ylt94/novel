@@ -22,8 +22,8 @@ class NovelCategoryController extends Controller{
         return ['status'=>1,'msg'=>'','data'=>$data];
     }
 
-    public function categoryAddOrUpdate(){
-        $data = Request::all();
+    public function categoryAddOrUpdate(Request $request){
+        $data = $request->all();
 
         $validata = [
             'name'=>'required|unique:novel_category,name',
