@@ -88,8 +88,8 @@ class NovelNew extends Command
         $max_page = env('QIDIAN_NEW_NOVELS_PAGES');
         $page = 1;
         while(true){
-            $url = $url.$page;
-            QiDianService::getNewNovels($url);
+            $page_url = $url.$page;
+            QiDianService::getNewNovels($page_url);
             DB::disconnect();
             $page++;
             if($page > $max_page){
@@ -99,7 +99,7 @@ class NovelNew extends Command
                 sleep($sleep_seconds);
             }else{
                 $time = PublicService::createRandomNumber(10,100);
-                sleep(60); 
+                sleep($time); 
             }
             
         }
