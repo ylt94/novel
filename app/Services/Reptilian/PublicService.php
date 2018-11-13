@@ -182,7 +182,7 @@
         /**
          * 生成一个随机数
          */
-        public static function createRandomNumber($min,$mnax){
+        public static function createRandomNumber($min,$max){
             return rand($min,$max);
         }
     }
