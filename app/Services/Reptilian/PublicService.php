@@ -34,7 +34,9 @@
                     ]
                 ];
             }
-            $data = QueryList::rules($rules)->$type($url,$params,$http)->query()->getData();
+            $ql = QueryList::rules($rules);
+            $data = $ql->$type($url)->query()->getData();
+            $ql->destruct();
             return $data;
         }
 

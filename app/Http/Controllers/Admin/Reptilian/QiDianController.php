@@ -42,12 +42,12 @@ class QiDianController extends Controller{
                     ->getData();
             $data =  $data->all();
             $data = array_slice($data,0,20);
-            $data = PublicService::careteNovelBase($data,$site,$categories);
-            $result = PublicService::insertNovelBase($data,$page);
+            // $data = PublicService::careteNovelBase($data,$site,$categories);
+            // $result = PublicService::insertNovelBase($data,$page);
             $ql->destruct();
             $arr = array_merge($arr,$data);
             $page++;
-        }while($page<2);
+        }while($page<3);
         dd($arr);
         echo 'success';
         

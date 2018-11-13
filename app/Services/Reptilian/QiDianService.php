@@ -247,7 +247,6 @@
 
             //爬取内容
             $result = self::getNovelBase($url);
-            $msg = var_export($result,true);
             //获取小说类型
             $insert_data = [];
             foreach($result as $item){
