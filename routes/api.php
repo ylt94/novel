@@ -64,7 +64,7 @@ Route::group(['namespace'=>'Member','prefix'=>'member','middleware'=>'auth:membe
     Route::post('/loginout','LoginController@loginOut');
 });
 
-
+Route::get('/search','Common\IndexController@search');
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
     

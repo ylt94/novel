@@ -8,6 +8,7 @@ use App\Models\NovelCategory;
 use App\Models\NovelContent;
 
 use App\Services\BaseService;
+use App\Services\Reptilian\BiQuService;
 
 
 class CommonService extends BaseService{
@@ -15,19 +16,19 @@ class CommonService extends BaseService{
     //搜索
     public static function search($words){
         $search = [
-            'is_hide' => 0
+            'is_hide' => 0,
+            'title' => $words
         ];
-        $result = BaseService::where($search)
-                            ->where('title','like','%'.$words.'%')
-                            ->select(
-                                'id',
-                                'title',
-                                'author',
-                                'status',
-                                'words',
-                                'img_url'
-                            )
-                            ->get();
+        //$url = BiQuService::novelChaptersUrl($words);
+        $chapters = BiQuService::getNovelBase('http://www.biquge.com.tw/18_18820/');
+        // $novel_id = NovelBase::where($search)->pluck('id')->first();
+        // if($novel_id){
+        //     return self::novelDetail($novel_id);
+        // }else{
+        //     $url = BiQuService::novelChaptersUrl($words);
+        //     $chapters = BiQuService::novelChapters($url);
+        // }
+                            
         return $result;
     }
 

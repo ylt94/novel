@@ -34,7 +34,7 @@ class IndexController extends Controller {
 
     public function search(Request $request) {
         $words = $request->words;
-        if(!$type || !$words) {
+        if(!$words) {
             return ['status'=>0,'msg'=>'请输入完整'];
         }
         $return = CommonService::search($words);
@@ -82,6 +82,9 @@ class IndexController extends Controller {
         return my_view('client.content',$result);
     }
 
+    /**
+     * 下一章
+     */
     public function nextContent($chapter_id){
         if(!$chapter_id){
             return ['status'=>0,'msg'=>'请求异常，请稍后再试'];
