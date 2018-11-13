@@ -90,6 +90,7 @@ class NovelNew extends Command
         while(true){
             $page_url = $url.$page;
             $this->info('开始抓取第'.$page.'页数据');
+            $this->info($page_url);
             QiDianService::getNewNovels($page_url);
             DB::disconnect();
             $page++;
