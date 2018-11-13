@@ -114,14 +114,24 @@ class BiQuService extends BaseService{
         }
         $result = $result[0];
         $result['author'] = explode('：',$result['author'])[1];
-        $result['last_update'] = explode('：',$result['last_update'])[1];
+        $result['last_update']  = explode('：',$result['last_update'])[1];
         $result['last_chapter'] = explode('：',$result['last_chapter'])[1];
-        $result['site_source'] = Sites::BIQU;
-        //$result['type'] = NovelCategory::where('name','like','%'.$type.'%')->pluck('id')->first();
-        $result['type'] = $type;
-        $result['desc'] = $desc;
-        $result['img_url'] = $img_url;
-        dd($result);
+         
+        
+        $novel = new NovelBase();
+        $novel->title = $result['title'];
+        $novel->author = $result['author'];
+        $novel->last_update = $result['last_update'];
+        $novel->site_source = Sites::BIQU;
+
+        $type_id = NovelCategory::where('name','like','%'.$type.'%')->pluck('id')->first();
+        $novel->type = $type_id ?: $type;
+        $novel->desc = $desc;
+        $novel->img_url = $img_url;
+        $novel->biqu_url = $url;
+        $novel->save();
+        $result['id'] = $novel->id; 
+        return $result;
     }
 
     /**
@@ -212,7 +222,7 @@ class BiQuService extends BaseService{
      * @param $novel_id 小说ID
      * @param $unupdate_chapters 未更新的新章节
      */
-    public static function insertChapters($novel_id,$unupdate_chapters){
+    public static function insertChapters($novel_id,$unupdate_chapters,$reutrn_array = false){
         if(!$novel_id) {
             return false;
         }
@@ -237,6 +247,9 @@ class BiQuService extends BaseService{
             array_push($insert_data,$insert_data_item);
         }
         NovelDetail::insert($insert_data);
+        if($reutrn_array){
+            return $insert_data;
+        }
         return true;
     }
 
@@ -279,7 +292,7 @@ class BiQuService extends BaseService{
      * 更新单个章节内容
      * @param $chapter_id 章节ID
      */
-    public static function updateChapterContent($chapter_id){
+    public static function updateChapterContent($chapter_id,$reutrn_content = false){
         if(!$chapter_id){
             return false;
         }
@@ -320,7 +333,8 @@ class BiQuService extends BaseService{
             DB::rollback();
             $error = '小说章节:'.$chapter_id.'更新失败:'.$e->getMessage();
             my_log($error,'logs/reptilian/biqu','error');
-            return false;
+            return $reutrn_content ? $insert_data['content'] :false;
         }
+        return $reutrn_content ? $insert_data['content'] :true;
     }
 }

@@ -9,6 +9,7 @@ use App\Models\NovelContent;
 
 use App\Services\BaseService;
 use App\Services\Reptilian\BiQuService;
+use App\Services\RedisService;
 
 
 class CommonService extends BaseService{
@@ -19,17 +20,37 @@ class CommonService extends BaseService{
             'is_hide' => 0,
             'title' => $words
         ];
-        //$url = BiQuService::novelChaptersUrl($words);
-        $chapters = BiQuService::getNovelBase('http://www.biquge.com.tw/18_18820/');
-        // $novel_id = NovelBase::where($search)->pluck('id')->first();
-        // if($novel_id){
-        //     return self::novelDetail($novel_id);
-        // }else{
-        //     $url = BiQuService::novelChaptersUrl($words);
-        //     $chapters = BiQuService::novelChapters($url);
-        // }
+       
+        $novel_id = NovelBase::where($search)->pluck('id')->first();
+        if($novel_id){
+            return self::novelDetail($novel_id);
+        }else{
+            $url = BiQuService::novelChaptersUrl($words);
+            $novel = BiQuService::getNovelBase($url);
+        }
                             
-        return $result;
+        return $novel;
+    }
+
+    //抓取章节
+    public static function searchChapters($novel_id){
+        $url = NovelBase::where('id',$novel_id)->pluck('biqu_url')->fitrst();
+        if(!$url){
+            return false;
+        }
+
+        $biqu_chapters = BiQuService::novelChapters($url);
+        if(!$biqu_chapters){
+            return false;
+        }
+
+        $insert_res = BiQuService::insertChapters($novel_id,$biqu_chapters,true);
+        if(!$insert_res){
+            return false;
+        }
+
+        return $insert_res;
+
     }
 
     //推荐
@@ -156,7 +177,9 @@ class CommonService extends BaseService{
             static::addError('该小说不存在或已被删除',-1);
             return false;
         }
-        $result['novel_type'] = NovelCategory::where('id',$result['type'])->pluck('name')->first();
+        if((int)$result['novel_type']){
+            $result['novel_type'] = NovelCategory::where('id',$result['type'])->pluck('name')->first();
+        }
         $chapter = NovelDetail::where('novel_id',$id)
                     ->where('is_update',1)
                     ->orderBy('id','desc')
@@ -186,9 +209,13 @@ class CommonService extends BaseService{
     public static function novelContent($id){
         $detail = NovelDetail::find($id);
         $content = NovelContent::where('capter_id',$id)->pluck('content')->first();
-        if(!$detail->is_update || !$content){
+        if(!$content && !$detail->biqu_url){
             static::addError('该章节不存在或已被删除',-1);
             return false;
+        }
+        //没有内容，抓取
+        if(!$content && $detail->biqu_url){
+            $content = BiQuService::updateChapterContent($id,true);
         }
         $detail->novel_title = NovelBase::where('id',$detail->novel_id)->pluck('title')->first();
 

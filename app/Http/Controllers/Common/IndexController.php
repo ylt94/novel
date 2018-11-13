@@ -38,7 +38,21 @@ class IndexController extends Controller {
             return ['status'=>0,'msg'=>'请输入完整'];
         }
         $return = CommonService::search($words);
+        if(!$return){
+            return false;
+        }
         return ['status'=>1,'msg'=>'请求成功','data'=>$return];
+    }
+
+    public function searchChapters($novel_id){
+        if(!$novel_id) {
+            return false;
+        }
+
+        $resut = CommonService::searchChapters($novel_id);
+
+        return $resut;
+        
     }
 
     public function novelDetail($novel_id){
