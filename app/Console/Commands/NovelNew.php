@@ -89,6 +89,7 @@ class NovelNew extends Command
         $page = 1;
         while(true){
             $page_url = $url.$page;
+            $this->info('开始抓取第'.$page.'页数据');
             QiDianService::getNewNovels($page_url);
             DB::disconnect();
             $page++;
@@ -96,9 +97,11 @@ class NovelNew extends Command
                 $page = 1;
                 $time = PublicService::createRandomNumber(1200,3600);
                 $sleep_seconds = ($time%2) ? ($this->sleep_seconds+$time) : ($this->sleep_seconds-$time);
+                $this->info('正在睡眠:'.$sleep_seconds.'秒');
                 sleep($sleep_seconds);
             }else{
                 $time = PublicService::createRandomNumber(10,100);
+                $this->info('正在睡眠:'.$time.'秒');
                 sleep($time); 
             }
             
