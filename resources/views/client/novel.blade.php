@@ -229,7 +229,8 @@
                 <div class="novel-title">{{$novel_base['title']}}</div>
                 <div class="novel-auther">作者：{{$novel_base['author']}}</div>
                 <div class="novel-type">类型：{{$novel_base['novel_type']}}</div>
-                <div class="novel-other">状态：{{$novel_base['words']}}万字|{{$novel_base['status'] == 1 ? '连载' : '完本'}}</div>
+                <div class="novel-other">状态：{{$novel_base['status'] == 1 ? '连载' : '完本'}}
+                {{ $novel_base['words'] ? '|'.$novel_base['words'].万字 : '' }}万字</div>
                 <div class="novel-other">最后更新：{{$last_chapter['create_at']}}</div>
             </div>
         </div>
