@@ -11,6 +11,7 @@ use App\Models\NovelDetail;
 use App\Models\NovelBase;
 use App\Models\NovelContent;
 use App\Models\Sites;
+use App\Models\NovelCategory;
 
 class BiQuService extends BaseService{
     const BIQU_BASE_URL = 'http://www.biquge.com.tw';
@@ -79,25 +80,48 @@ class BiQuService extends BaseService{
         if(!$url){
             return false;
         }
-        $html = dd(mb_convert_encoding('UTF-8','GBK',(string)file_get_contents($url)));
-        
+
         $rules = [
-            'title'=> array('#maininfo>#info>h1','text'),
-            'author' => array('#maininfo>#info>p:eq(0)','text'),
-            'last_update' => array('#maininfo>#info>p:eq(2)','text'),
-            'last_chapter' => array('#maininfo>#info>p:eq(3)>a','text')
+            'all'=> array('#maininfo>#info','html'),
+            'type' => array('.con_top','text'),
+            'desc' => array('#intro>p','text'),
+            'img_url' => array('#sidebar>#fmimg>img','src'),
         ];
-        $result = QueryList::rules($rules)->get($url)->encoding('GBK','UTF-8')->query()->getData();dd($result);
-        $result = QueryList::html($html)->rules($rules)->query()->getData();dd($result);
-        $result = PublicService::getDataFromQueryList($url,$rules);
-        $result[0]['title'] = mb_convert_encoding($result[0]['title'],'UTF-8','GBK');
-        $result[0]['author'] = mb_convert_encoding($result[0]['author'],'UTF-8','GBK');
-        $result[0]['last_update'] = mb_convert_encoding($result[0]['last_update'],'UTF-8','GBK');
-        // foreach ($result as &$item){
-        //     mb_convert_encoding($item['title'],'UTF-8','GBK');
-        //     mb_convert_encoding($item['author'],'UTF-8','GBK');
-        //     mb_convert_encoding($item['last_update'],'UTF-8','GBK');
-        // }
+        $html = PublicService::getDataFromQueryList($url,$rules);
+        if(!$html){
+            return false;
+        }
+
+        $desc = mb_convert_encoding($html[0]['desc'],'UTF-8','GBK');
+        $img_url = self::BIQU_BASE_URL.$html[0]['img_url'];
+        
+        $type = $html[0]['type'];
+        $html = mb_convert_encoding($html[0]['all'],'UTF-8','GBK');
+        $type = mb_convert_encoding($type,'UTF-8','GBK');
+        $type = explode('&gt; ',$type)[1];
+        $type = mb_substr($type,0,2);
+        $rules = [
+            'title' => array('h1','text'),
+            'author' => array('p:eq(0)','text'),
+            'last_update' => array('p:eq(2)','text'),
+            'last_chapter' => array('p:eq(3)','text'),
+        ];
+        $result = QueryList::html($html)->rules($rules)->query()->getData();
+        if(!$result){
+            $msg = var_export($result,true).'没有获取到内容';
+            my_log($msg,'logs/reptilian/biqu');
+            return false;
+        }
+        $result = $result[0];
+        $result['author'] = explode('：',$result['author'])[1];
+        $result['last_update'] = explode('：',$result['last_update'])[1];
+        $result['last_chapter'] = explode('：',$result['last_chapter'])[1];
+        $result['site_source'] = Sites::BIQU;
+        //$result['type'] = NovelCategory::where('name','like','%'.$type.'%')->pluck('id')->first();
+        $result['type'] = $type;
+        $result['desc'] = $desc;
+        $result['img_url'] = $img_url;
+        dd($result);
     }
 
     /**

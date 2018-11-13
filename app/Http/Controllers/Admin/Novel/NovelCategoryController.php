@@ -12,11 +12,11 @@ use Illuminate\Support\Facades\DB;
 class NovelCategoryController extends Controller{
 
 
-    public function getCategory(){
+    public function getCategory(Request $request){
 
         $query = NovelCategory::query();
-        if(Request::input('type_id')) {
-            $query->where('type_id',Request::input('type_id'));
+        if($request->type_id) {
+            $query->where('type_id',$request->type_id);
         }
         $data = $query->get();
         return ['status'=>1,'msg'=>'','data'=>$data];
@@ -62,8 +62,8 @@ class NovelCategoryController extends Controller{
 
     }
 
-    public function categoryDel(){
-        $id = Request::input('id');
+    public function categoryDel(Request $request){
+        $id = $request->id;
 
         if(!$id) {
             return ['status'=>0,'msg'=>'参数错误！'];
@@ -75,9 +75,9 @@ class NovelCategoryController extends Controller{
 
     }
 
-    public function categorySort(){
-        $last_id = Request::input('last_id');
-        $font_id = Request::input('font_id');
+    public function categorySort(Request $request){
+        $last_id = $request->last_id;
+        $font_id = $request->font_id;
         if(!$last_id || !$font_id){
             return['status'=>0,'msg'=>'参数不完整'];
         }
