@@ -222,7 +222,7 @@ class BiQuService extends BaseService{
      * @param $novel_id 小说ID
      * @param $unupdate_chapters 未更新的新章节
      */
-    public static function insertChapters($novel_id,$unupdate_chapters,$reutrn_array = false){
+    public static function insertChapters($novel_id,$unupdate_chapters){
         if(!$novel_id) {
             return false;
         }
@@ -292,7 +292,7 @@ class BiQuService extends BaseService{
      * 更新单个章节内容
      * @param $chapter_id 章节ID
      */
-    public static function updateChapterContent($chapter_id,$reutrn_content = false){
+    public static function updateChapterContent($chapter_id){
         if(!$chapter_id){
             return false;
         }

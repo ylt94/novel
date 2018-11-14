@@ -44,12 +44,15 @@ class CommonService extends BaseService{
             return false;
         }
 
-        $insert_res = BiQuService::insertChapters($novel_id,$biqu_chapters,true);
+        $insert_res = BiQuService::insertChapters($novel_id,$biqu_chapters);
         if(!$insert_res){
             return false;
         }
-
-        return $insert_res;
+        $result = self::novelChapters($novel_id);
+        foreach($result['chapters'] as $chapter){
+            RedisService::setNovelDetailId($chapter['id']);
+        }
+        return $result;
 
     }
 
@@ -201,7 +204,7 @@ class CommonService extends BaseService{
             static::addError('该内容不存在或已被删除',-1);
             return false;
         }
-        $chapters = NovelDetail::where('novel_id',$novel_id)->where('is_update',1)->orderBy('create_at','asc')->get()->toArray();
+        $chapters = NovelDetail::where('novel_id',$novel_id)->orderBy('create_at','asc')->get()->toArray();
 
         return ['title' => $title, 'chapters'=>$chapters];
     }
@@ -215,7 +218,11 @@ class CommonService extends BaseService{
         }
         //没有内容，抓取
         if(!$content && $detail->biqu_url){
-            $content = BiQuService::updateChapterContent($id,true);
+            $content = BiQuService::getChapterContent($detail->biqu_url);
+        }
+        if(!$content){
+            static::addError('该章节不存在或已被删除',-1);
+            return false;
         }
         $detail->novel_title = NovelBase::where('id',$detail->novel_id)->pluck('title')->first();
 
