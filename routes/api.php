@@ -65,6 +65,7 @@ Route::group(['namespace'=>'Member','prefix'=>'member','middleware'=>'auth:membe
 });
 
 Route::get('/search','Common\IndexController@search');
+Route::get('/search/chapters/{novel_id}','Common\IndexController@searchChapters');
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
     

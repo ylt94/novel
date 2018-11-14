@@ -247,9 +247,7 @@ class BiQuService extends BaseService{
             array_push($insert_data,$insert_data_item);
         }
         NovelDetail::insert($insert_data);
-        if($reutrn_array){
-            return $insert_data;
-        }
+
         return true;
     }
 

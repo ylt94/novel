@@ -34,7 +34,7 @@ class CommonService extends BaseService{
 
     //抓取章节
     public static function searchChapters($novel_id){
-        $url = NovelBase::where('id',$novel_id)->pluck('biqu_url')->fitrst();
+        $url = NovelBase::where('id',$novel_id)->pluck('biqu_url')->first();
         if(!$url){
             return false;
         }
@@ -49,7 +49,7 @@ class CommonService extends BaseService{
             return false;
         }
         $result = self::novelChapters($novel_id);
-        foreach($result['chapters'] as $chapter){
+        foreach(dataYieldRange($result['chapters']) as $chapter){
             RedisService::setNovelDetailId($chapter['id']);
         }
         return $result;

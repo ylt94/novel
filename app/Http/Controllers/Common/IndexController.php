@@ -49,9 +49,9 @@ class IndexController extends Controller {
             return false;
         }
 
-        $resut = CommonService::searchChapters($novel_id);
+        $result = CommonService::searchChapters($novel_id);
 
-        return $resut;
+        return $result;
         
     }
 

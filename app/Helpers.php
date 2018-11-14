@@ -65,7 +65,7 @@ function dataYieldRange($data){
     }
 }
 
-function my_log($msg,$path,$log_type){
+function my_log($msg,$path,$log_type = 'info'){
 
     $log_types = ['info','error'];
     if (!in_array($log_type,$log_types)) {
