@@ -17,20 +17,21 @@ Route::get('/content/{chapter_id}','Common\IndexController@novelContent');
 Route::get('/content/next/{chapter_id}','Common\IndexController@nextContent');
 
 Route::get('test',function(){
-    $a = 1;
-    $b = $a+$a+$a++;
-    echo $b;
+    // $a = 1;
+    // $b = $a+$a+$a++;
+    // echo $b;
 
-    $a = 1;
-    $b = $a + $a++ + $a;
-    echo $b;
+    // $a = 1;
+    // $b = $a + $a++ + $a;
+    // echo $b;
 
-    $a = 1;
-    $b = $a++ + $a+$a;
-    echo $b;
+    // $a = 1;
+    // $b = $a++ + $a+$a;
+    // echo $b;
 
-    $a = 1;
-    $b = $a+$a++;
-    echo $b;
+    // $a = 1;
+    // $b = $a+$a++;
+    // echo $b;
+    return view('resume');
 });
 
