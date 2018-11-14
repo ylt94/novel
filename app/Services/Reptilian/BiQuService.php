@@ -62,14 +62,63 @@ class BiQuService extends BaseService{
         $content = curl_getinfo($ch);
         curl_close($ch);
         $url = isset($content['redirect_url']) ? $content['redirect_url'] : '';
-        if(!$url){
+        if(!$url && !$result){
             $msg = '小说:'.$novel_id.'在笔趣网没有查到相关信息';
             my_log($msg,'logs/reptilian/biqu');
             return false;
         }
+        if($result){//列表
+            //$html = mb_convert_encoding($result,'UTF-8','GBK');
+            //$html = iconv('GBK', 'UTF-8', $result);
+            $urls = self::searchNovelList($result);
+            if(!$urls){
+                return false;
+            }
+            foreach($urls as $item){
+                if($item['title'] == $novel_name){dd($item['url']);
+                    return $item['url'];
+                }
+            }
+            return false;
+        }
+       
         // $novel->biqu_url = rtrim($url,'/');
         // $novel->save(); 
         return $url;
+    }
+
+    /**
+     * 获取搜索结果列表
+     */
+    public static function searchNovelList($html){
+        $table = QueryList::html($html)->find('table');
+
+        // 采集链接
+        $urls = $table->find('tr:gt(0)')->map(function($row){
+            return $row->find('td>a')->attr('href');
+        })->all();
+        // 采集表的每行内容
+        $tableRows = $table->find('tr:gt(0)')->map(function($row){
+            return $row->find('td')->texts()->all();
+        })->all();
+        if(!$urls || !$tableRows || (count($urls) != count($tableRows))){
+            return false;
+        }
+        $result = [];
+        foreach($tableRows as $key => $item){
+            $result_item = [
+                'title' => $item[0],
+                'last_chapter' => $item[1],
+                'author' => $item[2],
+                'words' => $item[3],
+                'last_update' => $item[4],
+                'status' => $item[5],
+                'url' => $urls[$key],
+            ];
+            array_push($result,$result_item);
+        }
+
+        return $result;
     }
 
     /**
@@ -91,6 +140,14 @@ class BiQuService extends BaseService{
         if(!$html){
             return false;
         }
+
+        $rules = [
+            'all'=> array('#maininfo>#info','html'),
+            'type' => array('.con_top','text'),
+            'desc' => array('#intro>p','text'),
+            'img_url' => array('#sidebar>#fmimg>img','src'),
+        ];
+        $html = PublicService::getDataFromQueryList($url,$rules);
 
         $desc = mb_convert_encoding($html[0]['desc'],'UTF-8','GBK');
         $img_url = self::BIQU_BASE_URL.$html[0]['img_url'];
