@@ -274,7 +274,7 @@
                 </div>
             </div>
         </div>
-        <div class="remark"><i>注：本人打算年后(2019年)去一线城市(初步定为深圳)发展，非诚勿扰，谢谢</i></div>
+        <div class="remark"><i>注：本人打算年后(2019年)去一线城市(初步定为深圳)发展</i></div>
     </div>
 </body>
 </html>
