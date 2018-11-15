@@ -37,6 +37,7 @@
         body{
             margin-top:30px;
             background-color:white;
+            margin-bottom:30px;
             width: 820px;
             min-height: 100%;
             border:3px solid #e5e5e5;
@@ -171,6 +172,17 @@
         .skill-item{
             display:flex;
             flex-direction:column;
+            min-height:30px;
+            flex:1;
+            align-items:flex-start;
+            justify-content:center;
+            margin-bottom:10px;
+        }
+
+        .remark{
+            margin-top:30px;
+            font-size:13px;
+            margin-bottom:3px;
         }
         
     </style>
@@ -186,7 +198,7 @@
                 <span style="font-weight:600"> | </span>
                 2+年经验
                 <span style="font-weight:600"> | </span>
-                17384082748
+                173****2748
                 <span style="font-weight:600"> | </span>
                 857425891@qq.com
             </div>
@@ -241,14 +253,28 @@
             </div>
             
         </div>
-        <div class="skill" style="margin-bottom:30px;">
+        <div class="skill">
             <div class="skill-title">技术掌握</div>
             <div class="skill-content">
                 <div class="skill-item">
-                   1.
+                   1.能够搭建（docker）LNMP环境,掌握的Linux命令能够满足日常开发所需
+                </div>
+                <div class="skill-item">
+                   2.掌握js,jquery,css，能够进行一般页面的编写，掌握vuejs,angularjs,能够搭建初始化环境以及模块编写
+                </div>
+                <div class="skill-item">
+                   3.熟悉redis缓存，熟练使用mysql，并了解SQL优化方案
+                </div>
+                
+                <div class="skill-item">
+                   4.熟悉微信小程序开发
+                </div>
+                <div class="skill-item">
+                   5.熟悉PHP，对于代码质量比较偏执，不断追求优雅，低冗余，高可用的编写境界
                 </div>
             </div>
         </div>
+        <div class="remark"><i>注：本人打算年后(2019年)去一线城市(初步定为深圳)发展，非诚勿扰，谢谢</i></div>
     </div>
 </body>
 </html>
