@@ -182,7 +182,9 @@
         .remark{
             margin-top:30px;
             font-size:13px;
-            margin-bottom:3px;
+            margin-bottom:30px;
+            height:30px;
+            line-height:30px;
         }
         
     </style>
