@@ -82,19 +82,23 @@ class NovelDetail extends Command
         $this->sleep_seconds = $process->sleep_time;
         //业务逻辑
         Process::where('type',Process::NOVEL_DETAIL)->update(['pid'=>getmypid()]);
-        while(true){
-            $novel_id = RedisService::getNovelId();
-            if(!$novel_id) {
+        try{
+            while(true){
+                $novel_id = RedisService::getNovelId();
+                if(!$novel_id) {
+                    DB::disconnect();
+                    sleep(3);
+                    continue;
+                }
+                $result = self::checkChannel($novel_id);
+                if($result){
+                    self::setNovelDetailId($novel_id);
+                }
                 DB::disconnect();
-                sleep(3);
-                continue;
+                sleep($this->sleep_seconds);
             }
-            $result = self::checkChannel($novel_id);
-            if($result){
-                self::setNovelDetailId($novel_id);
-            }
-            DB::disconnect();
-            sleep($this->sleep_seconds);
+        }catch(\Exception $e){
+
         }
         
     }

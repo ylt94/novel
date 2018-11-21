@@ -83,21 +83,25 @@ class NovelBase extends Command
         * 处理业务代码
         */
         Process::where('type',Process::NOVEL_BASE)->update(['pid'=>getmypid()]);
-        while(true){
-            $time = time()-$this->update_seconds;
-            $time = date('Y-m-d H:i:s',$time);
-            $novels = NovelBaseModel::where('last_update','<=',$time)->get();
-            if(!$novels){
+        try{
+            while(true){
+                $time = time()-$this->update_seconds;
+                $time = date('Y-m-d H:i:s',$time);
+                $novels = NovelBaseModel::where('last_update','<=',$time)->get();
+                if(!$novels){
+                    DB::disconnect();
+                    sleep($this->sleep_seconds);
+                    continue;
+                }
+                foreach($novels as $item){
+                    //$this->info($item->id);
+                    RedisService::setNovelId($item->id);
+                }
                 DB::disconnect();
                 sleep($this->sleep_seconds);
-                continue;
             }
-            foreach($novels as $item){
-                //$this->info($item->id);
-                RedisService::setNovelId($item->id);
-            }
-            DB::disconnect();
-            sleep($this->sleep_seconds);
+        }catch(\Exception $e){
+            
         }
 
     }

@@ -80,17 +80,21 @@ class NovelContent extends Command
 
         //业务逻辑
         Process::where('type',Process::NOVEL_CONTENT)->update(['pid'=>getmypid()]);
-        while(true){
-            $detail_id = RedisService::getNovelDetailId();
-            if(!$detail_id){
-                DB::disconnect();
-                sleep(3);
-                continue;
-            }
-            self::checkChannel($detail_id);
+        try{
+            while(true){
+                $detail_id = RedisService::getNovelDetailId();
+                if(!$detail_id){
+                    DB::disconnect();
+                    sleep(3);
+                    continue;
+                }
+                self::checkChannel($detail_id);
 
-            DB::disconnect();
-            sleep($this->sleep_seconds);
+                DB::disconnect();
+                sleep($this->sleep_seconds);
+            }
+        }catch(\Exception $e){
+            
         }
         
     }
