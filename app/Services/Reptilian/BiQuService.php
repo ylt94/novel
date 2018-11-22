@@ -27,7 +27,7 @@ class BiQuService extends BaseService{
         $novel_id = (int)$search_words;
         $novel = null;
         if($novel_id){
-            $novel = NovelBase::where('id',$novel_id)->select('title','biqu_url')->first();
+            $novel = NovelBase::find($novel_id);
         }
         if($novel && $novel->biqu_url){
             return $novel->biqu_url;
@@ -329,7 +329,7 @@ class BiQuService extends BaseService{
             static::addError('小说ID'.$novel_id.'未获取到小说URL',-1);
             return false;
         }
-
+        
         //获取url页面的所有章节信息
         $biqu_chapters = self::novelChapters($biqu_url);
         if (!$biqu_chapters) {
@@ -342,7 +342,7 @@ class BiQuService extends BaseService{
 
         //获取未更新章节
         $unupdate_chapters = PublicService::getUnupdateChapters($last_updated_chapter,$biqu_chapters);
-        if (!$unupdate_chapters) {
+        if (is_bool($unupdate_chapters) && !$unupdate_chapters) {
             static::addError('小说ID'.$novel_id.'获取未更新章节失败',-1);
             return false;
         }
