@@ -324,7 +324,7 @@ class BiQuService extends BaseService{
         }
 
         //获取url
-        $biqu_url = self::novelChaptersUrl($novel_id);dd(11);
+        $biqu_url = self::novelChaptersUrl($novel_id);
         if(!$biqu_url){
             static::addError('小说ID'.$novel_id.'未获取到小说URL',-1);
             return false;
