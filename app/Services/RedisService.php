@@ -18,7 +18,7 @@
 
         //获取小说ID
         public static function getNovelId(){
-            return Redis::lpop(self::$novel_base_key);
+            return Redis::rpop(self::$novel_base_key);
         }
 
 
