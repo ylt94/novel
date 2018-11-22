@@ -100,7 +100,7 @@ class NovelDetail extends Command
         }catch(\Exception $e){
             DB::disconnect();
             $message = '更新出错：'.$e->getFile().$e->getLine().':'.$e->getMessage();
-            PS::myLog($message,'logs/daemons/novel_detail','error');
+            PS::myLog($message,'logs/daemons/novel_detail/','error');
         }
         
     }
