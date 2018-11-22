@@ -86,7 +86,7 @@ class NovelDetail extends Command
         Process::where('type',Process::NOVEL_DETAIL)->update(['pid'=>getmypid()]);
         try{
             while(true){
-                $novel_id = RedisService::getNovelId();
+                $novel_id = RedisService::getNovelId();$this->info($novel_id);
                 if(!$novel_id) {
                     DB::disconnect();
                     sleep(3);
