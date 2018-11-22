@@ -8,6 +8,7 @@ use DB;
 use App\Services\RedisService;
 use App\Services\ProcessService;
 use App\Services\Reptilian\PublicService;
+use App\Services\PublicService as PS;
 
 use App\Models\NovelBase as NovelBaseModel;
 use App\Models\Sites;
@@ -101,7 +102,9 @@ class NovelBase extends Command
                 sleep($this->sleep_seconds);
             }
         }catch(\Exception $e){
-            
+            DB::disconnect();
+            $message = '更新出错：'.$e->getFile().$e->getLine().':'.$e->getMessage();
+            PS::myLog($message,'logs/daemons/novel_base','error');
         }
 
     }

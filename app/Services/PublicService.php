@@ -29,4 +29,15 @@ class PublicService extends BaseService {
 
         return ['pages'=>$pages,'data'=>$data];
     }
+
+    public static function myLog($msg,$path,$log_type = 'info'){
+
+        $log_types = ['info','error'];
+        if (!in_array($log_type,$log_types)) {
+            return false;
+        }
+    
+        \Log::useDailyFiles(storage_path($path));
+        \Log::$log_type($msg);
+    }
 }
