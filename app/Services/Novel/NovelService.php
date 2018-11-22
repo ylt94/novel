@@ -100,6 +100,24 @@
         public static function lastUpdatedChapter($novel_id,$return_array = false){
             $search = [
                 'novel_id' => $novel_id,
+                'is_update' => 1
+            ];
+            $chapter = NovelDetail::where($search)->orderBy('id','desc')->first();
+            if ($return_array) {
+                if(!$chapter){
+                    return [];
+                }
+                return $chapter->toArray();
+            }
+            return $chapter;
+        }
+
+        /**
+         * 获取我方最后一章章节
+         */
+        public static function lastUnUpdateChapter($novel_id,$return_array = false){
+            $search = [
+                'novel_id' => $novel_id,
             ];
             $chapter = NovelDetail::where($search)->orderBy('id','desc')->first();
             if ($return_array) {

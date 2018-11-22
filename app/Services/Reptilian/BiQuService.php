@@ -337,7 +337,7 @@ class BiQuService extends BaseService{
         }
 
         //获取我方已更新章节的最后一章
-        $last_updated_chapter = NovelService::lastUpdatedChapter($novel_id,true);
+        $last_updated_chapter = NovelService::lastUnUpdateChapter($novel_id,true);
 
         //获取未更新章节
         $unupdate_chapters = PublicService::getUnupdateChapters($last_updated_chapter,$biqu_chapters);
