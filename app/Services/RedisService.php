@@ -33,7 +33,7 @@
         public static function getNovelDetailId(){
             $key = self::$novel_detail_key;
 
-            return Redis::lpop($key);
+            return Redis::rpop($key);
         }
 
 
