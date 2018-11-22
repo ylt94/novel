@@ -76,8 +76,7 @@ class BiQuController extends Controller{
 
         //    echo 1;
         // }
-       
-        dd(BiQuService::updateDetail(583));
+        dd(BiQuService::updateDetail(181));
     }
 
 }

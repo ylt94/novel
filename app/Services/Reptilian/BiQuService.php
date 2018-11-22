@@ -35,7 +35,6 @@ class BiQuService extends BaseService{
             $novel_name = $novel ? $novel->title : $search_words;
         }
         
-        
         $code_name = urlencode(mb_convert_encoding(' '.$novel_name,'gbk','utf-8'));
         $url = 'http://www.biquge.com.tw/modules/article/soshu.php?searchkey='.$code_name;
         // $free_ip = PublicService::getFreeIp();
@@ -68,7 +67,7 @@ class BiQuService extends BaseService{
             PS::myLog($msg,'logs/reptilian/biqu');
             return false;
         }
-        if($result){//列表
+        if(!$url && $result){//列表
             //$html = mb_convert_encoding($result,'UTF-8','GBK');
             //$html = iconv('GBK', 'UTF-8', $result);
             $urls = self::searchNovelList($result);
@@ -76,19 +75,21 @@ class BiQuService extends BaseService{
                 return false;
             }
             foreach($urls as $item){
-                if($item['title'] == $novel_name){dd($item['url']);
-                    return $item['url'];
+                if($item['title'] == $novel_name){
+                    $url = $item['url'];
+                    break;
                 }
             }
-            $msg = '小说:'.$novel_id.'在笔趣网没有查到相关信息';
-            PS::myLog($msg,'logs/reptilian/biqu');
-            return false;
-            return false;
+            if(!$url){
+                $msg = '小说:'.$novel_id.'在笔趣网没有查到相关信息';
+                PS::myLog($msg,'logs/reptilian/biqu');
+                return false;
+            } 
         }
-       
-        // $novel->biqu_url = rtrim($url,'/');
-        // $novel->save(); 
+        $novel->biqu_url = rtrim($url,'/');
+        $novel->save(); 
         return $url;
+
     }
 
     /**
@@ -323,7 +324,7 @@ class BiQuService extends BaseService{
         }
 
         //获取url
-        $biqu_url = self::novelChaptersUrl($novel_id);
+        $biqu_url = self::novelChaptersUrl($novel_id);dd(11);
         if(!$biqu_url){
             static::addError('小说ID'.$novel_id.'未获取到小说URL',-1);
             return false;
