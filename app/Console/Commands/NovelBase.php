@@ -88,7 +88,7 @@ class NovelBase extends Command
             while(true){
                 $time = time()-$this->update_seconds;
                 $time = date('Y-m-d H:i:s',$time);
-                $novels = NovelBaseModel::where('last_update','<=',$time)->get();
+                $novels = NovelBaseModel::where('last_update','<=',$time)->orderBy('created_at','asc')->get();
                 if(!$novels){
                     DB::disconnect();
                     sleep($this->sleep_seconds);

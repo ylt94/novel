@@ -10,6 +10,7 @@
     use App\Models\NovelBase;
 
     use App\Services\BaseService;
+    use App\Services\PublicService as PS;
 
     class PublicService extends BaseService{
 
@@ -158,7 +159,7 @@
                     continue;
                 }elseif($is_find > 1){
                     $error_msg = '小说id:'.$last_updated_chapter['novel_id'].'更新数据异常';
-                    my_log($error_msg,'logs/reptilian/biqu');
+                    PS::myLog($error_msg,'logs/reptilian/biqu');
                     return false;
                 }
                 if($item['title'] == $last_updated_chapter['title']) {

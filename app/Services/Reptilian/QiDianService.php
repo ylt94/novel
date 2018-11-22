@@ -13,6 +13,7 @@
     use App\Models\NovelContent;
 
     use App\Services\BaseService;
+    use App\Services\PublicService as PS;
 
     class QiDianService extends BaseService{
 
@@ -41,7 +42,7 @@
                 DB::commit();
             }catch(\Exception $e){
                 $error = $site->name.'，小说基础信息创建失败：'.$e->getMessage();
-                my_log($error,'logs/reptilian/qidian','error');
+                PS::myLog($error,'logs/reptilian/qidian','error');
                 return false;
             }
 
