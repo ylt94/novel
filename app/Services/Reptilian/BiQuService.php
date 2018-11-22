@@ -355,7 +355,7 @@ class BiQuService extends BaseService{
      * 更新单个章节内容
      * @param $chapter_id 章节ID
      */
-    public static function updateChapterContent($chapter_id){
+    public static function updateChapterContent($chapter_id,$reutrn_content = false){
         if(!$chapter_id){
             return false;
         }
