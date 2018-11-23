@@ -15,7 +15,7 @@
     class PublicService extends BaseService{
 
         //querylist获取信息
-        public static function getDataFromQueryList($url,$rules,$use_agent = true,$type = 'get',$params = []){
+        public static function getDataFromQueryList($url,$rules,$use_agent = false,$type = 'get',$params = []){
             if(!$url || !$rules){
                 return false;
             }
