@@ -180,7 +180,7 @@ class CommonService extends BaseService{
             static::addError('该小说不存在或已被删除',-1);
             return false;
         }
-        if((int)$result['novel_type']){
+        if((int)$result['type']){
             $result['novel_type'] = NovelCategory::where('id',$result['type'])->pluck('name')->first();
         }
         $chapter = NovelDetail::where('novel_id',$id)
