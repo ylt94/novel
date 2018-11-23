@@ -231,7 +231,7 @@
                 <div class="novel-type">类型：{{$novel_base['novel_type']}}</div>
                 <div class="novel-other">状态：{{$novel_base['status'] == 1 ? '连载' : '完本'}}
                 {{ $novel_base['words'] ? '| '.$novel_base['words'].'万字' : '' }}</div>
-                <div class="novel-other">最后更新：{{$last_chapter['create_at']}}</div>
+                <div class="novel-other">最后更新：{{ $last_chapter? $last_chapter['create_at'] :''}}</div>
             </div>
         </div>
         <div class="book-action">
@@ -245,7 +245,7 @@
     </div>
     <div class="chapters">
         <div style="font-weight:600;width:30%;">目录</div>
-        <div class="chapters-newset"><a href="/content/{{ $last_chapter['id'] }}" style="color:grey;">已更新至： {{$last_chapter['title']}}</a></div>
+        <div class="chapters-newset"><a href="/content/{{ $last_chapter ? $last_chapter['id'] : '' }}" style="color:grey;">已更新至： {{$last_chapter ? $last_chapter['title'] : ''}}</a></div>
     </div>
     <div class="author-others">
         <div class="other-title">作者相关作品</div>
