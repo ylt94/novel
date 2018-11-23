@@ -240,7 +240,7 @@ class CommonService extends BaseService{
         
         $content = NovelContent::where('capter_id',$next_detail->id)->pluck('content')->first();
         if(!$content && $next_detail->biqu_url){
-            $content = BiQuService::getChapterContent($detail->biqu_url);
+            $content = BiQuService::getChapterContent($next_detail->biqu_url);
         }
         if(!$content){
             static::addError('该章节不存在或已被删除',-1);
