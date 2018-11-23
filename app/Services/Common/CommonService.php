@@ -192,8 +192,8 @@ class CommonService extends BaseService{
                         'words',
                         'create_at'
                     )
-                    ->first()->toArray();
-
+                    ->first();
+        $chapter = $chapter ? $chapter->toArray() : [];
 
         return ['novel_base'=>$result,'last_chapter'=>$chapter];
     }
