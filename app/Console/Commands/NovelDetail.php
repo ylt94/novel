@@ -84,8 +84,9 @@ class NovelDetail extends Command
         $this->sleep_seconds = $process->sleep_time;
         //业务逻辑
         Process::where('type',Process::NOVEL_DETAIL)->update(['pid'=>getmypid()]);
-        try{
-            while(true){
+        
+        while(true){
+            try{
                 $novel_id = RedisService::getNovelId();
                 if(!$novel_id) {
                     DB::disconnect();
@@ -98,12 +99,13 @@ class NovelDetail extends Command
                 }
                 DB::disconnect();
                 sleep($this->sleep_seconds);
+            }catch(\Exception $e){
+                DB::disconnect();
+                $message = '更新出错：'.$e->getFile().$e->getLine().':'.$e->getMessage();
+                PS::myLog($message,'logs/daemons/novel_detail/','error');
             }
-        }catch(\Exception $e){
-            DB::disconnect();
-            $message = '更新出错：'.$e->getFile().$e->getLine().':'.$e->getMessage();
-            PS::myLog($message,'logs/daemons/novel_detail/','error');
         }
+        
         
     }
 

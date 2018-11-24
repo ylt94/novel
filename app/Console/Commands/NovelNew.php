@@ -88,8 +88,9 @@ class NovelNew extends Command
         */
         Process::where('type',Process::NOVEL_NEW)->update(['pid'=>getmypid()]);
        
-        try{
-            while(true){
+        
+        while(true){
+            try{
                 $urls = ReptilianAddress::get();
                 foreach($urls as $item){
                     $result = $this->checkChannel($item->site_id,$item->url);
@@ -99,13 +100,14 @@ class NovelNew extends Command
                 DB::disconnect();
                 $time = rand(1200,3600);
                 $sleep_seconds = ($time%2) ? ($this->sleep_seconds+$time) : ($this->sleep_seconds-$time);
-                sleep($sleep_seconds);      
-            }
-        }catch(\Exception $e){
-            DB::disconnect();
-            $message = '更新出错：'.$e->getFile().$e->getLine().':'.$e->getMessage();
-            PS::myLog($message,'logs/daemons/novel_new/','error');
+                sleep($sleep_seconds); 
+            }catch(\Exception $e){
+                DB::disconnect();
+                $message = '更新出错：'.$e->getFile().$e->getLine().':'.$e->getMessage();
+                PS::myLog($message,'logs/daemons/novel_new/','error');
+            }     
         }
+        
 
     }
 

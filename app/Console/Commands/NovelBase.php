@@ -84,8 +84,9 @@ class NovelBase extends Command
         * 处理业务代码
         */
         Process::where('type',Process::NOVEL_BASE)->update(['pid'=>getmypid()]);
-        try{
-            while(true){
+        
+        while(true){
+            try{
                 $time = time()-$this->update_seconds;
                 $time = date('Y-m-d H:i:s',$time);
                 $novels = NovelBaseModel::where('last_update','<=',$time)->orderBy('created_at','asc')->get();
@@ -100,12 +101,13 @@ class NovelBase extends Command
                 }
                 DB::disconnect();
                 sleep($this->sleep_seconds);
+            }catch(\Exception $e){
+                DB::disconnect();
+                $message = '更新出错：'.$e->getFile().$e->getLine().':'.$e->getMessage();
+                PS::myLog($message,'logs/daemons/novel_base/','error');
             }
-        }catch(\Exception $e){
-            DB::disconnect();
-            $message = '更新出错：'.$e->getFile().$e->getLine().':'.$e->getMessage();
-            PS::myLog($message,'logs/daemons/novel_base/','error');
         }
+        
 
     }
 
