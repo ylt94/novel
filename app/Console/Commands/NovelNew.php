@@ -89,10 +89,11 @@ class NovelNew extends Command
         Process::where('type',Process::NOVEL_NEW)->update(['pid'=>getmypid()]);
        
         try{
-            $urls = ReptilianAddress::get();
             while(true){
+                $urls = ReptilianAddress::get();
                 foreach($urls as $item){
-                    $rsult = $this->checkChannel($item->site_id,$item->url);
+                    $this->info($item->url);
+                    $result = $this->checkChannel($item->site_id,$item->url);
                     DB::disconnect();
                     sleep(rand(10,100));
                 }
@@ -128,16 +129,18 @@ class NovelNew extends Command
     }
 
     public function checkChannel($site_id,$url){
+        $result = false;
         switch($site_id){
             case Sites::BIQU:
-                BiQuService::reptilianPageNovel($url);
+                $result = BiQuService::reptilianPageNovel($url);
                 break;
             case Sites::QIDIAN:
-                QiDianService::getNewNovels($page_url);
+                $result = QiDianService::getNewNovels($page_url);
                 break;
             default:
                 break;
         }
+        return $result;
     }   
 
     
