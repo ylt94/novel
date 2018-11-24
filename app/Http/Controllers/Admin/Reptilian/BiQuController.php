@@ -9,8 +9,6 @@ use App\Services\Reptilian\BiQuService;
 use App\Services\Novel\NovelService;
 use App\Models\NovelContent;
 use App\Models\NovelDetail;
-use App\Services\RedisService;
-use App\Services\Reptilian\QiDianService;
 
 class BiQuController extends Controller{
 
@@ -49,34 +47,7 @@ class BiQuController extends Controller{
 
 
     public function test(){
-        // $search = [
-        //     'novel_id' => 183,
-        //     'is_update' => 0
-        // ];
-        // $novel_detail_ids = NovelDetail::where($search)->orderBy('id','asc')->pluck('id')->all();
-        // if(!$novel_detail_ids){
-        //     return true;
-        // }
-
-        // foreach($novel_detail_ids as $val){
-        //     RedisService::setNovelDetailId($val);
-        // }
-        // return 1;
-        
-        // echo 1;
-        // fastcgi_finish_request();
-        // set_time_limit(0);
-        // while(true){
-        //     $detail_id = RedisService::getNovelDetailId();
-        //     if(!$detail_id){
-        //         echo 1;
-        //         break;
-        //     }
-        //     BiQuService::updateChapterContent($detail_id);
-
-        //    echo 1;
-        // }
-        dd(BiQuService::updateDetail(181));
+        BiQuService::reptilianPageNovel('http://www.biquge.com.tw/');
     }
 
 }

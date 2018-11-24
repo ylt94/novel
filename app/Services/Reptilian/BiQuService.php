@@ -170,7 +170,7 @@ class BiQuService extends BaseService{
         ];
         $result = QueryList::html($html)->rules($rules)->query()->getData();
         if(!$result){
-            $msg = var_export($result,true).'没有获取到内容';
+            $msg = $url.':'.var_export($result,true).'没有获取到内容';
             PS::myLog($msg,'logs/reptilian/biqu');
             return false;
         }
@@ -178,7 +178,12 @@ class BiQuService extends BaseService{
         $result['author'] = explode('：',$result['author'])[1];
         $result['last_update']  = explode('：',$result['last_update'])[1];
         $result['last_chapter'] = explode('：',$result['last_chapter'])[1];
-         
+        
+        $check = NovelBase::where('title',$result['title'])->where('author',$result['author'])->first();
+        if($check){
+            static::addError('该小说已存在',-1);
+            return false;
+        }
         
         $novel = new NovelBase();
         $novel->title = $result['title'];
@@ -401,4 +406,45 @@ class BiQuService extends BaseService{
         }
         return $reutrn_content ? $insert_data['content'] :true;
     }
-}
+
+
+    /**
+     * 爬取网站页面的小说
+     */
+    public static function reptilianPageNovel($url){
+
+        if(!$url){
+            static::addError('参不完整',-1);
+            return false;
+        }
+        $rules = [
+            'href'=> array('a','href')
+        ];
+        $result = PublicService::getDataFromQueryList(static::BIQU_BASE_URL,$rules);
+        $novel_hrefs = [];
+        foreach(dataYieldRange($result) as $item){
+            $href = $item['href'];
+            //去掉内容页
+            $content_search = strpos($href,'html');
+            if($content_search){
+                continue;
+            }
+
+            //去掉其他页面
+            $href_arr = array_reverse(explode('/',$href));
+            foreach($href_arr as $val){
+                if(!$val){
+                    continue;
+                }
+                if((int)$val){
+                    array_push($novel_hrefs,$href);
+                }
+            };
+            
+        }
+        foreach(dataYieldRange($novel_hrefs) as $href){
+            $result = self::getNovelBase($href);
+        }
+        return true;
+    }
+}   

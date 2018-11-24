@@ -8,12 +8,14 @@ use DB;
 use App\Services\RedisService;
 use App\Services\ProcessService;
 use App\Services\Reptilian\QiDianService;
+use App\Services\Reptilian\BiQuService;
 use App\Services\Reptilian\PublicService;
 use App\Services\PublicService as PS;
 
 use App\Models\NovelBase as NovelBaseModel;
 use App\Models\Sites;
 use App\Models\Process;
+use App\Models\ReptilianAddress;
 
 class NovelNew extends Command
 {
@@ -85,28 +87,19 @@ class NovelNew extends Command
         * 处理业务代码
         */
         Process::where('type',Process::NOVEL_NEW)->update(['pid'=>getmypid()]);
-        $url = env('QIDIAN_NEW_NOVELS_URL');
-        $max_page = env('QIDIAN_NEW_NOVELS_PAGES');
-        $page = 1;
+       
         try{
+            $urls = ReptilianAddress::get();
             while(true){
-                $page_url = $url.$page;
-                $this->info('开始抓取第'.$page.'页数据');
-                QiDianService::getNewNovels($page_url);
-                DB::disconnect();
-                $page++;
-                if($page > $max_page){
-                    $page = 1;
-                    $time = PublicService::createRandomNumber(1200,3600);
-                    $sleep_seconds = ($time%2) ? ($this->sleep_seconds+$time) : ($this->sleep_seconds-$time);
-                    $this->info('正在睡眠:'.$sleep_seconds.'秒');
-                    sleep($sleep_seconds);
-                }else{
-                    $time = PublicService::createRandomNumber(10,100);
-                    $this->info('正在睡眠:'.$time.'秒');
-                    sleep($time); 
+                foreach($urls as $item){
+                    $rsult = $this->checkChannel($item->site_id,$item->url);
+                    DB::disconnect();
+                    sleep(rand(10,100));
                 }
-                
+                DB::disconnect();
+                $time = rand(1200,3600);
+                $sleep_seconds = ($time%2) ? ($this->sleep_seconds+$time) : ($this->sleep_seconds-$time);
+                sleep($time);      
             }
         }catch(\Exception $e){
             DB::disconnect();
@@ -133,6 +126,19 @@ class NovelNew extends Command
         return $res;
 
     }
+
+    public function checkChannel($site_id,$url){
+        switch($site_id){
+            case Sites::BIQU:
+                BiQuService::reptilianPageNovel($url);
+                break;
+            case Sites::QIDIAN:
+                QiDianService::getNewNovels($page_url);
+                break;
+            default:
+                break;
+        }
+    }   
 
     
 }
