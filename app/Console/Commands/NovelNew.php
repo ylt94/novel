@@ -92,7 +92,6 @@ class NovelNew extends Command
             while(true){
                 $urls = ReptilianAddress::get();
                 foreach($urls as $item){
-                    $this->info($item->url);
                     $result = $this->checkChannel($item->site_id,$item->url);
                     DB::disconnect();
                     sleep(rand(10,100));
