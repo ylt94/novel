@@ -53,7 +53,7 @@ class NovelNew extends Command
     {   
         
         $start = $this->argument('start');
-        $this->info(111111);
+
         //关闭守护进程
         if(!$start){
             $res = $this->killProcess();
@@ -64,14 +64,14 @@ class NovelNew extends Command
             $this->info($action_msg);
             exit(0);
         }
-        $this->info(222222222222);
+
         //检查有无此类程序的后台进程
         $process = ProcessService::checkProcess(Process::NOVEL_NEW);
         if(!$process){
             $this->error(ProcessService::getLastError());
             exit;
         }
-        $this->info(333333333333);
+
         //守护进程
         $daemon_res = ProcessService::Daemon();
         if(!$daemon_res){
@@ -79,7 +79,7 @@ class NovelNew extends Command
             $this->error(ProcessService::getLastError());
             exit;
         }
-        $this->info(4444444444);
+
         //配置
         $this->update_seconds = $process->update_time;
         $this->sleep_seconds = $process->sleep_time;
@@ -87,11 +87,10 @@ class NovelNew extends Command
         * 处理业务代码
         */
         Process::where('type',Process::NOVEL_NEW)->update(['pid'=>getmypid()]);
-        $this->info(5555555555);
+       
         try{
             while(true){
-                $this->info(666666666);
-                $urls = ReptilianAddress::get();$this->info($urls);$this->info(777777777);
+                $urls = ReptilianAddress::get();
                 foreach($urls as $item){
                     $this->info($item->url);
                     $result = $this->checkChannel($item->site_id,$item->url);
