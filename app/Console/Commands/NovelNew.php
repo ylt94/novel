@@ -90,7 +90,7 @@ class NovelNew extends Command
        
         try{
             while(true){
-                $urls = ReptilianAddress::get();dd($urls);
+                $urls = ReptilianAddress::get();$this->info($urls);
                 foreach($urls as $item){
                     $this->info($item->url);
                     $result = $this->checkChannel($item->site_id,$item->url);
