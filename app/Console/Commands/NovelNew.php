@@ -90,7 +90,7 @@ class NovelNew extends Command
        
         try{
             while(true){
-                $urls = ReptilianAddress::get();
+                $urls = ReptilianAddress::get();dd($urls);
                 foreach($urls as $item){
                     $this->info($item->url);
                     $result = $this->checkChannel($item->site_id,$item->url);
@@ -100,7 +100,7 @@ class NovelNew extends Command
                 DB::disconnect();
                 $time = rand(1200,3600);
                 $sleep_seconds = ($time%2) ? ($this->sleep_seconds+$time) : ($this->sleep_seconds-$time);
-                sleep($time);      
+                sleep($sleep_seconds);      
             }
         }catch(\Exception $e){
             DB::disconnect();
