@@ -16,14 +16,14 @@ use App\Models\NovelDetail;
 use App\Models\Sites;
 use App\Models\Process;
 
-class NovelContentOne extends Command
+class NovelContentTwo extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'command:novel_content_one {start=1} {pid=0}';
+    protected $signature = 'command:novel_content_two {start=1} {pid=0}';
 
     /**
      * The console command description.
