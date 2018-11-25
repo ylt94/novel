@@ -100,6 +100,7 @@ class NovelDetail extends Command
                 DB::disconnect();
                 sleep($this->sleep_seconds);
             }catch(\Exception $e){
+                RedisService::setNovelId($novel_id);
                 DB::disconnect();
                 $message = '更新出错：'.$e->getFile().$e->getLine().':'.$e->getMessage();
                 PS::myLog($message,'logs/daemons/novel_detail/','error');
