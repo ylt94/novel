@@ -313,8 +313,11 @@ class BiQuService extends BaseService{
             ];
             array_push($insert_data,$insert_data_item);
         }
-        NovelDetail::insert($insert_data);
-
+        $insert = array_chunk($insert_data,50);
+        foreach($insert as $items){
+            NovelDetail::insert($items);
+        }
+        unset($insert_data);
         return true;
     }
 
