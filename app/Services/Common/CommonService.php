@@ -60,12 +60,12 @@ class CommonService extends BaseService{
     public static function recommend($novel_type){
         $search = [
             'is_hide' => 0,
-            'is_recommend' => 1
+            'is_recommend' => 1,
         ];
         if($novel_type){
             $search['type'] = $novel_type;
         }
-        $result = NovelBase::where($search)->select(
+        $result = NovelBase::where($search)->where('total_chapters','>',0)->select(
             'id',
             'title',
             'desc',
