@@ -80,16 +80,19 @@ class CommonService extends BaseService{
     }
 
     //热门
-    public static function orderCollection($novel_type){
+    public static function collection($novel_type){
         $search = [
             'is_hide' => 0,
             'is_recommend' => 0,
         ];
-
+        if($novel_type){
+            $search['type'] = $novel_type;
+        }
         $result = NovelBase::where($search)->select(
             'id',
             'title',
             'author',
+            'desc',
             'status',
             'words',
             'img_url'
@@ -98,17 +101,21 @@ class CommonService extends BaseService{
     }
 
     //点击量
-    public static function orderClick($novel_type){
+    public static function click($novel_type){
         $search = [
             'is_hide' => 0,
             'is_recommend' => 0,
         ];
+        if($novel_type){
+            $search['type'] = $novel_type;
+        }
 
         $result = NovelBase::where($search)->select(
             'id',
             'title',
             'author',
             'status',
+            'desc',
             'words',
             'img_url'
         )->orderBy('click_num','desc')->take(15)->get();
@@ -121,11 +128,15 @@ class CommonService extends BaseService{
             'is_hide' => 0,
             'is_recommend' => 0,
         ];
+        if($novel_type){
+            $search['type'] = $novel_type;
+        }
         $result = NovelBase::where($search)->select(
             'id',
             'title',
             'author',
             'status',
+            'desc',
             'words',
             'img_url'
         )->orderBy('recommend_num','desc')->take(15)->get();
@@ -134,16 +145,21 @@ class CommonService extends BaseService{
     }
 
     //最新更新
-    public static function orderNewUpdate($novel_type){
+    public static function newset($novel_type){
         $search = [
             'is_hide' => 0,
             'is_recommend' => 0,
         ];
+        if($novel_type){
+            $search['type'] = $novel_type;
+        }
+
         $result = NovelBase::where($search)->select(
             'id',
             'title',
             'author',
             'status',
+            'desc',
             'words',
             'img_url'
         )->orderBy('last_update','desc')->take(30)->get();
@@ -157,11 +173,15 @@ class CommonService extends BaseService{
             'is_hide' => 0,
             'is_recommend' => 0,
         ];
+        if($novel_type){
+            $search['type'] = $novel_type;
+        }
         $result = NovelBase::where($search)->select(
             'id',
             'title',
             'author',
             'status',
+            'desc',
             'words',
             'img_url'
         )->orderBy('created_at','desc')->take(30)->get();

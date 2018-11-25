@@ -216,7 +216,7 @@
                 </div>
                 <div class="search-params">
                     <div class="search-param"><a id='recommend' href="javascript:getNewByOrderType('recommend')">推荐</a></div>
-                    <div class="search-param"><a id='collection_num' href="javascript:getNewByOrderType('collection_num')">收藏</a></div>
+                    <div class="search-param"><a id='collection' href="javascript:getNewByOrderType('collection')">收藏</a></div>
                     <div class="search-param"><a id='newset' href="javascript:getNewByOrderType('newset')">更新</a></div>
                 </div>
             </div>
