@@ -239,6 +239,13 @@ class CommonService extends BaseService{
         //没有内容，抓取
         if(!$content && $detail->biqu_url){
             $content = BiQuService::getChapterContent($detail->biqu_url);
+            if($detail->is_update){
+                $insert_data = [
+                    'capter_id' => $id,
+                    'content' => $content,
+                ];
+                NovelContent::create($insert_data);
+            }
         }
         if(!$content){
             static::addError('该章节不存在或已被删除',-1);
