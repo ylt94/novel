@@ -83,6 +83,7 @@ class NovelContentOne extends Command
                 DB::disconnect();
                 sleep(1);
             }catch(\Exception $e){
+                RedisService::setNovelDetailId($detail_id);
                 DB::disconnect();
                 $message = '更新出错：'.$e->getFile().$e->getLine().':'.$e->getMessage();
                 PS::myLog($message,'logs/daemons/novel_content/','error');
