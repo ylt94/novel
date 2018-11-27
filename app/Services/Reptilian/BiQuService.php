@@ -274,12 +274,12 @@ class BiQuService extends BaseService{
         // $result = $ql->get($url)
         //             ->query()
         //             ->getData();
-        $result = mb_convert_encoding($result[0]['content'],'UTF-8','GBK');
-        if(!$result){
+        if(!$result || !$result[0] || !$result[0]['content']){
             $error = '小说url:'.$url.'未获取到内容';
             PS::myLog($error,'logs/reptilian/biqu','error');
             return false;
         }
+        $result = mb_convert_encoding($result[0]['content'],'UTF-8','GBK');
 
         return $result;
     }
