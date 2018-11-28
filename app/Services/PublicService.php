@@ -36,7 +36,7 @@ class PublicService extends BaseService {
         if (!in_array($log_type,$log_types)) {
             return false;
         }
-        $path = rtrim($path,'/').'/'.'.log';
+        $path = rtrim($path,'/').'/'.'log'.'.log';
         \Log::useDailyFiles(storage_path($path));
         \Log::$log_type($msg);
     }
