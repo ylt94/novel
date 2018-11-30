@@ -36,7 +36,7 @@
                 ];
             }
             $ql = QueryList::rules($rules);
-            $data = $ql->$type($url)->query()->getData();
+            $data = $ql->$type($url,[],$http)->query()->getData();
             $ql->destruct();
             return $data;
         }
