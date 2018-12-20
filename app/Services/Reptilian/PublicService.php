@@ -8,6 +8,7 @@
 
     use App\Models\NovelDetail;
     use App\Models\NovelBase;
+    use App\Models\AgentIp;
 
     use App\Services\BaseService;
     use App\Services\PublicService as PS;
@@ -21,9 +22,9 @@
             }
             $http = [];
             if($use_agent){
-                //$agent = self::getFreeIp();
-                //$agent_url = strtolower($agent['agent_type']).'://'.$agent['agent_ip'].':'.$agent['agent_port'];
-                $agent_url = 'http://117.191.11.80:8080';
+                $agent = self::getAgentIp();
+                $agent_url = $agent['agent_type'].'://'.$agent['agent_ip'].':'.$agent['agent_port'];
+                //$agent_url = 'http://117.191.11.80:8080';
                 $http = [
                     // 设置代理
                     'proxy' => $agent_url,//http://222.141.11.17:8118',
@@ -36,10 +37,34 @@
                     ]
                 ];
             }
-            $ql = QueryList::rules($rules);
-            $data = $ql->$type($url,[],$http)->query()->getData();
+            try{
+                $ql = QueryList::rules($rules);
+                $data = $ql->$type($url,[],$http)->query()->getData();
+            }catch(\Exception $e){
+                
+                $error = $e->getMessage();
+                $errorcode = self::quertListErrorHandle($error);
+                if($errorcode == 521){
+                    self::changeAgentIp();
+                }
+                return ['error_msg' =>$error,'http_code' => $errorcode,'data' => false];
+            }
             $ql->destruct();
-            return $data;
+            return ['http_code' => 200,'data' => $data];
+        }
+
+        /**
+         * querylist 错误处理
+         */
+        public static function quertListErrorHandle($error_msg){
+            $http_code = 0;
+            $http_code = strpos($error,'404') === false ? 0 : 404;
+            $http_code = strpos($error,'521') === false ? 0 : 521;
+            if($http_code){
+                return $error_msg;
+            }
+
+            return $http_code;
         }
 
         //二次处理网页信息
@@ -82,12 +107,12 @@
         //获取网络空闲代理Ip//http://www.xicidaili.com/nn/
         public static function getFreeIp(){
             
-            // $agent_type = Cache::get('agent_type');
-            // $agent_ip = Cache::get('agent_ip');
-            // $agent_port = Cache::get('agent_port');
-            // if($agent_type && $agent_ip && $agent_port){
-            //     return ['agent_type' => $agent_type,'agent_ip' => $agent_ip ,'agent_port' => $agent_port];
-            // }
+            $agent_type = Cache::get('agent_type');
+            $agent_ip = Cache::get('agent_ip');
+            $agent_port = Cache::get('agent_port');
+            if($agent_type && $agent_ip && $agent_port){
+                return ['agent_type' => $agent_type,'agent_ip' => $agent_ip ,'agent_port' => $agent_port];
+            }
 
             
             $resuorce_url = 'http://www.xicidaili.com/nn/';
@@ -124,6 +149,45 @@
 
             return ['agent_type' => $agent_type,'agent_ip' => $agent_ip ,'agent_port' => $agent_port];
             
+        }
+
+        /**
+         * 获取存储的代理ip
+         */
+        public static function getAgentIp(){
+            $agent_type = Cache::get('agent_type');
+            $agent_ip = Cache::get('agent_ip');
+            $agent_port = Cache::get('agent_port');
+            if($agent_type && $agent_ip && $agent_port){
+                return ['agent_type' => $agent_type,'agent_ip' => $agent_ip ,'agent_port' => $agent_port];
+            }
+
+            $agentip = AgentIp::where('is_available',1)->orderBy('id','asc')->first();
+            if(!$agentip){
+                static::addError('没有可用代理ip',-1);
+                return false;
+            }
+            Cache::put('agent_ip_id',$agentip->id,120);
+            Cache::put('agent_ip',$agentip->agent_ip,120);
+            Cache::put('agent_port',$agentip->agent_port,120);
+            Cache::put('agent_type',$agentip->agent_type,120);
+
+            return ['agent_type' => $$agentip->agent_type,'agent_ip' => $agentip->agent_ip ,'agent_port' => $agentip->agent_port];
+        }
+
+        /**
+         * 切换其他代理ip
+         */
+        public static function changeAgentIp(){
+            $id = $agent_type = Cache::get('agent_ip_id');
+            AgentIp::where('id',$id)->update(['is_available' => 0]);
+
+            Cache::forget('agent_ip');
+            Cache::forget('agent_port');
+            Cache::forget('agent_type');
+            Cache::forget('agent_ip_id');
+            
+            return self::getAgentIp();
         }
 
         /**

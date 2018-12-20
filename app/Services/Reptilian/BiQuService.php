@@ -142,10 +142,11 @@ class BiQuService extends BaseService{
             'img_url' => array('#sidebar>#fmimg>img','src'),
         ];
         $html = PublicService::getDataFromQueryList($url,$rules);
-        if(!$html){
+        if(!$html || $html['http_code'] != 200){
+            PS::myLog('基本信息更新失败：'.$html['error_msg'],'logs/reptilian/novel_base');
             return false;
         }
-
+        $html = $html['data'];
         // $rules = [
         //     'all'=> array('#maininfo>#info','html'),
         //     'type' => array('.con_top','text'),
@@ -171,7 +172,7 @@ class BiQuService extends BaseService{
         $result = QueryList::html($html)->rules($rules)->query()->getData();
         if(!$result){
             $msg = $url.':'.var_export($result,true).'没有获取到内容';
-            PS::myLog($msg,'logs/reptilian/biqu');
+            PS::myLog($msg,'logs/reptilian/novel_base');
             return false;
         }
         $result = $result[0];
@@ -211,6 +212,11 @@ class BiQuService extends BaseService{
             'href' => array('dd>a','href')
         ];
         $result = PublicService::getDataFromQueryList($url,$rules);
+        if(!$result || $result['http_code'] != 200){
+            PS::myLog('基本信息更新失败：'.$result['error_msg'],'logs/reptilian/novel_detail');
+            return false;
+        }
+        $result = $result['data'];
         // $ql = QueryList::rules($rules);
         // $result = $ql->get($url)
         //             ->query()
@@ -270,6 +276,11 @@ class BiQuService extends BaseService{
             'content' => array('#content','html'),
         ];
         $result = PublicService::getDataFromQueryList($url,$rules);
+        if(!$result || $result['http_code'] != 200){
+            PS::myLog('基本信息更新失败：'.$result['error_msg'],'logs/reptilian/novel_content');
+            return false;
+        }
+        $result = $result['data'];
         // $ql = QueryList::rules($rules);
         // $result = $ql->get($url)
         //             ->query()
@@ -424,6 +435,12 @@ class BiQuService extends BaseService{
             'href'=> array('a','href')
         ];
         $result = PublicService::getDataFromQueryList(static::BIQU_BASE_URL,$rules);
+        if(!$result || $result['http_code'] != 200){
+            PS::myLog('基本信息更新失败：'.$result['error_msg'],'logs/reptilian/novel_content');
+            return false;
+        }
+        $result = $result['data'];
+        
         $novel_hrefs = [];
         foreach(dataYieldRange($result) as $item){
             $href = $item['href'];
