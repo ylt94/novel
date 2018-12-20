@@ -47,7 +47,7 @@ class BiQuController extends Controller{
 
 
     public function test(){
-        BiQuService::getChapterContent('http://www.biquyun.com/14_14055/9198191.html');
+        BiQuService::getNovelBase('http://www.biquge.com.tw/19_19757/');
     }
 
 }
