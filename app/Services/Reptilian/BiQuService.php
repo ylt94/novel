@@ -290,7 +290,7 @@ class BiQuService extends BaseService{
             PS::myLog($error,'logs/reptilian/biqu','error');
             return false;
         }
-        $result = mb_convert_encoding($result[0]['content'],'UTF-8','GBK');dd($result);
+        $result = mb_convert_encoding($result[0]['content'],'UTF-8','GBK');
 
         return $result;
     }
@@ -440,7 +440,7 @@ class BiQuService extends BaseService{
             return false;
         }
         $result = $result['data'];
-        
+
         $novel_hrefs = [];
         foreach(dataYieldRange($result) as $item){
             $href = $item['href'];
