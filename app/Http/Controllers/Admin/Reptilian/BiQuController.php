@@ -46,7 +46,8 @@ class BiQuController extends Controller{
     }
 
 
-    public function test(){
+    public function test(Request $requset){
+        dd($requset->getClientIp());
         BiQuService::getNovelBase('http://www.biquge.com.tw/19_19757/');
     }
 
