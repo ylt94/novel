@@ -9,6 +9,7 @@ use App\Services\Reptilian\BiQuService;
 use App\Services\Novel\NovelService;
 use App\Models\NovelContent;
 use App\Models\NovelDetail;
+use App\Services\PublicService as PS;
 
 class BiQuController extends Controller{
 
@@ -47,7 +48,9 @@ class BiQuController extends Controller{
 
 
     public function test(Request $requset){
-        dd($requset->getClientIp());
+        $error = 'ip:'.$requset->getClientIp();
+        PS::myLog($error,'logs/reptilian/biqu','error');
+        PublicService::getDataFromQueryList('http://120.78.183.163/api/test',[]);
         BiQuService::getNovelBase('http://www.biquge.com.tw/19_19757/');
     }
 
