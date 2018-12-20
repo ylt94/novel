@@ -141,19 +141,19 @@ class BiQuService extends BaseService{
             'desc' => array('#intro>p','text'),
             'img_url' => array('#sidebar>#fmimg>img','src'),
         ];
-        $html = PublicService::getDataFromQueryList($url,$rules);
+        $html = PublicService::getDataFromQueryList($url,$rules);dd($html);
         if(!$html){
             return false;
         }
 
-        $rules = [
-            'all'=> array('#maininfo>#info','html'),
-            'type' => array('.con_top','text'),
-            'desc' => array('#intro>p','text'),
-            'img_url' => array('#sidebar>#fmimg>img','src'),
-        ];
-        $html = PublicService::getDataFromQueryList($url,$rules);
-
+        // $rules = [
+        //     'all'=> array('#maininfo>#info','html'),
+        //     'type' => array('.con_top','text'),
+        //     'desc' => array('#intro>p','text'),
+        //     'img_url' => array('#sidebar>#fmimg>img','src'),
+        // ];
+        // $html = PublicService::getDataFromQueryList($url,$rules);
+        
         $desc = mb_convert_encoding($html[0]['desc'],'UTF-8','GBK');
         $img_url = self::BIQU_BASE_URL.$html[0]['img_url'];
         

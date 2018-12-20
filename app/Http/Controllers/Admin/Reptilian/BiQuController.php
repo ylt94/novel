@@ -47,7 +47,7 @@ class BiQuController extends Controller{
 
 
     public function test(){
-        BiQuService::reptilianPageNovel('http://www.biquge.com.tw/');
+        BiQuService::getNovelBase('http://www.biquyun.com/14_14055/');
     }
 
 }
