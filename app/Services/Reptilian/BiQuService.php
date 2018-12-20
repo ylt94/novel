@@ -141,7 +141,7 @@ class BiQuService extends BaseService{
             'desc' => array('#intro>p','text'),
             'img_url' => array('#sidebar>#fmimg>img','src'),
         ];
-        $html = PublicService::getDataFromQueryList($url,$rules);dd($html);
+        $html = PublicService::getDataFromQueryList($url,$rules,false);
         if(!$html){
             return false;
         }
