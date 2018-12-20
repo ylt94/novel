@@ -49,7 +49,7 @@ class BiQuController extends Controller{
 
     public function test(Request $requset){
         $error = 'ip:'.$requset->getClientIp();
-        PS::myLog($error,'logs/reptilian/biqu','error');
+        PS::myLog($error,'logs/reptilian/biqu');exit;
         PublicService::getDataFromQueryList('http://120.78.183.163/api/test',[]);
         BiQuService::getNovelBase('http://www.biquge.com.tw/19_19757/');
     }
