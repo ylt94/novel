@@ -279,7 +279,7 @@ class BiQuService extends BaseService{
             PS::myLog($error,'logs/reptilian/biqu','error');
             return false;
         }
-        $result = mb_convert_encoding($result[0]['content'],'UTF-8','GBK');
+        $result = mb_convert_encoding($result[0]['content'],'UTF-8','GBK');dd($result);
 
         return $result;
     }
