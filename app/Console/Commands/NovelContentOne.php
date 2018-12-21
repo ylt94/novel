@@ -81,7 +81,7 @@ class NovelContentOne extends Command
                 self::checkChannel($detail_id);
 
                 DB::disconnect();
-                sleep(3);
+                sleep(720);
             }catch(\Exception $e){
                 RedisService::setNovelDetailId($detail_id);
                 DB::disconnect();
