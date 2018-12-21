@@ -22,9 +22,9 @@
             }
             $http = [];
             if($use_agent){
-                $agent = self::getAgentIp();
-                $agent_url = $agent['agent_type'].'://'.$agent['agent_ip'].':'.$agent['agent_port'];
-                //$agent_url = 'http://117.191.11.80:8080';
+                //$agent = self::getAgentIp();
+                //$agent_url = $agent['agent_type'].'://'.$agent['agent_ip'].':'.$agent['agent_port'];
+                $agent_url = 'http://211.152.33.24:51778';
                 $http = [
                     // 设置代理
                     'proxy' => $agent_url,//http://222.141.11.17:8118',
@@ -44,7 +44,8 @@
                 
                 $error = $e->getMessage();
                 $errorcode = self::quertListErrorHandle($error);
-                if($errorcode == 521){
+                $change_agent_ip_code = [503,521];
+                if(in_array($errorcode,$change_agent_ip_code)){
                     self::changeAgentIp();
                 }
                 return ['error_msg' =>$error,'http_code' => $errorcode,'data' => false];
@@ -56,11 +57,12 @@
         /**
          * querylist 错误处理
          */
-        public static function quertListErrorHandle($error_msg){
+        public static function quertListErrorHandle($error_msg){dd($error_msg);
             $http_code = 0;
-            $http_code = strpos($error,'404') === false ? 0 : 404;
-            $http_code = strpos($error,'521') === false ? 0 : 521;
-            if($http_code){
+            $http_code = strpos($error_msg,'404') === false ? 0 : 404;
+            $http_code = strpos($error_msg,'521') === false ? 0 : 521;
+            $http_code = strpos($error_msg,'503') === false ? 0 : 503;
+            if(!$http_code){
                 return $error_msg;
             }
 
@@ -172,7 +174,7 @@
             Cache::put('agent_port',$agentip->agent_port,120);
             Cache::put('agent_type',$agentip->agent_type,120);
 
-            return ['agent_type' => $$agentip->agent_type,'agent_ip' => $agentip->agent_ip ,'agent_port' => $agentip->agent_port];
+            return ['agent_type' => $agentip->agent_type,'agent_ip' => $agentip->agent_ip ,'agent_port' => $agentip->agent_port];
         }
 
         /**

@@ -141,7 +141,7 @@ class BiQuService extends BaseService{
             'desc' => array('#intro>p','text'),
             'img_url' => array('#sidebar>#fmimg>img','src'),
         ];
-        $html = PublicService::getDataFromQueryList($url,$rules);
+        $html = PublicService::getDataFromQueryList($url,$rules,false);
         if(!$html || $html['http_code'] != 200){
             PS::myLog('基本信息更新失败：'.$html['error_msg'],'logs/reptilian/novel_base');
             return false;
@@ -211,7 +211,7 @@ class BiQuService extends BaseService{
             'title' => array('dd>a','text'),
             'href' => array('dd>a','href')
         ];
-        $result = PublicService::getDataFromQueryList($url,$rules);
+        $result = PublicService::getDataFromQueryList($url,$rules,false);
         if(!$result || $result['http_code'] != 200){
             PS::myLog('基本信息更新失败：'.$result['error_msg'],'logs/reptilian/novel_detail');
             return false;
@@ -275,7 +275,7 @@ class BiQuService extends BaseService{
         $rules = [
             'content' => array('#content','html'),
         ];
-        $result = PublicService::getDataFromQueryList($url,$rules);
+        $result = PublicService::getDataFromQueryList($url,$rules,false);
         if(!$result || $result['http_code'] != 200){
             PS::myLog('基本信息更新失败：'.$result['error_msg'],'logs/reptilian/novel_content');
             return false;
@@ -434,7 +434,7 @@ class BiQuService extends BaseService{
         $rules = [
             'href'=> array('a','href')
         ];
-        $result = PublicService::getDataFromQueryList(static::BIQU_BASE_URL,$rules);
+        $result = PublicService::getDataFromQueryList(static::BIQU_BASE_URL,$rules,false);
         if(!$result || $result['http_code'] != 200){
             PS::myLog('基本信息更新失败：'.$result['error_msg'],'logs/reptilian/novel_content');
             return false;
