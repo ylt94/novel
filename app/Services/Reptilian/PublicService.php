@@ -181,7 +181,7 @@
          * 切换其他代理ip
          */
         public static function changeAgentIp(){
-            $id = $agent_type = Cache::get('agent_ip_id');
+            $id = Cache::get('agent_ip_id');
             AgentIp::where('id',$id)->update(['is_available' => 0]);
 
             Cache::forget('agent_ip');
