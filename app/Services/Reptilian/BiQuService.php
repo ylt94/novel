@@ -397,7 +397,7 @@ class BiQuService extends BaseService{
         $insert_data['content'] = self::getChapterContent($chapter->biqu_url);
         if(!$insert_data['content']){
             $error = '小说章节:'.$chapter_id.'更新失败:没有抓取到具体内容';
-            PS::myLog($error,'logs/reptilian/qidian','error');
+            PS::myLog($error,'logs/reptilian/biqu','error');
             return false;
         }
         //获取小说字数
