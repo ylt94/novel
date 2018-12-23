@@ -23,7 +23,7 @@
             $http = [];
             if($use_agent){
                 //$agent = self::getAgentIp();
-                //$agent_url = $agent['agent_type'].'://'.$agent['agent_ip'].':'.$agent['agent_port'];
+                //$agent_url = $agent['agent_ip'].':'.$agent['agent_port'];
                 $agent_url = '117.191.11.80:8080';
                 $http = [
                     // 设置代理
