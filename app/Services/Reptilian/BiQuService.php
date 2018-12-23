@@ -275,7 +275,7 @@ class BiQuService extends BaseService{
         $rules = [
             'content' => array('#content','html'),
         ];
-        $result = PublicService::getDataFromQueryList($url,$rules,false);
+        $result = PublicService::getDataFromQueryList($url,$rules,true);
         if(!$result || $result['http_code'] != 200){
             PS::myLog('基本信息更新失败：'.$result['error_msg'],'logs/reptilian/novel_content');
             return false;
