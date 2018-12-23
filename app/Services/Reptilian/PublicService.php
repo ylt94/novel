@@ -57,7 +57,7 @@
         /**
          * querylist 错误处理
          */
-        public static function quertListErrorHandle($error_msg){dd($error_msg);
+        public static function quertListErrorHandle($error_msg){
             $http_code = 0;
             $http_code = strpos($error_msg,'404') === false ? 0 : 404;
             $http_code = strpos($error_msg,'521') === false ? 0 : 521;
