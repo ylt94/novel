@@ -22,9 +22,9 @@
             }
             $http = [];
             if($use_agent){
-                //$agent = self::getAgentIp();
-                //$agent_url = $agent['agent_ip'].':'.$agent['agent_port'];
-                $agent_url = '117.191.11.80:8080';
+                $agent = self::getAgentIp();
+                $agent_url = $agent['agent_ip'].':'.$agent['agent_port'];
+                //$agent_url = '117.191.11.80:8080';
                 $http = [
                     // 设置代理
                     'proxy' => $agent_url,//http://222.141.11.17:8118',
