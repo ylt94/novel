@@ -141,7 +141,7 @@ class BiQuService extends BaseService{
             'desc' => array('#intro>p','text'),
             'img_url' => array('#sidebar>#fmimg>img','src'),
         ];
-        $html = PublicService::getDataFromQueryList($url,$rules,false);
+        $html = PublicService::getDataFromQueryList($url,$rules,true);
         if(!$html || $html['http_code'] != 200){
             PS::myLog('基本信息更新失败：'.$html['error_msg'],'logs/reptilian/novel_base');
             return false;
@@ -244,6 +244,11 @@ class BiQuService extends BaseService{
                 continue;
             }
             $insert_data['content'] = self::getChapterContent($item['biqu_url']);
+            if(is_bool($insert_data['content']) && $insert_data['content']){
+                $error = '小说章节:'.$item['id'].'更新失败:404';
+                PS::myLog($error,'logs/reptilian/qidian','error');
+                continue;
+            }
             if(!$insert_data['content']){
                 $error = '小说章节:'.$item['id'].'更新失败:没有抓取到具体内容';
                 PS::myLog($error,'logs/reptilian/qidian','error');
@@ -277,6 +282,9 @@ class BiQuService extends BaseService{
         ];
         $result = PublicService::getDataFromQueryList($url,$rules,true);
         if(!$result || $result['http_code'] != 200){
+            if($html['http_code'] != 404){
+                return true;
+            }
             PS::myLog('基本信息更新失败：'.$result['error_msg'],'logs/reptilian/novel_content');
             return false;
         }
@@ -285,7 +293,7 @@ class BiQuService extends BaseService{
         // $result = $ql->get($url)
         //             ->query()
         //             ->getData();
-        if(!$result || !$result[0] || !$result[0]['content']){
+        if(!$result || !isset($result[0]) || !isset($result[0]['content'])){
             $error = '小说url:'.$url.'未获取到内容';
             PS::myLog($error,'logs/reptilian/biqu','error');
             return false;
