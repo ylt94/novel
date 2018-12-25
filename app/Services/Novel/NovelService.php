@@ -130,13 +130,6 @@
         }
 
         /**
-         * 确定novel_base分表（5张表）
-         */
-        public static function ChoiceNovelBaseTable($novel_id){
-
-        }
-
-        /**
          * 确定分表
          */
         public static function ChoiceTable($id,$total_table,$namespace_prefix = ''){
