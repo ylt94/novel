@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin\Reptilian;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\services\Reptilian\PublicService;
+use App\Services\Reptilian\PublicService;
 use App\Services\Reptilian\BiQuService;
 use App\Services\Novel\NovelService;
 use App\Models\NovelContent;
