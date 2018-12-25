@@ -48,6 +48,8 @@ class BiQuController extends Controller{
 
 
     public function test(Request $requset){
+        $table = NovelService::ChoiceTable(232600,20,'NovelDetail\NovelDetail_');
+        dd(new $table);
         //$error = 'ip:'.$requset->getClientIp();
         //PS::myLog($error,'logs/reptilian/biqu');exit;
         $rules = [

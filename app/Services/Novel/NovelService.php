@@ -9,7 +9,7 @@
 
     use App\Models\NovelCategory;
     use App\Models\NovelBase;
-    use App\Models\NovelDetail;
+    use App\Models\NovelDetail_1;
     use App\Models\NovelContent;
 
 
@@ -128,4 +128,27 @@
             }
             return $chapter;
         }
-    }
+
+        /**
+         * 确定novel_base分表（5张表）
+         */
+        public static function ChoiceNovelBaseTable($novel_id){
+
+        }
+
+        /**
+         * 确定分表
+         */
+        public static function ChoiceTable($id,$total_table,$namespace_prefix = ''){
+            $namespace_prefix = 'App\Models\\'.$namespace_prefix;
+            if(!$id || !$total_table){
+                static::addError('参数不完整',-1);
+                return false;
+            }
+            $laset_two_num = substr((string)$id,-2);
+            $table_num = $laset_two_num%$total_table + 1;
+
+            $table = $namespace_prefix.$table_num;
+            return $table;
+        }
+    }   
