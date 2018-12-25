@@ -56,7 +56,7 @@ class BiQuController extends Controller{
             'desc' => array('#intro>p','text'),
             'img_url' => array('#sidebar>#fmimg>img','src'),
         ];
-        //dd(PublicService::getDataFromQueryList('http://www.biquge.com.tw/18_18820',$rules,true));
+        dd(PublicService::getDataFromQueryList('http://www.biquge.com.tw/18_18820',$rules,false));
         BiQuService::getNovelBase('http://www.biquge.com.tw/19_19757/');
     }
 
