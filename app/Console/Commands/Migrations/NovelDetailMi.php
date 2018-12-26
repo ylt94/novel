@@ -59,7 +59,7 @@ class NovelDetailMi extends Command
     /**
      * 迁移detail表
      */
-    public function detial($novel_id){
+    public function detail($novel_id){
 
         $novel_detail_table = NovelService::ChoiceTable($novel_id,$this->novel_detail_tables,'NovelDetail\NovelDetail_');
 
