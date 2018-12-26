@@ -14,14 +14,14 @@ use App\Models\NovelContent;
 use App\Models\Sites;
 use App\Models\Process;
 
-class Novels extends Command
+class NovelDetailMi extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'migration:novels';
+    protected $signature = 'migration:novel_detail';
 
     /**
      * The console command description.
@@ -33,7 +33,7 @@ class Novels extends Command
     protected $novel_base_tables = 1;
     protected $novel_detail_tables = 20;
     protected $novel_content_tables = 20;
-    protected $migration_page_num = 500;
+    protected $migration_page_num = 1000;
     /**
      * Create a new command instance.
      *
@@ -68,6 +68,7 @@ class Novels extends Command
         $pages = ceil($details/$this->migration_page_num);
         for($page = 1; $page <= $pages; $page++){
             $query = NovelDetail::where('novel_id',$novel_id)->select(
+                'id as old_id',
                 'site_resource',
                 'novel_id',
                 'is_free',
@@ -90,17 +91,9 @@ class Novels extends Command
                 $result = false;
                 $this->error('the migrate sql fail:'.$e->getMessage());
             }
-            
         }
 
         
-    }
-
-    /**
-     * 迁移content表
-     */
-    public function content($detail_id){
-
     }
 
     
