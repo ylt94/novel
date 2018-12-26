@@ -8,6 +8,7 @@ use DB;
 use App\Services\Novel\NovelService;
 use App\Services\PublicService;
 
+use App\Models\NovelBase;
 use App\Models\NovelDetail;
 use App\Models\NovelContent;
 
@@ -52,6 +53,7 @@ class NovelContentMi extends Command
         foreach( dataYieldRange($novels) as $novel){
             $this->content($novel->id);
         }
+        $this->info('success');
     }
 
     /**
@@ -59,18 +61,20 @@ class NovelContentMi extends Command
      */
     public function content($novel_id){
         $novel_detail_table = NovelService::ChoiceTable($novel_id,$this->novel_detail_tables,'NovelDetail\NovelDetail_');
-        $novel_content_table = NovelService::ChoiceTable($novel_id,$this->novel_detail_tables,'NovelContent\NovelContent_');
-
+        $novel_content_table = NovelService::ChoiceTable($novel_id,$this->novel_content_tables,'NovelContent\NovelContent_');
+        $this->info('migration novel id：'.$novel_id.'.......to the novel content:'.$novel_content_table);
         $page = 1;
-        $details = NovelDetail::count();
+        $details = $novel_detail_table::where('novel_id',$novel_id)->count();
+        $this->info('the novel has '.$details.' content records');
         $pages = ceil($details/$this->migration_page_num);
         for($page = 1; $page <= $pages; $page++){
             $query = $novel_detail_table::where('novel_id',$novel_id)->select(
+                'id',
                 'old_id',
                 'novel_id'
             )->orderBy('id','asc');
             $page_data = PublicService::Paginate($query,$page,$this->migration_page_num,true);
-            foreach($page_data as $item){
+            foreach($page_data['data'] as $item){
                 $content = NovelContent::where('capter_id',$item['old_id'])->select(
                     'capter_id',
                     'content',
@@ -86,8 +90,8 @@ class NovelContentMi extends Command
                         DB::commit();
                     }catch(\Exception $e){
                         DB::rollBack();
-                        break;
                         $this->error('the migrate sql fail:'.$e->getMessage());
+                        break;
                     }
                     
                 }

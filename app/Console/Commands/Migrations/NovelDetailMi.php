@@ -54,6 +54,7 @@ class NovelDetailMi extends Command
         foreach( dataYieldRange($novels) as $novel){
             $this->detail($novel->id);
         }
+        $this->info('迁移完成');
     }
 
     /**
@@ -62,7 +63,7 @@ class NovelDetailMi extends Command
     public function detail($novel_id){
 
         $novel_detail_table = NovelService::ChoiceTable($novel_id,$this->novel_detail_tables,'NovelDetail\NovelDetail_');
-
+        $this->info('正在迁移：'.$novel_id.'.......迁移目标表:'.$novel_detail_table);
         $page = 1;
         $details = NovelDetail::where('novel_id',$novel_id)->count();
         $pages = ceil($details/$this->migration_page_num);
