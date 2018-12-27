@@ -32,6 +32,6 @@ Route::get('test',function(){
     // $a = 1;
     // $b = $a+$a++;
     // echo $b;
-    return view('resume');
+    //return view('resume');
 });
 
