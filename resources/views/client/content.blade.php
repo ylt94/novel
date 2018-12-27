@@ -80,7 +80,7 @@
         </div>
     </div>
     <div class="load-more">
-        <button class="load-more-btn"><a href="/content/next/{{$id}}">下一章</a></button>
+        <button class="load-more-btn"><a href="/content/next/{{novel_id}}_{{$id}}">下一章</a></button>
     </div>
 </body>
 </html>

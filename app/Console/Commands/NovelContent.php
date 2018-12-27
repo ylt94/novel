@@ -85,20 +85,20 @@ class NovelContent extends Command
         
         while(true){
             try{
-                $detail_id = RedisService::getNovelDetailId();
-                if(!$detail_id){
+                $result = RedisService::getNovelDetailId();
+                if(!$result){
                     DB::disconnect();
                     sleep(3);
                     continue;
                 }
-                self::checkChannel($detail_id);
+                self::checkChannel($result);
 
                 DB::disconnect();
                 sleep($this->sleep_seconds);
             }catch(\Exception $e){
-                RedisService::setNovelDetailId($detail_id);
+                RedisService::setNovelDetailId($result);
                 DB::disconnect();
-                $message = '章节ID：'.$detail_id.'更新出错：'.$e->getFile().$e->getLine().':'.$e->getMessage();
+                $message = '章节ID：'.var_export($result,true).'更新出错：'.$e->getFile().$e->getLine().':'.$e->getMessage();
                 PS::myLog($message,'logs/daemons/novel_content/','error');
             }
         }
@@ -106,7 +106,7 @@ class NovelContent extends Command
         
     }
 
-    public static function checkChannel($detail_id){
+    public static function checkChannel($item){
         $result = false;
         // switch($novel_detail->site_resource){
         //     case Sites::QIDIAN:
@@ -118,7 +118,7 @@ class NovelContent extends Command
         // if(!$result){
         //     //$this->info('result-------:'.QiDianService::getLastError());
         // }
-        $result = BiQuService::updateChapterContent($detail_id);
+        $result = BiQuService::updateChapterContent($item);
         return $result; 
     }
 

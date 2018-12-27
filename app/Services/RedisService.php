@@ -23,17 +23,23 @@
 
 
         //设置detail
-        public static function setNovelDetailId($id){
+        public static function setNovelDetailId($item){
+            $item = json_encode($item);
             $key = self::$novel_detail_key;
 
-            Redis::lpush($key,$id);
+            Redis::lpush($key,$item);
         }
 
         //获取详情ID
         public static function getNovelDetailId(){
             $key = self::$novel_detail_key;
 
-            return Redis::rpop($key);
+            $result = Redis::rpop($key);
+            if($result){
+                $result = json_decode($result,true);
+            }
+
+            return $result;
         }
 
 

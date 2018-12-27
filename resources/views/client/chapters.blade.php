@@ -88,7 +88,7 @@
     <div class="head">目录</div>
     <div class="chapter">
         <div class="total">
-            <div class="total-chapters" style="font-weight: 700;">共534章</div>
+            <div class="total-chapters" style="font-weight: 700;">共{{count($chapters)}}章</div>
             <div style="display:block" id="chapters_orders_asc" class="chapters-order" onclick="chaptersOrder(1)">正序</div>
             <div style="display:none" id="chapters_orders_desc" class="chapters-order" onclick="chaptersOrder(2)">逆序</div>
         </div>
@@ -96,7 +96,7 @@
         <div class="chapters">
             @foreach($chapters as $chapter)
             <div class="chapter-item">
-                <a href="/content/{{$chapter['id']}}"><span stype="color:black;font-weight:500;">{{$chapter['title']}}</span></a>
+                <a href="/content/{{$chapter['novel_id']}}_{{$chapter['id']}}"><span stype="color:black;font-weight:500;">{{$chapter['title']}}</span></a>
             </div>
             @endforeach
             

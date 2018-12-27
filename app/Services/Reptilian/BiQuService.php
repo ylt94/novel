@@ -235,7 +235,10 @@ class BiQuService extends BaseService{
      * 更新小说章节内容(所有)
      * @param $chapters 需要更新的章节
      */
-    public static function updateChaptersContent($chapters){
+    public static function updateChaptersContent($novel_id,$chapters){
+
+        $novel_detail_table = NovelService::getNovelDetailByNovelId($item['novel_id']);
+        $novel_content_table = NovelService::getNovelContentByNovelId($item['novel_id']);
         foreach(dataYieldRange($chapters) as $item){
             $insert_data['capter_id'] = $item['id'];
             if(!$item['biqu_url']){
@@ -257,8 +260,8 @@ class BiQuService extends BaseService{
             if($insert_data['content']){
                 try{
                     DB::beginTransaction();
-                    NovelContent::create($insert_data);
-                    NovelDetail::where('id',$item['id'])->update(['is_update'=>1,'biqu_url' => $item['biqu_url']]);
+                    $novel_content_table::create($insert_data);
+                    $novel_detail_table::where('id',$item['id'])->update(['is_update'=>1,'biqu_url' => $item['biqu_url']]);
                     DB::commit();
                 }catch(\Exception $e){
                     DB::rollback();
@@ -315,6 +318,7 @@ class BiQuService extends BaseService{
         if (!$unupdate_chapters) {
             return true;
         }
+        $novel_detail_table = NovelService::getNovelDetailByNovelId($novel_id);
         $insert_data = [];
         $time = date('Y-m-d H:i:s',time());
         $day_time = date('Y-m-d',time());
@@ -334,7 +338,7 @@ class BiQuService extends BaseService{
         }
         $insert = array_chunk($insert_data,500);
         foreach($insert as $items){
-            NovelDetail::insert($items);
+            $novel_detail_table::insert($items);
         }
         unset($insert_data);
         return true;
@@ -383,11 +387,17 @@ class BiQuService extends BaseService{
      * 更新单个章节内容
      * @param $chapter_id 章节ID
      */
-    public static function updateChapterContent($chapter_id,$reutrn_content = false){
-        if(!$chapter_id){
+    public static function updateChapterContent($item,$reutrn_content = false){
+
+        if(!$item){
             return false;
         }
-        $chapter = NovelDetail::find($chapter_id);
+
+        $novel_detail_table = NovelService::getNovelDetailByNovelId($item['novel_id']);
+        $novel_content_table = NovelService::getNovelContentByNovelId($item['novel_id']);
+
+        $chapter_id = $item['detail_id'];
+        $chapter = $novel_detail_table::find($chapter_id);
         if(!$chapter || $chapter->is_update){
             return false;
         }
@@ -412,8 +422,8 @@ class BiQuService extends BaseService{
         $content_words = PublicService::getContentWords($insert_data['content']);
         DB::beginTransaction();
         try{
-            NovelContent::create($insert_data);
-            NovelDetail::where('id',$chapter_id)->update([
+            $novel_content_table::create($insert_data);
+            $novel_detail_table::where('id',$chapter_id)->update([
                 'is_update'=> 1,
                 'words' => $content_words,
             ]);

@@ -84,12 +84,17 @@ class IndexController extends Controller {
         return my_view('client.chapters',$result);
     }
 
-    public function novelContent($chapter_id){
-        if(!$chapter_id){
+    public function novelContent($ids){
+        if(!$ids){
             return ['status'=>0,'msg'=>'请求异常，请稍后再试'];
         }
 
-        $result = CommonService::novelContent($chapter_id);
+        $ids_arr = explode('_',$ids);
+        if(count($ids_arr) !=2){
+            return ['status'=>0,'msg'=>'请求异常，请稍后再试'];
+        }
+
+        $result = CommonService::novelContent($ids_arr[0],$ids_arr[1]);
         if(!$result){
             return ['status'=>0,'msg'=>'请求异常，请稍后再试'];
         }
@@ -99,12 +104,18 @@ class IndexController extends Controller {
     /**
      * 下一章
      */
-    public function nextContent($chapter_id){
-        if(!$chapter_id){
+    public function nextContent($ids){
+        if(!$ids){
             return ['status'=>0,'msg'=>'请求异常，请稍后再试'];
         }
+
+        $ids_arr = explode('_',$ids);
+        if(count($ids_arr) !=2){
+            return ['status'=>0,'msg'=>'请求异常，请稍后再试'];
+        }
+
         
-        $result = CommonService::nextContent($chapter_id);
+        $result = CommonService::nextContent($ids_arr[0],$ids_arr[1]);
         if(!$result){
             return ['status'=>0,'msg'=>'请求异常，请稍后再试'];
         }

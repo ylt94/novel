@@ -9,13 +9,13 @@
 
     use App\Models\NovelCategory;
     use App\Models\NovelBase;
-    use App\Models\NovelDetail_1;
+    use App\Models\NovelDetail;
     use App\Models\NovelContent;
 
 
     class NovelService extends BaseService{
 
-
+        public static $novel_detail_tables = 20;
 
         public static function novles(Request $request){
             $query = NovelBase::query();
@@ -116,10 +116,13 @@
          * 获取我方最后一章章节
          */
         public static function lastUnUpdateChapter($novel_id,$return_array = false){
+            
+            $novel_detail_table = self::getNovelDetailByNovelId($novel_id);
+
             $search = [
                 'novel_id' => $novel_id,
             ];
-            $chapter = NovelDetail::where($search)->orderBy('id','desc')->first();
+            $chapter = $novel_detail_table::where($search)->orderBy('id','desc')->first();
             if ($return_array) {
                 if(!$chapter){
                     return [];
@@ -143,5 +146,27 @@
 
             $table = $namespace_prefix.$table_num;
             return $table;
+        }
+
+        /**
+         * 根据novel_id确定detail表
+         */
+        public static function getNovelDetailByNovelId($novel_id){
+            if(!$novel_id){
+                static::addError('参数不完整',-1);
+                return false;
+            }
+            return self::ChoiceTable($novel_id,self::$novel_detail_tables,'NovelDetail\NovelDetail_');
+        }
+
+         /**
+         * 根据novel_id确定content表
+         */
+        public static function getNovelContentByNovelId($novel_id){
+            if(!$novel_id){
+                static::addError('参数不完整',-1);
+                return false;
+            }
+            return self::ChoiceTable($novel_id,self::$novel_detail_tables,'NovelContent\NovelContent_');
         }
     }   

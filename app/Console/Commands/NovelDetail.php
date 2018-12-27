@@ -11,6 +11,7 @@ use App\Services\ProcessService;
 use App\Services\Reptilian\BiQuService;
 use App\Services\Reptilian\PublicService;
 use App\Services\PublicService as PS;
+use App\Services\Novel\NovelService;
 
 use App\Models\NovelBase;
 use App\Models\NovelDetail as NovelDetailTable;
@@ -148,18 +149,22 @@ class NovelDetail extends Command
      * 插入要更新章节内容的小说章节ID
      */
     public static function setNovelDetailId($novel_id){
-
+        $novel_detail_table = NovelService::getNovelDetailByNovelId($novel_id);
         $search = [
             'novel_id' => $novel_id,
             'is_update' => 0
         ];
-        $novel_detail_ids = NovelDetailTable::where($search)->pluck('id')->all();
+        $novel_detail_ids = $novel_detail_table::where($search)->pluck('id')->all();
         if(!$novel_detail_ids){
             return true;
         }
 
         foreach($novel_detail_ids as $val){
-            RedisService::setNovelDetailId($val);
+            $item = [
+                'novel_id' => $novel_id,
+                'detail_id' => $val
+            ];
+            RedisService::setNovelDetailId($item);
         }
         return true;
     }

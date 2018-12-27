@@ -10,6 +10,7 @@ use App\Models\NovelContent;
 use App\Services\BaseService;
 use App\Services\Reptilian\BiQuService;
 use App\Services\RedisService;
+use App\Services\Novel\NovelService;
 
 
 class CommonService extends BaseService{
@@ -17,11 +18,10 @@ class CommonService extends BaseService{
     //搜索
     public static function search($words){
         $search = [
-            'is_hide' => 0,
-            'title' => $words
+            'is_hide' => 0
         ];
        
-        $novel_id = NovelBase::where($search)->pluck('id')->first();
+        $novel_id = NovelBase::where($search)->where('title','like',$words.'%')->pluck('id')->first();
         if($novel_id){
             return self::novelDetail($novel_id);
         }else{
@@ -50,7 +50,11 @@ class CommonService extends BaseService{
         }
         $result = self::novelChapters($novel_id);
         foreach(dataYieldRange($result['chapters']) as $chapter){
-            RedisService::setNovelDetailId($chapter['id']);
+            $item = [
+                'novel_id' => $novel_id,
+                'detail_id' => $chapter['id']
+            ];
+            RedisService::setNovelDetailId($item);
         }
         return $result;
 
@@ -203,7 +207,8 @@ class CommonService extends BaseService{
         if((int)$result['type']){
             $result['novel_type'] = NovelCategory::where('id',$result['type'])->pluck('name')->first();
         }
-        $chapter = NovelDetail::where('novel_id',$id)
+        $novel_detail_table = NovelService::getNovelDetailByNovelId($id);
+        $chapter = $novel_detail_table::where('novel_id',$id)
                     ->where('is_update',1)
                     ->orderBy('id','desc')
                     ->select(
@@ -224,14 +229,21 @@ class CommonService extends BaseService{
             static::addError('该内容不存在或已被删除',-1);
             return false;
         }
-        $chapters = NovelDetail::where('novel_id',$novel_id)->orderBy('create_at','asc')->get()->toArray();
+        $novel_detail_table = NovelService::getNovelDetailByNovelId($novel_id);
+        $chapters = $novel_detail_table::where('novel_id',$novel_id)->orderBy('create_at','asc')->get()->toArray();
 
         return ['title' => $title, 'chapters'=>$chapters];
     }
 
-    public static function novelContent($id){
-        $detail = NovelDetail::find($id);
-        $content = NovelContent::where('capter_id',$id)->pluck('content')->first();
+    public static function novelContent($novel_id,$chapter_id){
+
+        $novel_detail_table = NovelService::getNovelDetailByNovelId($novel_id);
+        $novel_content_table = NovelService::getNovelContentByNovelId($novel_id);
+
+
+        $detail = $novel_detail_table::find($chapter_id);
+
+        $content = $novel_content_table::where('capter_id',$chapter_id)->pluck('content')->first();
         if(!$content && !$detail->biqu_url){
             static::addError('该章节不存在或已被删除',-1);
             return false;
@@ -257,15 +269,20 @@ class CommonService extends BaseService{
         return $detail;
     }
 
-    public static function nextContent($chapter_id){
-        $detail = NovelDetail::find($chapter_id);
+    public static function nextContent($novel_id,$chapter_id){
+
+        $novel_detail_table = NovelService::getNovelDetailByNovelId($novel_id);
+        $novel_content_table = NovelService::getNovelContentByNovelId($novel_id);
+
+
+        $detail = $novel_detail_table::find($chapter_id);
         $novel_id = $detail->novel_id;
-        $next_detail = NovelDetail::where('id','>',$chapter_id)->where('novel_id',$novel_id)->orderBy('id','asc')->first();
+        $next_detail = $novel_detail_table::where('id','>',$chapter_id)->where('novel_id',$novel_id)->orderBy('id','asc')->first();
         if(!$next_detail){
             return false;
         }
         
-        $content = NovelContent::where('capter_id',$next_detail->id)->pluck('content')->first();
+        $content = $novel_content_table::where('capter_id',$next_detail->id)->pluck('content')->first();
         if(!$content && $next_detail->biqu_url){
             $content = BiQuService::getChapterContent($next_detail->biqu_url);
         }
@@ -273,6 +290,7 @@ class CommonService extends BaseService{
             static::addError('该章节不存在或已被删除',-1);
             return false;
         }
+
         $next_detail->novel_title = NovelBase::where('id',$novel_id)->pluck('title')->first();
         $next_detail->content = $content;
 
