@@ -213,6 +213,7 @@ class CommonService extends BaseService{
                     ->orderBy('id','desc')
                     ->select(
                         'id',
+                        'novel_id',
                         'title',
                         'words',
                         'create_at'

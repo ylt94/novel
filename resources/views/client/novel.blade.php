@@ -245,7 +245,7 @@
     </div>
     <div class="chapters">
         <div style="font-weight:600;width:30%;">目录</div>
-        <div class="chapters-newset"><a href="/content/{{ $last_chapter ? $last_chapter['id'] : '' }}" style="color:grey;">已更新至： {{$last_chapter ? $last_chapter['title'] : ''}}</a></div>
+        <div class="chapters-newset"><a href="/content/{{ $last_chapter ? $last_chapter['novel_id'].'_'.$last_chapter['id'] : '' }}" style="color:grey;">已更新至： {{$last_chapter ? $last_chapter['title'] : ''}}</a></div>
     </div>
     <div class="author-others">
         <div class="other-title">作者相关作品</div>

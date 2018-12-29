@@ -18,10 +18,10 @@
         a:active:{color: white;text-decoration:none; } 
         a:visited {color:white;text-decoration:none;} 
         a:hover {color: white; text-decoration:underline;text-decoration:none;}
+
         html, body {
             padding:0 5% 0 5%;
             width:90%;
-            background-color: #fff;
             color: black;
             font-family: 'Raleway', sans-serif;
             font-weight: 100;
@@ -54,6 +54,7 @@
         .content{
             overflow: hidden;
             width:100%;
+            font-size:auto;
         }
         .load-more{
             
@@ -64,8 +65,79 @@
             line-height: 2.25rem;
             border-radius: 99px;
             color:white;
-            width: 17.5rem;
+            width: 10.5rem;
             border:none;
+            margin-left:3.5rem;
+        }
+        #setting{
+            position:fixed;
+            height:30%;
+            width:90%;
+            background-color:#f6f7f9;
+            bottom:0px;
+            left:0px;
+            visibility:hidden;
+            padding:0 5% 0 5%;
+            border-top:1px solid #e1e5e8;
+            opacity:0;
+        }
+        .chapter{
+            height:40%;
+            width:100%;
+            display:flex;
+            flex-direction:row;
+            justify-content:space-around;
+            align-items:center;
+        }
+        .font-size{
+            height:20%;
+            width:100%;
+            display:flex;
+            flex-direction:row;
+            justify-content:space-around;
+            align-items:center;
+        }
+        .background-color{
+            height:30%;
+            width:100%;
+            display:flex;
+            flex-direction:row;
+            justify-content:space-around;
+            align-items:center;
+        }
+        .chapter-item{
+            width:30%;
+            height:60%;
+            border-radius:3px;
+            box-sizing:border-box;
+            display:flex;
+            align-items:center;
+            background-color:auto;
+            justify-content:space-between;
+            color:black;
+            border:none;
+            font-size: .875rem;
+        }
+        .background-color-item{
+            display:flex;
+            flex-direction:row;
+            justify-content:space-around;
+            border-radius:99px;
+            height:30px;
+            width:30px;
+        }
+        .font-size-item{
+            width:45%;
+            height:60%;
+            border-radius:3px;
+            box-sizing:border-box;
+            display:flex;
+            align-items:center;
+            background-color:auto;
+            justify-content:center;
+            color:black;
+            border:none;
+            font-size: .875rem;
         }
     </style>
 </head>
@@ -73,7 +145,7 @@
     <div class="head">{{$title}}</div>
     <div class="detail">
         <h3>{{$title}}</h3>
-        <div class="content">
+        <div class="content" style="font-size:17px;" id="content" onclick="showMenu()">
            <?php echo $content; ?>
         </div>
         <div class="load-more">
@@ -82,5 +154,54 @@
     <div class="load-more">
         <button class="load-more-btn"><a href="/content/next/{{$novel_id}}_{{$id}}">下一章</a></button>
     </div>
+    <div id="setting">
+        <div class="chapter">
+            <button class="chapter-item"><a href="/content/next/{{$novel_id}}_{{$id}}" style="color:black">上一章</a></button>
+            <button class="chapter-item"><a href="/content/next/{{$novel_id}}_{{$id}}" style="color:black">目录</a></button>
+            <button class="chapter-item"><a href="/content/next/{{$novel_id}}_{{$id}}" style="color:black">下一章</a></button>
+        </div>
+        <div class="font-size">
+            <button class="font-size-item" onclick="changeFontSize(-1)">A-</button>
+            <button class="font-size-item" onclick="changeFontSize(+1)">A+</button>
+        </div>
+        <div class="background-color">
+            <div class="background-color-item" style="background-color:#f3efef" onclick="changeBackgroundColor(0)"></div>
+            <div class="background-color-item" style="background-color:#d6dbe2" onclick="changeBackgroundColor(1)"></div>
+            <div class="background-color-item" style="background-color:#a5c5bf" onclick="changeBackgroundColor(2)"></div>
+            <div class="background-color-item" style="background-color:#ccc2a8" onclick="changeBackgroundColor(3)"></div>
+            <div class="background-color-item" style="background-color:#656363" onclick="changeBackgroundColor(4)"></div>
+        </div>
+    </div>
 </body>
+<script type="text/javascript">
+    function showMenu(){
+        var el = document.getElementById('setting');
+        el.style.visibility = el.style.visibility == "visible" ? "hidden" : "visible";
+        el.style.opacity = el.style.opacity == 1 ? 0 : 1;
+    }
+    function changeBackgroundColor(key){
+        var background_color = [
+            "#f3efef",
+            "#d6dbe2",
+            "#a5c5bf",
+            "#ccc2a8",
+            "#656363"
+        ];
+        var body = document.body;
+        body.style.backgroundColor = background_color[key];
+        var content = document.getElementById('content');
+        if(background_color[key] == '#656363'){
+            content.style.color = "white";
+        }else{
+            content.style.color = "black";
+        }
+    }
+
+    function changeFontSize(num){
+        var content = document.getElementById('content');
+        var font_size = parseInt(content.style.fontSize.slice(0,-2));
+        font_size += num > 0 ? +1 : -1;
+        content.style.fontSize = font_size+'px';
+    }
+</script>
 </html>
