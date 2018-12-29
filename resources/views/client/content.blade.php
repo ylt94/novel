@@ -180,9 +180,18 @@
         var background_color = localStorage.getItem('novel_content_background_color');
         var body = document.body;
         var content = document.getElementById('content');
-        body.style.backgroundColor = background_color;
-        content.style.color = content_color;
-        content.style.fontSize = content_font_size + 'px';
+        if(background_color){
+            body.style.backgroundColor = background_color;
+        }
+        
+        if(content_color){
+            content.style.color = content_color;
+        }
+        
+        if(content_font_size){
+            content.style.fontSize = content_font_size + 'px';
+        }
+        
     };
     function showMenu(){
         var el = document.getElementById('setting');
