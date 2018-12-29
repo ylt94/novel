@@ -4,7 +4,8 @@ a{
     font-weight:450;
     display:inline-block;
 }
-a:link {color: grey;text-decoration:blink; text-decoration:none;} 
+a:link {color: black;text-decoration:blink; text-decoration:none;} 
+a:active{color: #ef9789;background-color:white;text-decoration:none; } 
 a:visited {color:grey;text-decoration:none;} 
 a:hover {color: #f57070; text-decoration:underline;background-color:white;text-decoration:none;}
 img{
@@ -18,7 +19,7 @@ html, body {
     font-family: 'Raleway', sans-serif;
     font-weight: 100;
     height:100%;
-    width:100;
+    width:100%;
     margin: 0;
 }
 .container{
@@ -71,6 +72,14 @@ html, body {
     flex-direction:column;
     
 }
+.search-params{
+    height:50%;
+    width:100%;
+    display:flex;
+    flex-direction:row;
+    justify-content:space-around;
+    align-items:center;
+}
 .novel{
     height:88%;
     width:100%;
@@ -78,17 +87,22 @@ html, body {
 }
 .novel-item{
     height:22%;
+    width:95%;
     box-sizing:border-box;
     border-bottom:1px solid #e1e5e8;
     min-height:22%;
     padding: 5% 5% 5% 0;
+    
+}
+.novel-item-a{
+    height:100%;
     display:flex;
     flex-direction:row;
-    
 }
 .novel-image{
     height:100%;
     width:20%;
+    max-width:60px;
     border:1px solid grey;
     box-sizing:border-box;
 }
@@ -163,13 +177,4 @@ html, body {
     width:20%;
     line-height:300%;
     text-align:center;
-}
-
-.search-params{
-    height:50%;
-    width:100%;
-    display:flex;
-    flex-direction:row;
-    justify-content:space-around;
-    align-items:center;
 }

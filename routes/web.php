@@ -16,6 +16,9 @@ Route::get('/chapters/{novel_id}','Client\ClientController@novelChapters');
 Route::get('/content/{chapter_id}','Client\ClientController@novelContent');
 Route::get('/content/next/{chapter_id}','Client\ClientController@nextContent');
 Route::get('/content/last/{chapter_id}','Client\ClientController@lastContent');
+Route::get('/error',function(){
+    return view('client.error');
+});
 
 Route::get('test',function(){
     // $a = 1;
