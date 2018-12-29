@@ -10,7 +10,7 @@
 |
 */
 
-Route::get('/', 'Client\IndexController@index');
+Route::get('/', 'Client\ClientController@index');
 Route::get('/novel/{novel_id}','Client\ClientController@novelDetail');
 Route::get('/chapters/{novel_id}','Client\ClientController@novelChapters');
 Route::get('/content/{chapter_id}','Client\ClientController@novelContent');
