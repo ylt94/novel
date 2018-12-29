@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Common;
+namespace App\Services\Client;
 
 use App\Models\NovelBase;
 use App\Models\NovelDetail;
@@ -13,7 +13,7 @@ use App\Services\RedisService;
 use App\Services\Novel\NovelService;
 
 
-class CommonService extends BaseService{
+class ClientService extends BaseService{
 
     //搜索
     public static function search($words){

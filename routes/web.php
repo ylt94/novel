@@ -10,12 +10,12 @@
 |
 */
 
-Route::get('/', 'Common\IndexController@index');
-Route::get('/novel/{novel_id}','Common\IndexController@novelDetail');
-Route::get('/chapters/{novel_id}','Common\IndexController@novelChapters');
-Route::get('/content/{chapter_id}','Common\IndexController@novelContent');
-Route::get('/content/next/{chapter_id}','Common\IndexController@nextContent');
-Route::get('/content/last/{chapter_id}','Common\IndexController@lastContent');
+Route::get('/', 'Client\IndexController@index');
+Route::get('/novel/{novel_id}','Client\ClientController@novelDetail');
+Route::get('/chapters/{novel_id}','Client\ClientController@novelChapters');
+Route::get('/content/{chapter_id}','Client\ClientController@novelContent');
+Route::get('/content/next/{chapter_id}','Client\ClientController@nextContent');
+Route::get('/content/last/{chapter_id}','Client\ClientController@lastContent');
 
 Route::get('test',function(){
     // $a = 1;

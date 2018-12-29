@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Http\Controllers\Common;
+namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -10,7 +10,7 @@ use App\Services\Common\CommonService;
 use App\Services\Novel\NovelCategoryService;
 
 
-class IndexController extends Controller {
+class ClientController extends Controller {
 
 
     public function index(Request $request){
