@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Client;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Services\Common\CommonService;
+use App\Services\Client\ClientService;
 use App\Services\Novel\NovelCategoryService;
 
 
@@ -17,14 +17,14 @@ class ClientController extends Controller {
         $novel_type = $request->novel_type ?: 0;
         $order_type = $request->order_type ?: 'recommend';
         $return = [];
-        $return = CommonService::$order_type($novel_type);
+        $return = ClientService::$order_type($novel_type);
         $types = NovelCategoryService::getCategories();
-        // $return['recommends'] = CommonService::recommend();
-        // $return['order_recommend'] = CommonService::orderRecommend();
-        // $return['order_collection'] = CommonService::orderCollection();
-        // $return['order_click'] = CommonService::orderClick();
-        // $return['order_update'] = CommonService::orderNewUpdate();
-        // $return['order_create'] = CommonService::orderNewCreate();
+        // $return['recommends'] = ClientService::recommend();
+        // $return['order_recommend'] = ClientService::orderRecommend();
+        // $return['order_collection'] = ClientService::orderCollection();
+        // $return['order_click'] = ClientService::orderClick();
+        // $return['order_update'] = ClientService::orderNewUpdate();
+        // $return['order_create'] = ClientService::orderNewCreate();
         return my_view('client.index',['novel_novel' =>$novel_type,'novels'=> $return,'types' => $types]);
 
 
@@ -37,7 +37,7 @@ class ClientController extends Controller {
         if(!$words) {
             return ['status'=>0,'msg'=>'请输入完整'];
         }
-        $return = CommonService::search($words);
+        $return = ClientService::search($words);
         if(!$return){
             return false;
         }
@@ -49,7 +49,7 @@ class ClientController extends Controller {
             return false;
         }
 
-        $result = CommonService::searchChapters($novel_id);
+        $result = ClientService::searchChapters($novel_id);
 
         return $result;
         
@@ -61,9 +61,9 @@ class ClientController extends Controller {
             return ['status'=>0,'msg'=>'数据异常，请稍后再试'];
         }
 
-        $result = CommonService::novelDetail($novel_id);
+        $result = ClientService::novelDetail($novel_id);
         if(!$result) {
-            return ['status'=>0,'msg'=>CommonService::getLastError()];
+            return ['status'=>0,'msg'=>ClientService::getLastError()];
         }
 
         //return view();
@@ -76,7 +76,7 @@ class ClientController extends Controller {
             return ['status'=>0,'msg'=>'数据异常，请稍后再试'];
         }
 
-        $result = CommonService::novelChapters($novel_id);
+        $result = ClientService::novelChapters($novel_id);
         if (!$result) {
             return ['status'=>0,'msg'=>'数据异常，请稍后再试'];
         }
@@ -94,7 +94,7 @@ class ClientController extends Controller {
             return ['status'=>0,'msg'=>'请求异常，请稍后再试'];
         }
 
-        $result = CommonService::novelContent($ids_arr[0],$ids_arr[1]);
+        $result = ClientService::novelContent($ids_arr[0],$ids_arr[1]);
         if(!$result){
             return ['status'=>0,'msg'=>'请求异常，请稍后再试'];
         }
@@ -115,7 +115,7 @@ class ClientController extends Controller {
         }
 
         
-        $result = CommonService::nextContent($ids_arr[0],$ids_arr[1]);
+        $result = ClientService::nextContent($ids_arr[0],$ids_arr[1]);
         if(!$result){
             return ['status'=>0,'msg'=>'请求异常，请稍后再试'];
         }
@@ -136,7 +136,7 @@ class ClientController extends Controller {
         }
 
         
-        $result = CommonService::lastContent($ids_arr[0],$ids_arr[1]);
+        $result = ClientService::lastContent($ids_arr[0],$ids_arr[1]);
         if(!$result){
             return ['status'=>0,'msg'=>'请求异常，请稍后再试'];
         }
