@@ -174,6 +174,16 @@
     </div>
 </body>
 <script type="text/javascript">
+    window.onload=function(){
+        var content_font_size = localStorage.getItem('novel_content_font_size');
+        var content_color = localStorage.getItem('novel_content_color');
+        var background_color = localStorage.getItem('novel_content_background_color');
+        var body = document.body;
+        var content = document.getElementById('content');
+        body.style.backgroundColor = background_color;
+        content.style.color = content_color;
+        content.style.fontSize = content_font_size + 'px';
+    };
     function showMenu(){
         var el = document.getElementById('setting');
         el.style.visibility = el.style.visibility == "visible" ? "hidden" : "visible";
@@ -195,6 +205,8 @@
         }else{
             content.style.color = "black";
         }
+        localStorage.setItem('novel_content_background_color',background_color[key]);
+        localStorage.setItem('novel_content_color',content.style.color);
     }
 
     function changeFontSize(num){
@@ -202,6 +214,7 @@
         var font_size = parseInt(content.style.fontSize.slice(0,-2));
         font_size += num > 0 ? +1 : -1;
         content.style.fontSize = font_size+'px';
+        localStorage.setItem('novel_content_font_size',font_size);
     }
 </script>
 </html>
