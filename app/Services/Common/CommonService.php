@@ -297,4 +297,31 @@ class CommonService extends BaseService{
 
         return $next_detail;
     }
+
+    public static function lastContent($novel_id,$chapter_id){
+        $novel_detail_table = NovelService::getNovelDetailByNovelId($novel_id);
+        $novel_content_table = NovelService::getNovelContentByNovelId($novel_id);
+
+
+        $detail = $novel_detail_table::find($chapter_id);
+        $novel_id = $detail->novel_id;
+        $next_detail = $novel_detail_table::where('id','<',$chapter_id)->where('novel_id',$novel_id)->orderBy('id','asc')->first();
+        if(!$next_detail){
+            return false;
+        }
+        
+        $content = $novel_content_table::where('capter_id',$next_detail->id)->pluck('content')->first();
+        if(!$content && $next_detail->biqu_url){
+            $content = BiQuService::getChapterContent($next_detail->biqu_url);
+        }
+        if(!$content){
+            static::addError('该章节不存在或已被删除',-1);
+            return false;
+        }
+
+        $next_detail->novel_title = NovelBase::where('id',$novel_id)->pluck('title')->first();
+        $next_detail->content = $content;
+
+        return $next_detail;
+    }
 }

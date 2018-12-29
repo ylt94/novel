@@ -121,4 +121,25 @@ class IndexController extends Controller {
         }
         return my_view('client.content',$result);
     }
+
+    /**
+     * 上一章
+     */
+    public function lastContent($ids){
+        if(!$ids){
+            return ['status'=>0,'msg'=>'请求异常，请稍后再试'];
+        }
+
+        $ids_arr = explode('_',$ids);
+        if(count($ids_arr) !=2){
+            return ['status'=>0,'msg'=>'请求异常，请稍后再试'];
+        }
+
+        
+        $result = CommonService::lastContent($ids_arr[0],$ids_arr[1]);
+        if(!$result){
+            return ['status'=>0,'msg'=>'请求异常，请稍后再试'];
+        }
+        return my_view('client.content',$result);
+    }
 }

@@ -156,8 +156,8 @@
     </div>
     <div id="setting">
         <div class="chapter">
-            <button class="chapter-item"><a href="/content/next/{{$novel_id}}_{{$id}}" style="color:black">上一章</a></button>
-            <button class="chapter-item"><a href="/content/next/{{$novel_id}}_{{$id}}" style="color:black">目录</a></button>
+            <button class="chapter-item"><a href="/content/last/{{$novel_id}}_{{$id}}" style="color:black">上一章</a></button>
+            <button class="chapter-item"><a href="/chapters/{{ $novel_id }}" style="color:black">目录</a></button>
             <button class="chapter-item"><a href="/content/next/{{$novel_id}}_{{$id}}" style="color:black">下一章</a></button>
         </div>
         <div class="font-size">
