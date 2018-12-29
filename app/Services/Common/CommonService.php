@@ -305,7 +305,7 @@ class CommonService extends BaseService{
 
         $detail = $novel_detail_table::find($chapter_id);
         $novel_id = $detail->novel_id;
-        $next_detail = $novel_detail_table::where('id','<',$chapter_id)->where('novel_id',$novel_id)->orderBy('id','asc')->first();
+        $next_detail = $novel_detail_table::where('id','<',$chapter_id)->where('novel_id',$novel_id)->orderBy('id','desc')->first();
         if(!$next_detail){
             return false;
         }
