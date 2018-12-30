@@ -35,7 +35,7 @@ class ClientController extends Controller {
     public function search(Request $request) {
         $words = $request->words;
         if(!$words) {
-            return ['status'=>0,'msg'=>'请输入完整'];
+            return my_view('client.error',['status'=>0,'msg'=>'请输入完整']);
         }
         $return = ClientService::search($words);
         if(!$return){
@@ -58,12 +58,12 @@ class ClientController extends Controller {
     public function novelDetail($novel_id){
         
         if(!$novel_id) {
-            return ['status'=>0,'msg'=>'数据异常，请稍后再试'];
+            return my_view('client.error',['status'=>0,'msg'=>'数据异常，请稍后再试']);
         }
 
         $result = ClientService::novelDetail($novel_id);
         if(!$result) {
-            return ['status'=>0,'msg'=>ClientService::getLastError()];
+            return my_view('client.error',['status'=>0,'msg'=>ClientService::getLastError()]);
         }
 
         //return view();
@@ -73,12 +73,12 @@ class ClientController extends Controller {
 
     public function novelChapters($novel_id){
         if(!$novel_id){
-            return ['status'=>0,'msg'=>'数据异常，请稍后再试'];
+            return my_view('client.error',['status'=>0,'msg'=>'数据异常，请稍后再试']);
         }
 
         $result = ClientService::novelChapters($novel_id);
         if (!$result) {
-            return ['status'=>0,'msg'=>'数据异常，请稍后再试'];
+            return my_view('client.error',['status'=>0,'msg'=>'数据异常，请稍后再试']);
         }
 
         return my_view('client.chapters',$result);
@@ -86,17 +86,17 @@ class ClientController extends Controller {
 
     public function novelContent($ids){
         if(!$ids){
-            return ['status'=>0,'msg'=>'请求异常，请稍后再试'];
+            return my_view('client.error',['status'=>0,'msg'=>'请求异常，请稍后再试']);
         }
 
         $ids_arr = explode('_',$ids);
         if(count($ids_arr) !=2){
-            return ['status'=>0,'msg'=>'请求异常，请稍后再试'];
+            return my_view('client.error',['status'=>0,'msg'=>'请求异常，请稍后再试']);
         }
 
         $result = ClientService::novelContent($ids_arr[0],$ids_arr[1]);
         if(!$result){
-            return ['status'=>0,'msg'=>'请求异常，请稍后再试'];
+            return my_view('client.error',['status'=>0,'msg'=>'请求异常，请稍后再试']);
         }
         return my_view('client.content',$result);
     }
@@ -106,18 +106,18 @@ class ClientController extends Controller {
      */
     public function nextContent($ids){
         if(!$ids){
-            return ['status'=>0,'msg'=>'请求异常，请稍后再试'];
+            return my_view('client.error',['status'=>0,'msg'=>'请求异常，请稍后再试']);
         }
 
         $ids_arr = explode('_',$ids);
         if(count($ids_arr) !=2){
-            return ['status'=>0,'msg'=>'请求异常，请稍后再试'];
+            return my_view('client.error',['status'=>0,'msg'=>'请求异常，请稍后再试']);
         }
 
         
         $result = ClientService::nextContent($ids_arr[0],$ids_arr[1]);
         if(!$result){
-            return ['status'=>0,'msg'=>'请求异常，请稍后再试'];
+            return my_view('client.error',['status'=>0,'msg'=>'请求异常，请稍后再试']);
         }
         return my_view('client.content',$result);
     }
@@ -127,18 +127,18 @@ class ClientController extends Controller {
      */
     public function lastContent($ids){
         if(!$ids){
-            return ['status'=>0,'msg'=>'请求异常，请稍后再试'];
+            return my_view('client.error',['status'=>0,'msg'=>'请求异常，请稍后再试']);
         }
 
         $ids_arr = explode('_',$ids);
         if(count($ids_arr) !=2){
-            return ['status'=>0,'msg'=>'请求异常，请稍后再试'];
+            return my_view('client.error',['status'=>0,'msg'=>'请求异常，请稍后再试']);
         }
 
         
         $result = ClientService::lastContent($ids_arr[0],$ids_arr[1]);
         if(!$result){
-            return ['status'=>0,'msg'=>'请求异常，请稍后再试'];
+            return my_view('client.error',['status'=>0,'msg'=>'请求异常，请稍后再试']);
         }
         return my_view('client.content',$result);
     }

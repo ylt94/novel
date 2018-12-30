@@ -60,7 +60,7 @@
             height:30%;
             width:100%;
             font-size:15px;
-            text-align:start;
+            text-align:center;
         }
         .return-last-page{
             background-color: #ed424b;
@@ -70,7 +70,6 @@
             color:white;
             width: 10.5rem;
             border:none;
-            margin-left:3.5rem;
             
         }
     </style>
@@ -78,10 +77,12 @@
 <body>
     <main class="main">
         <div class="title">出错了~</div>
-        <div class="content">服务器错误，请骚后再试！</div>
+        <div class="content">{{$msg}}！</div>
         <div class="btn">
-            <button class="return-last-page">返回上一页</button>
+            <button class="return-last-page" onclick="JavaScript:history.back(-1);">返回上一页</button>
         </div>
     </main>
 </body>
+<script type="text/javascript">
+</script>
 </html>
