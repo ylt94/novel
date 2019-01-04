@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>{{$novel_title}}_{{$title}}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable">
     <!-- <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
     <script src="main.js"></script> -->
     <style>
@@ -55,6 +55,7 @@
             overflow: hidden;
             width:100%;
             font-size:auto;
+            font-weight:500;
         }
         .load-more{
             
@@ -138,6 +139,7 @@
             color:black;
             border:none;
             font-size: .875rem;
+            font-weight:600;
         }
     </style>
 </head>
