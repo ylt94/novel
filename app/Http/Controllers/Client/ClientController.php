@@ -69,10 +69,9 @@ class ClientController extends Controller {
 
         //小说字数类型
         $novel_base->words = bcdiv($novel_base->words,10000,2);
-        $type_id = $novel_base->type;
         if((int)$novel_base->type){
             $novel_type = ClientService::novelType($novel_base->type);
-            $novel_base->type = $novel_type ? $novel_type->name : '玄幻';
+            $novel_base->novel_type = $novel_type ? $novel_type->name : '玄幻';
         }
 
         //最新章节
@@ -86,7 +85,7 @@ class ClientController extends Controller {
 
 
         //相关推荐
-        $relevant_recommend = ClientService::relevantRecommend($novel_base->id,$type_id);
+        $relevant_recommend = ClientService::relevantRecommend($novel_base->id,$novel_base->type);
         $return = [
             'novel_base' => $novel_base,
             'last_chapter' => $chapter,
