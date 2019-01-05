@@ -61,13 +61,25 @@ class ClientController extends Controller {
             return my_view('client.error',['status'=>0,'msg'=>'数据异常，请稍后再试']);
         }
 
-        $result = ClientService::novelDetail($novel_id);
-        if(!$result) {
+        //主体信息
+        $novel_base = ClientService::novelBase($novel_id);
+        if(!$novel_base){
             return my_view('client.error',['status'=>0,'msg'=>ClientService::getLastError()]);
         }
 
-        //return view();
-        return my_view('client.novel',$result);
+        //小说类型
+        $novel_base->words = bcdiv($novel_base->words,10000,2);
+        if((int)$novel_base->type){
+            $novel_type = ClientService::novelType($novel_base->type);
+            $novel_base->type = $novel_type ? $novel_type->name : '玄幻';
+        }
+
+        $chapter = ClientService::novelDetail($novel_id);
+        if(!$chapter) {
+            return my_view('client.error',['status'=>0,'msg'=>ClientService::getLastError()]);
+        }
+
+        return my_view('client.novel',['novel_base'=>$novel_base,'last_chapter'=>$chapter]);
 
     }
 
@@ -76,12 +88,17 @@ class ClientController extends Controller {
             return my_view('client.error',['status'=>0,'msg'=>'数据异常，请稍后再试']);
         }
 
-        $result = ClientService::novelChapters($novel_id);
-        if (!$result) {
+        $novel_base = ClientService::novelBase($novel_id);
+        if(!$novel_base){
+            return my_view('client.error',['status'=>0,'msg'=>ClientService::getLastError()]);
+        }
+
+        $novel_chapters = ClientService::novelChapters($novel_id);
+        if (!$novel_chapters) {
             return my_view('client.error',['status'=>0,'msg'=>'数据异常，请稍后再试']);
         }
 
-        return my_view('client.chapters',$result);
+        return my_view('client.chapters',['title' =>$novel_base->title,'chapters' => $novel_chapters]);
     }
 
     public function novelContent($ids){
@@ -94,11 +111,25 @@ class ClientController extends Controller {
             return my_view('client.error',['status'=>0,'msg'=>'请求异常，请稍后再试']);
         }
 
-        $result = ClientService::novelContent($ids_arr[0],$ids_arr[1]);
-        if(!$result){
-            return my_view('client.error',['status'=>0,'msg'=>'请求异常，请稍后再试']);
+        $novel_chapter = ClientService::novelChapter($ids_arr[0],$ids_arr[1]);
+        if(!$novel_chapter){
+            return my_view('client.error',['status'=>0,'msg'=>ClientService::getLastError()]);
         }
-        return my_view('client.content',$result);
+        
+        $content = ClientService::novelContent($ids_arr[0],$novel_chapter->id);
+        if(!$content){
+            if($novel_chapter->biqu_url){
+                $content = ClientService::reptilianContent($novel_chapter->biqu_url);
+            }else{
+                return my_view('client.error',['status'=>0,'msg'=>'暂无该章节内容']);
+            }
+        }
+        $novel = ClientService::novelBase($ids_arr[0]);
+
+        $novel_chapter->content = $content;
+        $novel_chapter->novel_title = $novel->title;
+        
+        return my_view('client.content',$novel_chapter);
     }
 
     /**
@@ -114,12 +145,25 @@ class ClientController extends Controller {
             return my_view('client.error',['status'=>0,'msg'=>'请求异常，请稍后再试']);
         }
 
-        
-        $result = ClientService::nextContent($ids_arr[0],$ids_arr[1]);
-        if(!$result){
-            return my_view('client.error',['status'=>0,'msg'=>'请求异常，请稍后再试']);
+        $next_chapter = ClientService::hasNextChapter($ids_arr[0],$ids_arr[1]);
+        if(!$next_chapter){
+            return my_view('client.error',['status'=>0,'msg'=>ClientService::getLastError()]);
         }
-        return my_view('client.content',$result);
+        
+        $content = ClientService::novelContent($ids_arr[0],$next_chapter->id);
+        if(!$content){
+            if($next_chapter->biqu_url){
+                $content = ClientService::reptilianContent($next_chapter->biqu_url);
+            }else{
+                return my_view('client.error',['status'=>0,'msg'=>'暂无该章节内容']);
+            }
+        }
+        $novel = ClientService::novelBase($ids_arr[0]);
+
+        $next_chapter->content = $content;
+        $next_chapter->novel_title = $novel->title;
+        
+        return my_view('client.content',$next_chapter);
     }
 
     /**
@@ -136,10 +180,24 @@ class ClientController extends Controller {
         }
 
         
-        $result = ClientService::lastContent($ids_arr[0],$ids_arr[1]);
-        if(!$result){
-            return my_view('client.error',['status'=>0,'msg'=>'请求异常，请稍后再试']);
+        $last_chpater = ClientService::hasLastChapter($ids_arr[0],$ids_arr[1]);
+        if(!$last_chpater){
+            return my_view('client.error',['status'=>0,'msg'=>ClientService::getLastError()]);
         }
-        return my_view('client.content',$result);
+
+        $content = ClientService::novelContent($ids_arr[0],$last_chpater->id);
+        if(!$content){
+            if($last_chpater->biqu_url){
+                $content = ClientService::reptilianContent($next_chapter->biqu_url);
+            }else{
+                return my_view('client.error',['status'=>0,'msg'=>'暂无该章节内容']);
+            }
+        }
+        $novel = ClientService::novelBase($ids_arr[0]);
+
+        $last_chpater->content = $content;
+        $last_chpater->novel_title = $novel->title;
+
+        return my_view('client.content',$last_chpater);
     }
 }

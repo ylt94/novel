@@ -193,22 +193,139 @@ class ClientService extends BaseService{
         return $result;
     }
 
-    public static function novelDetail($id){
-        $search = [
-            'id' => $id,
-            'is_hide' => 0
-        ];
-        $result = NovelBase::where($search)->first()->toArray();
-        $result['words'] = bcdiv($result['words'],10000,2);
-        if(!$result) {
-            static::addError('该小说不存在或已被删除',-1);
+    /**
+     * 获取小说主要信息
+     * @param $novel_id
+     */
+    public static function novelBase($novel_id){
+        if(!$novel_id){
+            static::addError('参数不完整',-1);
             return false;
         }
-        if((int)$result['type']){
-            $result['novel_type'] = NovelCategory::where('id',$result['type'])->pluck('name')->first();
+
+        $novel_base = NovelBase::find($novel_id);
+        if(!$novel_base){
+            static::addError('该小说不存在',-1);
+            return false;
         }
-        $novel_detail_table = NovelService::getNovelDetailByNovelId($id);
-        $chapter = $novel_detail_table::where('novel_id',$id)
+
+        return $novel_base;
+    }
+
+    /**
+     * 获取章节的一条信息
+     * @param $novel_id
+     * @param $chapter_id
+     */
+    public static function novelChapter($novel_id,$chapter_id){
+        if(!$novel_id || !$chapter_id){
+            static::addError('参数不完整',-1);
+            return false;
+        }
+
+        $novel_detail_table = NovelService::getNovelDetailByNovelId($novel_id);
+        $novel_chapter = $novel_detail_table::find($chapter_id);
+        if(!$novel_chapter){
+            static::addError('该章节不存在',-1);
+            return false;
+        }
+
+        return $novel_chapter;
+
+    }
+
+    /**
+     * 获取章节内容的一条信息
+     * @param $novel_id
+     * @param $chapter_id
+     */
+    public static function novelContent($novel_id,$chapter_id,$noly_content = true){
+        if(!$novel_id || !$chapter_id){
+            static::addError('参数不完整',-1);
+            return false;
+        }
+
+        $novel_content_table = NovelService::getNovelContentByNovelId($novel_id);
+        $novel_content = $novel_content_table::where('capter_id',$chapter_id)->first();
+        if(!$novel_content){
+            static::addError('该章节不存在',-1);
+            return false;
+        }
+
+        if($noly_content){
+            $novel_content = $novel_content->content; 
+        }
+        
+        return $novel_content;
+
+    }
+
+     /**
+     * 检查是否有下一章(是否最后一章)
+     * @param $novel_id
+     * @param $chapter_id
+     */
+    public static function hasNextChapter($novel_id,$chapter_id){
+        if(!$novel_id || !$chapter_id){
+            static::addError('参数不完整',-1);
+            return false;
+        }
+        $novel_detail_table = NovelService::getNovelDetailByNovelId($novel_id);
+
+        $next_detail = $novel_detail_table::where('id','>',$chapter_id)->where('novel_id',$novel_id)->orderBy('id','asc')->first();
+        if(!$next_detail){
+            static::addError('已经是最后一章了',-1);
+            return false;
+        }
+
+        return $next_detail;
+    }
+
+    /**
+     * 检查是否有上一章
+     * @param $novel_id
+     * @param $chapter_id
+     */
+    public static function hasLastChapter($novel_id,$chapter_id){
+        if(!$novel_id || !$chapter_id){
+            static::addError('参数不完整',-1);
+            return false;
+        }
+        $novel_detail_table = NovelService::getNovelDetailByNovelId($novel_id);
+
+        $last_detail = $novel_detail_table::where('id','<',$chapter_id)->where('novel_id',$novel_id)->orderBy('id','desc')->first();
+        if(!$last_detail){
+            static::addError('已经是第一章了',-1);
+            return false;
+        }
+
+        return $last_detail;
+    }
+
+    /**
+     * 抓取一条小说内容
+     */
+    public static function reptilianContent($url){
+        $content = BiQuService::getChapterContent($detail->biqu_url);
+        return $content;
+    }
+
+    /**
+     * 获取小说所属类型
+     */
+    public static function novelType($type_id){
+        if(!$type_id){
+            static::addError('参数不完整',-1);
+            return false;
+        }
+        $novel_type = NovelCategory::find($type_id);
+        return $novel_type;
+    }
+
+    public static function novelDetail($novel_id){
+        
+        $novel_detail_table = NovelService::getNovelDetailByNovelId($novel_id);
+        $chapter = $novel_detail_table::where('novel_id',$novel_id)
                     ->where('is_update',1)
                     ->orderBy('id','desc')
                     ->select(
@@ -221,107 +338,17 @@ class ClientService extends BaseService{
                     ->first();
         $chapter = $chapter ? $chapter->toArray() : [];
 
-        return ['novel_base'=>$result,'last_chapter'=>$chapter];
+        return $chapter;
     }
 
     public static function novelChapters($novel_id){
-        $title = NovelBase::where('id',$novel_id)->where('is_hide',0)->pluck('title')->first();
-        if (!$title) {
-            static::addError('该内容不存在或已被删除',-1);
+        if(!$novel_id){
+            static::addError('参数不完整',-1);
             return false;
         }
         $novel_detail_table = NovelService::getNovelDetailByNovelId($novel_id);
         $chapters = $novel_detail_table::where('novel_id',$novel_id)->orderBy('create_at','asc')->get()->toArray();
 
-        return ['title' => $title, 'chapters'=>$chapters];
-    }
-
-    public static function novelContent($novel_id,$chapter_id){
-
-        $novel_detail_table = NovelService::getNovelDetailByNovelId($novel_id);
-        $novel_content_table = NovelService::getNovelContentByNovelId($novel_id);
-
-
-        $detail = $novel_detail_table::find($chapter_id);
-
-        $content = $novel_content_table::where('capter_id',$chapter_id)->pluck('content')->first();
-        if(!$content && !$detail->biqu_url){
-            static::addError('该章节不存在或已被删除',-1);
-            return false;
-        }
-        //没有内容，抓取
-        if(!$content && $detail->biqu_url){
-            $content = BiQuService::getChapterContent($detail->biqu_url);
-            if($detail->is_update){
-                $insert_data = [
-                    'capter_id' => $id,
-                    'content' => $content,
-                ];
-                NovelContent::create($insert_data);
-            }
-        }
-        if(!$content){
-            static::addError('该章节不存在或已被删除',-1);
-            return false;
-        }
-        $detail->novel_title = NovelBase::where('id',$detail->novel_id)->pluck('title')->first();
-
-        $detail->content = $content;
-        return $detail;
-    }
-
-    public static function nextContent($novel_id,$chapter_id){
-
-        $novel_detail_table = NovelService::getNovelDetailByNovelId($novel_id);
-        $novel_content_table = NovelService::getNovelContentByNovelId($novel_id);
-
-
-        $detail = $novel_detail_table::find($chapter_id);
-        $novel_id = $detail->novel_id;
-        $next_detail = $novel_detail_table::where('id','>',$chapter_id)->where('novel_id',$novel_id)->orderBy('id','asc')->first();
-        if(!$next_detail){
-            return false;
-        }
-        
-        $content = $novel_content_table::where('capter_id',$next_detail->id)->pluck('content')->first();
-        if(!$content && $next_detail->biqu_url){
-            $content = BiQuService::getChapterContent($next_detail->biqu_url);
-        }
-        if(!$content){
-            static::addError('该章节不存在或已被删除',-1);
-            return false;
-        }
-
-        $next_detail->novel_title = NovelBase::where('id',$novel_id)->pluck('title')->first();
-        $next_detail->content = $content;
-
-        return $next_detail;
-    }
-
-    public static function lastContent($novel_id,$chapter_id){
-        $novel_detail_table = NovelService::getNovelDetailByNovelId($novel_id);
-        $novel_content_table = NovelService::getNovelContentByNovelId($novel_id);
-
-
-        $detail = $novel_detail_table::find($chapter_id);
-        $novel_id = $detail->novel_id;
-        $next_detail = $novel_detail_table::where('id','<',$chapter_id)->where('novel_id',$novel_id)->orderBy('id','desc')->first();
-        if(!$next_detail){
-            return false;
-        }
-        
-        $content = $novel_content_table::where('capter_id',$next_detail->id)->pluck('content')->first();
-        if(!$content && $next_detail->biqu_url){
-            $content = BiQuService::getChapterContent($next_detail->biqu_url);
-        }
-        if(!$content){
-            static::addError('该章节不存在或已被删除',-1);
-            return false;
-        }
-
-        $next_detail->novel_title = NovelBase::where('id',$novel_id)->pluck('title')->first();
-        $next_detail->content = $content;
-
-        return $next_detail;
+        return $chapters;
     }
 }
