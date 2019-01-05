@@ -11,6 +11,7 @@ use App\Services\BaseService;
 use App\Services\Reptilian\BiQuService;
 use App\Services\RedisService;
 use App\Services\Novel\NovelService;
+use Cache;
 
 
 class ClientService extends BaseService{
@@ -398,5 +399,23 @@ class ClientService extends BaseService{
                             )->orderBy('click_num','desc')->get();
 
         return $relevant_recommend ?: [];
+    }
+
+    //修改小说点击量
+    public static function addClickNum($user_ip,$novel_id){
+        if(!$user_ip || !$novel_id){
+            static::addError('参数不完整',-1);
+            return false;
+        }
+
+        $key = $novel_id.'_'.$user_ip;
+        $history = Cache::get($key);
+        if($history){
+            return true;
+        }
+
+        $history = Cache::put($key,1,60);
+        NovelBase::where('id',$novel_id)->increment('click_num');
+        return true;
     }
 }

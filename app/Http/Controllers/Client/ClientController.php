@@ -55,17 +55,23 @@ class ClientController extends Controller {
         
     }
 
-    public function novelDetail($novel_id){
-        
+    public function novelDetail($novel_id,Request $request){
+
         if(!$novel_id) {
             return my_view('client.error',['status'=>0,'msg'=>'数据异常，请稍后再试']);
         }
+
+        //获取访问ip
+        $user_ip = $request->getClientIp();
 
         //主体信息
         $novel_base = ClientService::novelBase($novel_id);
         if(!$novel_base){
             return my_view('client.error',['status'=>0,'msg'=>ClientService::getLastError()]);
         }
+
+        //修改点击量
+        ClientService::addClickNum($user_ip,$novel_id);
 
         //小说字数类型
         $novel_base->words = bcdiv($novel_base->words,10000,2);
