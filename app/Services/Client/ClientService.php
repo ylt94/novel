@@ -322,7 +322,11 @@ class ClientService extends BaseService{
         return $novel_type;
     }
 
-    public static function novelDetail($novel_id){
+    /**
+     * 小说最后一条一更新章节
+     * @param $novel_id
+     */
+    public static function finalChapter($novel_id){
         
         $novel_detail_table = NovelService::getNovelDetailByNovelId($novel_id);
         $chapter = $novel_detail_table::where('novel_id',$novel_id)
@@ -341,6 +345,10 @@ class ClientService extends BaseService{
         return $chapter;
     }
 
+    /**
+     * 小说所有章节
+     * @param $novel_id
+     */
     public static function novelChapters($novel_id){
         if(!$novel_id){
             static::addError('参数不完整',-1);
@@ -350,5 +358,45 @@ class ClientService extends BaseService{
         $chapters = $novel_detail_table::where('novel_id',$novel_id)->orderBy('create_at','asc')->get()->toArray();
 
         return $chapters;
+    }
+
+    /**
+     * 作者其他作品
+     */
+    public static function authorOther($novel_id,$author_name){
+        if(!$author_name){
+            static::addError('参数不完整',-1);
+            return false;
+        }
+
+        $author_other = NovelBase::where('author',$author_name)->where('id','!=',$novel_id)->select(
+            'img_url',
+            'title',
+            'id'
+        )->get();
+
+        return $author_other ?: [];
+    }
+
+    //相关推荐
+    public static function relevantRecommend($novel_id,$type_id){
+        if(!$type_id){
+            static::addError('参数不完整',-1);
+            return false;
+        }
+        
+        if(!(int)$type_id){
+            return [];
+        }
+
+        $relevant_recommend = NovelBase::where('type',$type_id)
+                            ->where('id','!=',$novel_id)
+                            ->offset(0)->limit(5)->select(
+                                'id',
+                                'title',
+                                'img_url'
+                            )->orderBy('click_num','desc')->get();
+
+        return $relevant_recommend ?: [];
     }
 }

@@ -67,19 +67,35 @@ class ClientController extends Controller {
             return my_view('client.error',['status'=>0,'msg'=>ClientService::getLastError()]);
         }
 
-        //小说类型
+        //小说字数类型
         $novel_base->words = bcdiv($novel_base->words,10000,2);
+        $type_id = $novel_base->type;
         if((int)$novel_base->type){
             $novel_type = ClientService::novelType($novel_base->type);
             $novel_base->type = $novel_type ? $novel_type->name : '玄幻';
         }
 
-        $chapter = ClientService::novelDetail($novel_id);
+        //最新章节
+        $chapter = ClientService::finalChapter($novel_id);
         if(!$chapter) {
             return my_view('client.error',['status'=>0,'msg'=>ClientService::getLastError()]);
         }
 
-        return my_view('client.novel',['novel_base'=>$novel_base,'last_chapter'=>$chapter]);
+        //作者其他作品
+        $author_other = ClientService::authorOther($novel_base->id,$novel_base->author);
+
+
+        //相关推荐
+        $relevant_recommend = ClientService::relevantRecommend($novel_base->id,$type_id);
+        $return = [
+            'novel_base' => $novel_base,
+            'last_chapter' => $chapter,
+            'author_other' => $author_other,
+            'relevant_recommend' => $relevant_recommend
+        ];
+
+
+        return my_view('client.novel',$return);
 
     }
 

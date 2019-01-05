@@ -244,97 +244,37 @@
         {{$novel_base['desc']}}
     </div>
     <div class="chapters">
-        <div style="font-weight:600;width:30%;">目录</div>
+        <div style="font-weight:600;width:30%;">最后更新</div>
         <div class="chapters-newset"><a href="/content/{{ $last_chapter ? $last_chapter['novel_id'].'_'.$last_chapter['id'] : '' }}" style="color:grey;">已更新至： {{$last_chapter ? $last_chapter['title'] : ''}}</a></div>
     </div>
     <div class="author-others">
         <div class="other-title">作者相关作品</div>
         <div class="other-novels">
+        @foreach($author_other as $novel)
             <div class="other-novel-item">
-                <a href="#">
+                <a href="/novel/{{$novel->id}}">
                     <div class="other-novel-image">
-                        <img src="//bookcover.yuewen.com/qdbimg/349573/1010734492/150" />
+                        <img src="{{$novel->img_url}}" />
                     </div>
-                    <div class="other-novel-title">凡人修仙传之仙界篇</div>
+                    <div class="other-novel-title">{{$novel->title}}</div>
                 </a>
             </div>
-            <div class="other-novel-item">
-                <a href="#">
-                    <div class="other-novel-image">
-                        <img src="//bookcover.yuewen.com/qdbimg/349573/1010734492/150" />
-                    </div>
-                    <div class="other-novel-title">凡人修仙传之仙界篇</div>
-                </a>
-            </div>
-            <div class="other-novel-item">
-                <a href="#">
-                    <div class="other-novel-image">
-                        <img src="//bookcover.yuewen.com/qdbimg/349573/1010734492/150" />
-                    </div>
-                    <div class="other-novel-title">凡人修仙传之仙界篇</div>
-                </a>
-            </div>
-            <div class="other-novel-item">
-                <a href="#">
-                    <div class="other-novel-image">
-                        <img src="//bookcover.yuewen.com/qdbimg/349573/1010734492/150" />
-                    </div>
-                    <div class="other-novel-title">凡人修仙传之仙界篇</div>
-                </a>
-            </div>
-            <div class="other-novel-item">
-                <a href="#">
-                    <div class="other-novel-image">
-                        <img src="//bookcover.yuewen.com/qdbimg/349573/1010734492/150" />
-                    </div>
-                    <div class="other-novel-title">凡人修仙传之仙界篇</div>
-                </a>
-            </div>
+        @endforeach
         </div>
     </div>
     <div class="other-same">
         <div class="same-title">同类推荐</div>
         <div class="other-novels">
-        <div class="other-novel-item">
-                <a href="#">
-                    <div class="other-novel-image">
-                        <img src="//bookcover.yuewen.com/qdbimg/349573/1010734492/150" />
-                    </div>
-                    <div class="other-novel-title">凡人修仙传之仙界篇</div>
-                </a>
-            </div>
+        @foreach($relevant_recommend as $novel)
             <div class="other-novel-item">
-                <a href="#">
+                <a href="/novel/{{$novel->id}}">
                     <div class="other-novel-image">
-                        <img src="//bookcover.yuewen.com/qdbimg/349573/1010734492/150" />
+                        <img src="{{$novel->img_url}}" />
                     </div>
-                    <div class="other-novel-title">凡人修仙传之仙界篇</div>
+                    <div class="other-novel-title">{{$novel->title}}</div>
                 </a>
             </div>
-            <div class="other-novel-item">
-                <a href="#">
-                    <div class="other-novel-image">
-                        <img src="//bookcover.yuewen.com/qdbimg/349573/1010734492/150" />
-                    </div>
-                    <div class="other-novel-title">凡人修仙传之仙界篇</div>
-                </a>
-            </div>
-            <div class="other-novel-item">
-                <a href="#">
-                    <div class="other-novel-image">
-                        <img src="//bookcover.yuewen.com/qdbimg/349573/1010734492/150" />
-                    </div>
-                    <div class="other-novel-title">凡人修仙传之仙界篇</div>
-                </a>
-            </div>
-            <div class="other-novel-item">
-                <a href="#">
-                    <div class="other-novel-image">
-                        <img src="//bookcover.yuewen.com/qdbimg/349573/1010734492/150" />
-                    </div>
-                    <div class="other-novel-title">凡人修仙传之仙界篇</div>
-                </a>
-            </div>
+        @endforeach
         </div>
     </div>
 </body>
