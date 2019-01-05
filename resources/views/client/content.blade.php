@@ -224,6 +224,9 @@
         var content = document.getElementById('content');
         var font_size = parseInt(content.style.fontSize.slice(0,-2));
         font_size += num > 0 ? +1 : -1;
+        if(!font_size){
+            return false;
+        }
         content.style.fontSize = font_size+'px';
         localStorage.setItem('novel_content_font_size',font_size);
     }
