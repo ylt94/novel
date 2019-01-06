@@ -56,20 +56,16 @@
             }
 
             $search = [
-                'member_id' => $member_id,
-                'is_collection' => 1
+                'member_book.member_id' => $member_id,
+                'member_book.is_collection' => 1
             ];
-            $novel_ids = MemberBooks::where($search)->orderBy('created_at','asc')->pluck('novel_id')->all();
-            if(!$novel_ids) {
-                return [];
-            }
-            $novels = NovelBase::whereIn('id',$novel_ids)->where('is_hide',0)->select(
-                'id',
-                'img_url',
-                'title'
-            )->get();
-
-            return $novels;
+            $novels = MemberBooks::leftJoin('novel_base','member_book.novel_id','=','novel_base.id')
+                        ->where($search)->orderBy('created_at','asc')->select(
+                            'id',
+                            'img_url',
+                            'title'
+                        )->get();
+            return $novels ?: [];
         }
 
         public static function memberBook($member_id,$novel_id){
