@@ -103,6 +103,11 @@
             </a>
         </div>
     @endforeach
+    @if(count($novels)%3)
+        @for($i = 1;$i<= count($novels)%3;$i++)
+            <div class="book-item"></div>
+        @endfor
+    @endif
    </div>
 </body>
 </html>
