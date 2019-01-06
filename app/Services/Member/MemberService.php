@@ -72,6 +72,24 @@
             return $novels;
         }
 
+        public static function memberBook($member_id,$novel_id){
+            if(!$member_id || !$novel_id) {
+                static::addError('参数不完整',0);
+                return false;
+            }
+
+            $search = [
+                'member_id' => $member_id,
+                'is_collection' => 1,
+                'novel_id' => $novel_id
+            ];
+            $novel = MemberBooks::where($search)->first();
+            if(!$novel) {
+                return [];
+            }
+            return $novel;
+        }
+
 
         public static function memberReadBookCapter($novel_id){
             $read_record = MemberBooks::where('novel_id',$novel_id)->first();

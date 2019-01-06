@@ -114,11 +114,12 @@ class ClientController extends Controller {
 
     }
 
-    public function novelChapters($novel_id){
+    public function novelChapters($novel_id,Request $request){
         if(!$novel_id){
             return my_view('client.error',['status'=>0,'msg'=>'数据异常，请稍后再试']);
         }
 
+        $user_ip = $request->getClientIp();
         $novel_base = ClientService::novelBase($novel_id);
         if(!$novel_base){
             return my_view('client.error',['status'=>0,'msg'=>ClientService::getLastError()]);
@@ -129,7 +130,20 @@ class ClientController extends Controller {
             return my_view('client.error',['status'=>0,'msg'=>'数据异常，请稍后再试']);
         }
 
-        return my_view('client.chapters',['title' =>$novel_base->title,'chapters' => $novel_chapters]);
+        $member_book = null;
+        $member_id = MemberService::getMemberIdFromCache($user_ip);
+        if($member_id){
+            $member_book = MemberService::memberBook($member_id,$novel_id);
+        }
+        
+        return my_view(
+            'client.chapters',
+            [
+                'title' =>$novel_base->title,
+                'chapters' => $novel_chapters,
+                'history_id' => $member_book ? $member_book->capter_id : 0
+                ]
+        );
     }
 
     public function novelContent($ids,Request $request){

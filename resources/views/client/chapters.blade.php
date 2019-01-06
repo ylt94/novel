@@ -96,7 +96,9 @@
         <div class="chapters">
             @foreach($chapters as $chapter)
             <div class="chapter-item">
-                <a href="/content/{{$chapter['novel_id']}}_{{$chapter['id']}}"><span stype="color:black;font-weight:500;">{{$chapter['title']}}</span></a>
+                <a href="/content/{{$chapter['novel_id']}}_{{$chapter['id']}}">
+                    <span style="color:{{$history_id == $chapter['id'] ? '#ed424b' : 'black'}};font-weight:500;">{{$chapter['title']}}{{$history_id == $chapter['id'] ? '（上次阅读到此）' : ''}}</span>
+                </a>
             </div>
             @endforeach
             
