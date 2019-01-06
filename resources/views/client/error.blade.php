@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>发生错误了</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable">
     <style>
         a:link {color: black;text-decoration:none;background-color:none;} 
         a:active:{color: black;text-decoration:none;background-color:none; } 
