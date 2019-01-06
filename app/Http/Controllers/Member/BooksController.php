@@ -24,6 +24,9 @@ class BooksController extends Controller{
 
     public function addBook($novel_id,Request $request){
         $data['member_id'] = MemberService::getMemberIdFromCache($request->getClientIp());
+        if(!$data['member_id']){
+            return redirect('/login');
+        }
         $data['novel_id'] = $novel_id;
         $data['capter_id'] = $request->capter_id ?: 1;
         $data['is_collection'] = 1;
