@@ -32,7 +32,7 @@
                         </div>
                     </div>
                     <div class="login">
-                        <a href="#">登录</a>
+                        <a href="/login">登录</a>
                     </div>
                 </div>
                 <div class="search-params">
