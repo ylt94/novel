@@ -214,7 +214,7 @@
         }
         .same-title{
             border-bottom:1px solid #e1e5e8;
-            width:65px;
+            width:100px;
         }
     </style>
 
@@ -248,7 +248,7 @@
         <div class="chapters-newset"><a href="/content/{{ $last_chapter ? $last_chapter['novel_id'].'_'.$last_chapter['id'] : '' }}" style="color:grey;">已更新至： {{$last_chapter ? $last_chapter['title'] : ''}}</a></div>
     </div>
     <div class="author-others">
-        <div class="other-title">作者相关作品</div>
+        <div class="other-title">相关作品</div>
         <div class="other-novels">
         @foreach($author_other as $novel)
             <div class="other-novel-item">
