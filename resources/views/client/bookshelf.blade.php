@@ -93,14 +93,16 @@
         <div><a href="/loginout">退出登录</a></div>
    </div>
    <div class="main">
+   @foreach($novels as $novel)
         <div class="book-item">
-            <a href="/chapters/1">
+            <a href="/chapters/{{$novel->id}}">
                 <div class="novel-img">
-                    <img src="//bookcover.yuewen.com/qdbimg/349573/1010734492/150" />
+                    <img src="{{$novel->img_url}}" />
                 </div>
-                <div class="novel-title">凡人修仙传之仙界篇</div>
+                <div class="novel-title">{{$novel->title}}</div>
             </a>
         </div>
+    @endforeach
    </div>
 </body>
 </html>

@@ -15,57 +15,66 @@ use App\Services\RedisService;
 class LoginController extends Controller{
 
     public function register(Request $request){
+
         $data['user_name'] = $request->user_name;
         $data['password'] = $request->password;
         $data['password_confirm'] = $request->password_confirm;
         $data['register_ip'] = $request->getClientIp();
 
-        if(!$data['user_name'] || !$data['password'] || !$data['password_confirm'] || !$data['register_ip']) {
-            return ['status'=>0,'msg'=>'请输入完整'];
+        if(!$data['user_name'] || !$data['password'] || !$data['password_confirm']) {
+            return my_view('client.error',['status'=>0,'msg'=>'请输入完完整']);
         }
 
-        if($data['password'] == $data['password_confirm']) {
-            return ['status'=>0,'msg'=>'两次密码不一致'];
+        if(!$data['register_ip']){
+            return my_view('client.error',['status'=>0,'msg'=>'您的ip为谜，暂时无法注册']);
         }
 
-        $result = MemberService::memberRegister($data);
-        if(!$result) {
-            return ['status'=>0,'msg'=>'注册失败，请稍后再试'];
+        if($data['password'] != $data['password_confirm']) {
+            return my_view('client.error',['status'=>0,'msg'=>'两次输入的密码不一致']);
         }
 
-        return ['status'=>1,'msg'=>'注册成功'];
+        $member = MemberService::memberRegister($data);
+        if(!$member) {
+            return my_view('client.error',['status'=>0,'msg'=>'注册失败，请稍后再试']);
+        }
+
+        $token_res = MemberService::setLoginCache($data['register_ip'],$member->id);
+
+        return redirect('/bookshelf');
     }
 
     public function login(Request $request){
+
         $user_name = $request->user_name;
         $password = $request->password;
         $login_ip = $request->getClientIp();
         if(!$user_name || !$password) {
-            return ['status'=>0,'msg'=>'请输入完整'];
+            return my_view('client.error',['status'=>0,'msg'=>'请输入完完整']);
         }
 
-        $result = MemberService::loginCheck($user_name,$password,$login_ip);
-        if(is_bool($result) && !$result) {
-            return ['status'=>0,'msg'=>'登陆失败，请检查用户名密码'];
+        if(!$login_ip){
+            return my_view('client.error',['status'=>0,'msg'=>'您的ip成谜，暂时无法登录']);
         }
 
-        $token_res = RedisService::setMemberToken($result);
+        $member = MemberService::loginCheck($user_name,$password,$login_ip);
+        if(is_bool($member) && !$member) {
+            return my_view('client.error',['status'=>0,'msg'=>'登陆失败，请检查用户名密码']);
+        }
+        
+        $token_res = MemberService::setLoginCache($login_ip,$member->id);
         if(!$token_res) {
-            return ['status'=>0,'msg'=>'登陆失败，请稍后再试'];
+            return my_view('client.error',['status'=>0,'msg'=>MemberService::getLastError()]);
         }
 
-        return ['status'=>1,'msg'=>'登陆成功','data'=>['token'=>$token_res]];
+        return redirect('/bookshelf');
     }
 
     public function loginOut(Request $request){
-        $key = $request->header('Access-Token');
+        $login_ip = $request->getClientIp();
 
-        $result = RedisService::delMemberToken($key);
-        if(!$result){
-            return ['status'=>0,'msg'=>'服务器异常，请稍后再试'];
-        }
+        MemberService::delMemberCache($login_ip);
 
-        return ['status'=>1,'msg'=>'退出成功'];
+        return redirect('/');
     }
 
 }

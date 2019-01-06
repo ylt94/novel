@@ -97,7 +97,8 @@
         <div class="logo">
             
         </div>
-        <form style="height:80%;width:100%">
+        <form style="height:80%;width:100%" method="post" action="/login">
+            {{csrf_field()}}
             <div class="login-item">
                 <input type="text" size="20" placeholder="用户名" class="input" name="user_name" />
             </div>

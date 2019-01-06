@@ -32,7 +32,13 @@
                         </div>
                     </div>
                     <div class="login">
+                    
+                    @if($is_login)
+                        <a href="/bookshelf">书架</a>
+                    @else
                         <a href="/login">登录</a>
+                    @endif
+                        
                     </div>
                 </div>
                 <div class="search-params">
@@ -64,11 +70,13 @@
         window.onload = function(){
             var novel_type = 0;
             var order_type = 'recommend';
-            var _novel_type = GetUrlParam('novel_type')
+            var _novel_type = GetUrlParam('novel_type');
+            var is_login = {{$is_login}}
+            localStorage.setItem('is_login',is_login);
             if(_novel_type){
                 novel_type = _novel_type;
             }
-            var _order_type = GetUrlParam('order_type')
+            var _order_type = GetUrlParam('order_type');
             if(_order_type){
                 order_type = _order_type;
             }

@@ -236,8 +236,8 @@
         </div>
         <div class="book-action">
             <div class="action-item" style="color:white;background-color:#f7483e;"><a style="color:white;" href="/chapters/{{ $novel_base['id'] }}">开始阅读</a></div>
-            <div class="action-item" style="color:black;background-color:white;"><a style="color:black;" href="#">加入书架</a></div>
-            <div class="action-item"style="color:black;background-color:white;"><a style="color:black;" href="#">我的书架</a></div>
+            <div class="action-item" style="color:black;background-color:white;"><a style="color:black;" href="/addbook/{{$novel_base['id']}}">加入书架</a></div>
+            <div class="action-item"style="color:black;background-color:white;"><a style="color:black;" href="/bookshelf">我的书架</a></div>
         </div>
     </div>
     <div class="book-desc">
@@ -245,12 +245,12 @@
     </div>
     <div class="chapters">
         <div style="font-weight:600;width:30%;">最后更新</div>
-        <div class="chapters-newset"><a href="/content/{{ $last_chapter ? $last_chapter['novel_id'].'_'.$last_chapter['id'] : '' }}" style="color:grey;">已更新至： {{$last_chapter ? $last_chapter['title'] : ''}}</a></div>
+        <div class="chapters-newset"><a href="/content/{{ $last_chapter ? $novel_base['id'].'_'.$last_chapter['id'] : '' }}" style="color:grey;">已更新至： {{$last_chapter ? $last_chapter['title'] : ''}}</a></div>
     </div>
     <div class="author-others">
         <div class="other-title">相关作品</div>
-        <div class="other-novels">
         @foreach($author_other as $novel)
+        <div class="other-novels">
             <div class="other-novel-item">
                 <a href="/novel/{{$novel->id}}">
                     <div class="other-novel-image">

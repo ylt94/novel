@@ -97,7 +97,8 @@
         <div class="logo">
             
         </div>
-        <form style="height:80%;width:100%">
+        <form style="height:80%;width:100%" method="post" action="/register">
+            {{csrf_field()}}
             <div class="register-item">
                 <input type="text" size="20" placeholder="用户名" class="input" name="user_name" />
             </div>
@@ -105,7 +106,7 @@
                 <input type="password" size="20" placeholder="密码" class="input" name="password" />
             </div>
             <div class="register-item">
-                <input type="password" size="20" placeholder="确认密码" class="input" name="confirm_password" />
+                <input type="password" size="20" placeholder="确认密码" class="input" name="password_confirm" />
             </div>
             <div class="login">
             <a href="/login" style="color:blue;font-size:14px;">已有账号，去登录</a>

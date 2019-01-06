@@ -16,15 +16,20 @@ Route::get('/chapters/{novel_id}','Client\ClientController@novelChapters');
 Route::get('/content/{chapter_id}','Client\ClientController@novelContent');
 Route::get('/content/next/{chapter_id}','Client\ClientController@nextContent');
 Route::get('/content/last/{chapter_id}','Client\ClientController@lastContent');
+
+Route::post('/login','Member\LoginController@login');
+Route::post('/register','Member\LoginController@register');
+Route::get('/loginout','Member\LoginController@loginOut');
+
+Route::get('/bookshelf','Member\BooksController@memberBooks');
+Route::get('/addbook/{novel_id}','Member\BooksController@addBook');
+
+
 Route::get('/login',function(){
     return view('client.login');
 });
 Route::get('/register',function(){
     return view('client.register');
-});
-
-Route::get('/bookshelf',function(){
-    return view('client.bookshelf');
 });
 
 Route::get('test',function(){

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 use App\Services\Client\ClientService;
 use App\Services\Novel\NovelCategoryService;
+use App\Services\Member\MemberService;
 
 
 class ClientController extends Controller {
@@ -25,7 +26,16 @@ class ClientController extends Controller {
         // $return['order_click'] = ClientService::orderClick();
         // $return['order_update'] = ClientService::orderNewUpdate();
         // $return['order_create'] = ClientService::orderNewCreate();
-        return my_view('client.index',['novel_novel' =>$novel_type,'novels'=> $return,'types' => $types]);
+        $is_login = MemberService::isLogin($request->getClientIp());
+        return my_view(
+            'client.index',
+            [
+                'novel_novel' =>$novel_type,
+                'novels'=> $return,
+                'types' => $types,
+                'is_login' => $is_login ? 1 : 0,
+            ]
+        );
 
 
         //return ['status'=>1,'msg'=>'请求成功','data'=>$return];
@@ -122,11 +132,12 @@ class ClientController extends Controller {
         return my_view('client.chapters',['title' =>$novel_base->title,'chapters' => $novel_chapters]);
     }
 
-    public function novelContent($ids){
+    public function novelContent($ids,Request $request){
         if(!$ids){
             return my_view('client.error',['status'=>0,'msg'=>'请求异常，请稍后再试']);
         }
 
+        $user_ip = $request->getClientIp();
         $ids_arr = explode('_',$ids);
         if(count($ids_arr) !=2){
             return my_view('client.error',['status'=>0,'msg'=>'请求异常，请稍后再试']);
@@ -150,6 +161,12 @@ class ClientController extends Controller {
         $novel_chapter->content = $content;
         $novel_chapter->novel_title = $novel->title;
         
+        $member_id = MemberService::getMemberIdFromCache($user_ip);
+        if($member_id){
+            MemberService::updateMemeberBookChapter($member_id,$novel->id,$novel_chapter->id);
+        }
+        
+
         return my_view('client.content',$novel_chapter);
     }
 

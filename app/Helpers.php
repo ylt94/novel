@@ -76,6 +76,6 @@ function my_log($msg,$path,$log_type = 'info'){
     \Log::$log_type($msg);
 }
 
-function my_view($view,$data){
+function my_view($view,$data = []){
     return view($view,$data);
 }

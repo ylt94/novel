@@ -6,6 +6,7 @@ use App\Models\NovelBase;
 use App\Models\NovelDetail;
 use App\Models\NovelCategory;
 use App\Models\NovelContent;
+use App\Models\Member;
 
 use App\Services\BaseService;
 use App\Services\Reptilian\BiQuService;
@@ -416,6 +417,31 @@ class ClientService extends BaseService{
 
         $history = Cache::put($key,1,60);
         NovelBase::where('id',$novel_id)->increment('click_num');
+        return true;
+    }
+
+    /**
+     * 登录
+     * @param $user_name
+     * @param $password
+     */
+    public static function login($user_name,$password){
+        if(!$user_name || !$password){
+            static::addError('参数不完整',-1);
+            return false;
+        }
+
+        $member = Member::where('user_name',$user_name)->first();
+        if(!$member){
+            static::addError('该用户不存在',-1);
+            return false;
+        }
+        
+        if(!password_verify($password,$member->password)){
+            static::addError('密码错误',-1);
+            return false;
+        }
+
         return true;
     }
 }
