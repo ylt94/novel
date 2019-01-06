@@ -60,10 +60,10 @@
                 'member_book.is_collection' => 1
             ];
             $novels = MemberBooks::leftJoin('novel_base','member_book.novel_id','=','novel_base.id')
-                        ->where($search)->orderBy('created_at','asc')->select(
-                            'id',
-                            'img_url',
-                            'title'
+                        ->where($search)->orderBy('member_book.created_at','asc')->select(
+                            'novel_base.id',
+                            'novel_base.img_url',
+                            'novel_base.title'
                         )->get();
             return $novels ?: [];
         }
