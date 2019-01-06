@@ -28,7 +28,7 @@ class BooksController extends Controller{
             return redirect('/login');
         }
         $data['novel_id'] = $novel_id;
-        $data['capter_id'] = $request->capter_id ?: 1;
+        $data['capter_id'] = $request->capter_id ?: 0;
         $data['is_collection'] = 1;
         if(!$data['novel_id'] || !isset($data['is_collection'])){
             return my_view('client.error',['status'=>0,'msg'=>'暂时不能加入书架']);
