@@ -198,7 +198,7 @@
             <div class="desc">
                 25岁
                 <span style="font-weight:600"> | </span>
-                2+年经验
+                2.5年经验
                 <span style="font-weight:600"> | </span>
                 173****2748
                 <span style="font-weight:600"> | </span>
@@ -211,8 +211,8 @@
             <div class="master-item-title">求职意向</div>
             <div class="master-item-content">
                 <div class="master-item-content-item">意向岗位：PHP工程师</div>
-                <div class="master-item-content-item">意向城市：深广上北</div>
-                <div class="master-item-content-item">薪资要求：12K-20K</div>
+                <div class="master-item-content-item">意向城市：重庆</div>
+                <div class="master-item-content-item">薪资要求：8K-10K</div>
                 <!-- <div class="master-item-content-item">意向岗位：PHP工程师</div> -->
             </div>
         </div>
@@ -276,7 +276,7 @@
                 </div>
             </div>
         </div>
-        <div class="remark"><i>注：本人打算年后(2019年)去一线城市(初步定为深圳)发展</i></div>
+        <!-- <div class="remark"><i>注：本人打算年后(2019年)去一线城市(初步定为深圳)发展</i></div> -->
     </div>
 </body>
 </html>
