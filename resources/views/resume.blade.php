@@ -276,7 +276,7 @@
                 </div>
             </div>
         </div>
-        <!-- <div class="remark"><i>注：本人打算年后(2019年)去一线城市(初步定为深圳)发展</i></div> -->
+        <div class="remark"><i>注：谢绝毫无意义的外包、长期性经常性的加班、有大牛带最好</i></div>
     </div>
 </body>
 </html>
