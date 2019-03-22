@@ -32,6 +32,14 @@ Route::get('/register',function(){
     return view('client.register');
 });
 
+Route::get('/register',function(){
+    return view('client.register');
+});
+
+Route::get('/resume',function(){
+    return view('resume');
+});
+
 Route::get('test',function(){
     // $a = 1;
     // $b = $a+$a+$a++;
