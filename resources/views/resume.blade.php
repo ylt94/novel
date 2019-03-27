@@ -194,7 +194,7 @@
         <div class="image"></div>
         <div class="base-info">
             <div class="name">袁粒桃</div>
-            <div class="desc"><i>-----春风得意马蹄疾，一日看遍长安花</i></div>
+            <div class="desc"><i>-----生于忧患，死于安乐</i></div>
             <div class="desc">
                 25岁
                 <span style="font-weight:600"> | </span>
@@ -212,7 +212,7 @@
             <div class="master-item-content">
                 <div class="master-item-content-item">意向岗位：PHP工程师</div>
                 <div class="master-item-content-item">意向城市：重庆</div>
-                <div class="master-item-content-item">薪资要求：8K-10K</div>
+                <div class="master-item-content-item">薪资要求：7K-10K</div>
                 <!-- <div class="master-item-content-item">意向岗位：PHP工程师</div> -->
             </div>
         </div>
