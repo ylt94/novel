@@ -274,7 +274,7 @@
             <div class="skill-title">技术掌握</div>
             <div class="skill-content">
                 <div class="skill-item">
-                   1.能够搭建LNMP环境,掌握的Linux命令能够满足日常开发所需,有独立建站经验(http://120.78.183.163)
+                   1.能够搭建LNMP环境,掌握的Linux命令能够满足日常开发所需,有独立建站经验(http://120.78.183.168,暂只支持手机版)
                 </div>
                 <div class="skill-item">
                    2.掌握js,jquery,css，能够进行一般页面的编写，掌握vuejs,angularjs,能够搭建初始化环境以及模块编写
