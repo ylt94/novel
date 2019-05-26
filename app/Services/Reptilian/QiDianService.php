@@ -41,7 +41,7 @@
                 NovelBase::insert($data);
                 DB::commit();
             }catch(\Exception $e){
-                $error = $site->name.'，小说基础信息创建失败：'.$e->getMessage();
+                $error = $data['title'].'，小说基础信息创建失败：'.$e->getMessage();
                 PS::myLog($error,'logs/reptilian/qidian','error');
                 return false;
             }
@@ -146,6 +146,7 @@
             $content = $data[0]['content'];
             Log::useDailyFiles(storage_path('logs/capter/qidian'));
             if(!$content){
+                $error = '章节内容获取失败';
                 Log::error($error);
             }
             try{

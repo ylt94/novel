@@ -237,8 +237,8 @@ class BiQuService extends BaseService{
      */
     public static function updateChaptersContent($novel_id,$chapters){
 
-        $novel_detail_table = NovelService::getNovelDetailByNovelId($item['novel_id']);
-        $novel_content_table = NovelService::getNovelContentByNovelId($item['novel_id']);
+        $novel_detail_table = NovelService::getNovelDetailByNovelId($novel_id);
+        $novel_content_table = NovelService::getNovelContentByNovelId($novel_id);
         foreach(dataYieldRange($chapters) as $item){
             $insert_data['capter_id'] = $item['id'];
             if(!$item['biqu_url']){
@@ -285,7 +285,7 @@ class BiQuService extends BaseService{
         ];
         $result = PublicService::getDataFromQueryList($url,$rules,true);
         if(!$result || $result['http_code'] != 200){
-            if($html['http_code'] != 404){
+            if($result['http_code'] != 404){
                 return true;
             }
             PS::myLog('基本信息更新失败：'.$result['error_msg'],'logs/reptilian/novel_content');
