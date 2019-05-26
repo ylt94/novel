@@ -308,7 +308,7 @@ class ClientService extends BaseService{
      * 抓取一条小说内容
      */
     public static function reptilianContent($url){
-        $content = BiQuService::getChapterContent($detail->biqu_url);
+        $content = BiQuService::getChapterContent($url);
         return $content;
     }
 
