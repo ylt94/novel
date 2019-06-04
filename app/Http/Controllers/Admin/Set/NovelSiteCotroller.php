@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Sites;
 
 
-class NovelSiteCotroller extends Controller{
+class NovelSiteController extends Controller{
 
 
     public function siteAdd(Request $request){
