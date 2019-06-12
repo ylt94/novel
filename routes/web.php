@@ -41,6 +41,11 @@ Route::get('/resume',function(){
 });
 
 Route::get('test',function(){
-    dd(Route::getRoutes());
+    $input = file_get_contents('php://stdin');
+    $cfg = json_decode($input, true);dd($cfg);
+});
+
+Route::get('websocket',function(){
+    return view('websocket');
 });
 
