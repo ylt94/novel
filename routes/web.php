@@ -41,21 +41,6 @@ Route::get('/resume',function(){
 });
 
 Route::get('test',function(){
-    // $a = 1;
-    // $b = $a+$a+$a++;
-    // echo $b;
-
-    // $a = 1;
-    // $b = $a + $a++ + $a;
-    // echo $b;
-
-    // $a = 1;
-    // $b = $a++ + $a+$a;
-    // echo $b;
-
-    // $a = 1;
-    // $b = $a+$a++;
-    // echo $b;
-    //return view('resume');
+    dd(Route::getRoutes());
 });
 
