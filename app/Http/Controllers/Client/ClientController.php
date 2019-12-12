@@ -15,6 +15,8 @@ class ClientController extends Controller {
 
 
     public function index(Request $request){
+        usleep(100);
+        return 'success';
         $novel_type = $request->novel_type ?: 0;
         $order_type = $request->order_type ?: 'recommend';
         $return = [];

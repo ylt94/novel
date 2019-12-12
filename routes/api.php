@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Auth;
 
 Route::post('/member/register','Member\LoginController@register');
 Route::post('/member/login','Member\LoginController@login');
-Route::post('/member/test','Member\LoginController@test');
 //Route::middleware('auth:api')->get('auth/logout','Auth\LoginController@logout');
 
 Route::group(['namespace'=>'Admin','prefix'=>'admin','middleware'=>'auth:api'],function(){
