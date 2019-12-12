@@ -46,7 +46,7 @@ Route::get('test',function(Request $request){
     ob_end_clean();//清空（擦除）缓冲区并关闭输出缓冲
     ob_implicit_flush(1);//将打开或关闭绝对（隐式）刷送。绝对（隐式）刷送将导致在每次输出调用后有一次刷送操作，以便不再需要对 flush() 的显式调用
     $i = 100;
-    while(1){
+    for($a = 0;$a<9;$a++){
         ++$i;
         //部分浏览器需要内容达到一定长度了才输出
         if ($i === 103) {
