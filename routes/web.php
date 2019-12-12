@@ -1,4 +1,6 @@
 <?php
+use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -40,9 +42,8 @@ Route::get('/resume',function(){
     return view('resume');
 });
 
-Route::get('test',function(){
-    $input = file_get_contents('php://stdin');
-    $cfg = json_decode($input, true);dd($cfg);
+Route::get('test',function(Request $request){
+    dd(rand(1,9));
 });
 
 Route::get('websocket',function(){

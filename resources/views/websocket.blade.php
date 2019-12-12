@@ -8,7 +8,7 @@
     <script src="main.js"></script> -->
 </head>
 <body>
-    <button onclick="sockets()">发送</button>
+    <button onclick="websocket()">发送</button>
 </body>
 <script>
     function sockets(){
@@ -18,23 +18,29 @@
     }
 
     function websocket(){
-        var ws = new WebSocket("ws://47.75.0.3:5200/api/usdt");
+        var ws = new WebSocket("ws://new.mitop.api.qidianjinfu.com:8001");
         ws.onopen = function(evt) {
-            console.log("Connection open ...");
-            //var send_data = '{"name":"test","send":1}';
-            var send_data = [{"name":"test","send":1}];
-            console.log(send_data);
+            //ws.send('ping');
+            console.log("Connection open ..."); 
+            var send_data = {"market":"btc/usdt"};
             send_data = JSON.stringify(send_data);
-            console.log(send_data);
+            console.log("send data: " + send_data);
             ws.send(send_data);
         };
+        // var t2 = window.setInterval(function() {
 
-        // ws.onclose = function(evt) {
-        //     console.log("Connection closed.");
-        // }
+        //     var send_data = {"route":"api/market/index","data":""};
+        //     send_data = JSON.stringify(send_data);
+        //     console.log("send data: " + send_data);
+        //     ws.send(send_data);
+
+        // },2000)
+        
         ws.onmessage = function(evt) {
+            // if(evt.data != 'pong'){
+            //     ws.send('ping');
+            // }
             console.log("Received Message: " + evt.data);
-            ws.close();
         };
         
         
