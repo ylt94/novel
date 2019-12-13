@@ -167,6 +167,7 @@ return [
          * Package Service Providers...
          */
         Laravel\Tinker\TinkerServiceProvider::class,
+        Hhxsv5\LaravelS\Illuminate\LaravelSServiceProvider::class,
 
         /*
          * Application Service Providers...
